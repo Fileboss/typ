@@ -99,27 +99,19 @@ public class ModelTest extends Observable {
         /* Choix du texte */
         switch (number) {
             case 0: text = Arrays.asList(TEXT1.split(" "));
-                setChanged();
-                notifyObservers(new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal));
                 break;
             case 1: text = Arrays.asList(TEXT2.split(" "));
-                setChanged();
-                notifyObservers(new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal));
                 break;
             case 2: text = Arrays.asList(TEXT3.split(" "));
-                setChanged();
-                notifyObservers(new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal));
                 break;
             case 3: text = Arrays.asList(TEXT4.split(" "));
-                setChanged();
-                notifyObservers(new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal));
                 break;
             case 4 : text = Arrays.asList(TEXT5.split(" "));
-                setChanged();
-                notifyObservers(new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal));
                 break;
             default: text = Arrays.asList(TEXT1.split(" ")); break;
         }
+        setChanged();
+        notifyObservers(new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal));
     }
 
     /**
