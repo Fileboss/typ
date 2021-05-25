@@ -1,0 +1,17 @@
+
+Y
+java:S1128">Remove this unused import 'javafx.beans.InvalidationListener'.(í¿ïÈşÿÿÿÿ
+<
+java:S1659"&Declare "cptFalse" on a separate line.(É®å›
+M
+java:S1874"2Remove this use of "Observable"; it is deprecated.(úÄÁ¼úÿÿÿÿ
+J
+java:S6212"/Declare this local variable with "var" instead.(×²ê¨ÿÿÿÿÿ
+S	java:S1067"9Replace this use of System.out or System.err by a logger.(–Ä¶öùÿÿÿÿ
+E
+java:S6212<"/Declare this local variable with "var" instead.(–áÍÈ
+4
+java:S2119<"Save and re-use this "Random".(–áÍÈ
+D
+java:S6212="/Declare this local variable with "var" instead.(ŠƒÍs
+S	java:S106>"9Replace this use of System.out or System.err by a logger.(è¶†ıÿÿÿÿ

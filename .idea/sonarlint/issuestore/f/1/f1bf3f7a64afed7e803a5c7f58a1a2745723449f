@@ -1,0 +1,8 @@
+
+V	java:S110"<This class has 6 parents which is greater than 5 authorized.(…É”Şüÿÿÿÿ
+S
+java:S1128"8Remove this unused import 'javafx.scene.input.KeyEvent'.(¦¶ Æøÿÿÿÿ
+M
+java:S1128"7Remove this unused import 'org.typ.vue.VueClassicMode'.(Ô¼¾Ó
+P	java:S125""<This block of commented-out lines of code should be removed.(ËØİL
+S	java:S106C"9Replace this use of System.out or System.err by a logger.(çù‚ÿøÿÿÿÿ
