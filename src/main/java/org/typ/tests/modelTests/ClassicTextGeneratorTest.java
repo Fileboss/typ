@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-
 public class ClassicTextGeneratorTest {
 
     private ClassicTextGenerator classicTextGenerator1;
@@ -33,6 +32,10 @@ public class ClassicTextGeneratorTest {
     public void testReturndifferentSequences() {
         try {
             assertNotEquals(classicTextGenerator1.generateText(), classicTextGenerator1.generateText());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+            assertEquals(200, classicTextGenerator1.generateText().size());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
