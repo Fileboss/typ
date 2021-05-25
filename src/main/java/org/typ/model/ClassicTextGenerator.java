@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +32,7 @@ public class ClassicTextGenerator {
         this.filePath = filePath;
         this.numberOfWords = numberOfWords;
         this.numberToSplit = numberToSplit;
+        this.fileAsList = new ArrayList<>();
         this.parser = new CSVParserBuilder()
                 .withSeparator('\n')
                 .withIgnoreQuotations(true)
@@ -48,12 +50,18 @@ public class ClassicTextGenerator {
         } catch (IOException | CsvException e) {
             e.printStackTrace();
         }
-        List<String> textToShuffle = Arrays.asList(fileAsList.get(0));
+        List<String> textToShuffle = new ArrayList<>();
+        for (String[] tabs : fileAsList) {
+            textToShuffle.add(tabs[0]);
+        }
+
         Collections.shuffle(textToShuffle);
+
         if (this.numberToSplit > 0) {
             List<String> text = textToShuffle.subList(0, this.numberToSplit);
             return text;
         }
+
         return textToShuffle;
     }
 
