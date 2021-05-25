@@ -35,9 +35,5 @@ public class ClassicTextGeneratorTest {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-            assertEquals(200, classicTextGenerator1.generateText().size());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 }
