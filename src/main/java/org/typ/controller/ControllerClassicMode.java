@@ -42,7 +42,7 @@ public class ControllerClassicMode extends VBox {
         textInput.setOnKeyPressed(e -> {
             //System.out.println("released : "+e.getCode());
             KeyCode keyPressed = e.getCode();
-            if (keyPressed == KeyCode.SPACE) {
+            if (keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty()) {
                 model.isValidWord(textInput.getText());
                 textInput.setText("");
                 model.incrementIndice();
