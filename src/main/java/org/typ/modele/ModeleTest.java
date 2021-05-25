@@ -9,6 +9,7 @@ public class ModeleTest extends Observable {
     private List<String> text;
     private int currentWordIndice;
     private List<Integer> correctIndicesList, falseIndicesList;
+    private int  currentTextIndice = -1;
 
     private int cptValidTotal, cptFalseTotal;
 
@@ -84,7 +85,11 @@ public class ModeleTest extends Observable {
      */
     public void changeText() {
         Random rnd = new Random();
-        int number = rnd.nextInt(2 - 0 + 1);
+        int number = -1;
+        do {
+            number = rnd.nextInt(2 - 0 + 1);
+        } while (currentTextIndice == number);
+        currentTextIndice = number;
         currentWordIndice = 0;
         correctIndicesList = new ArrayList<>();
         falseIndicesList = new ArrayList<>();
