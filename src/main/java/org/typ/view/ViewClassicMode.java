@@ -38,24 +38,16 @@ public class ViewClassicMode extends BorderPane implements Observer {
         labelChrono = new Label("03:42");
         var boxTypChrono = new VBox(12, labelTyp, labelChrono);
 
-
         textFlow = new TextFlow();
-        //textArea.setWrapText(true);
-        //textArea.setEditable(false);
         correctLabel = new Label("Correct : ");
         correctValue = new Label("0");
         falseLabel = new Label("False : ");
         falseValue = new Label("0");
         hBoxCorrectFalse = new HBox(50, correctLabel, correctValue, falseLabel, falseValue);
 
-
-
         this.setTop(boxTypChrono);
         this.setCenter(textFlow);
         this.setBottom(hBoxCorrectFalse);
-
-
-
     }
 
 
@@ -68,20 +60,25 @@ public class ViewClassicMode extends BorderPane implements Observer {
 
         List<String> wholeText = struct.getText();
 
+        /* Ajouter le texte au textFlow.  */
         for(int i = 0; i < wholeText.size(); i++) {
+            // Cas du mot courant
             if (i == struct.getPosition()) {
                 TextHighlight th = new TextHighlight(wholeText.get(i)+" ");
                 th.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
                 textFlow.getChildren().add(th);
+            // Cas des mots corrects
             } else if (struct.getCorrectList().contains(i)) {
                 TextTrue tt = new TextTrue(wholeText.get(i)+" ");
                 tt.setFont(Font.font ("Verdana", 20));
                 textFlow.getChildren().add(tt);
+            // Cas des mots faux
             } else if (struct.getFalseList().contains(i)) {
                 TextFalse tf = new TextFalse(wholeText.get(i)+" ");
                 tf.setFont(Font.font ("Verdana", 20));
                 textFlow.getChildren().add(tf);
             }else {
+            // Cas des autres mots
                 Text tx =new Text(wholeText.get(i) + " ");
                 tx.setFont(Font.font ("Verdana", 20));
                 textFlow.getChildren().add(tx);
@@ -93,7 +90,5 @@ public class ViewClassicMode extends BorderPane implements Observer {
 
         correctValue.setText(""+struct.getNbCorrectTotal());
         falseValue.setText(""+struct.getNbFalseTotal());
-
-
     }
 }

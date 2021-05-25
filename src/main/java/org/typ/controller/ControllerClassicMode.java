@@ -18,12 +18,13 @@ public class ControllerClassicMode extends VBox {
     private Button replayButton;
 
     /**
-     *
+     * Constructeur de la classe ControllerClassicMode
      * @param model : modele
      */
     public ControllerClassicMode(ModelTest model) {
         super(20);
         this.model = model;
+        /* Redéfinition du textfield pour refuser les espaces */
         textInput = new TextField() {
             @Override public void replaceText(int start, int end, String text) {
                 if (!text.matches("\\s")) {
@@ -37,6 +38,7 @@ public class ControllerClassicMode extends VBox {
             }
         };
 
+        /* Définition du comportement lorsque la barre espace est enfoncée. (validation du mot) */
         textInput.setOnKeyPressed(e -> {
             //System.out.println("released : "+e.getCode());
             KeyCode keyPressed = e.getCode();
@@ -47,17 +49,11 @@ public class ControllerClassicMode extends VBox {
             }
         });
 
-
         exitButton = new Button("Exit");
-
         replayButton = new Button("Replay");
         replayButton.setOnAction(this::onClickReplayButton);
         exitButton.setOnAction(this::onClickExitButton);
-
         hBoxQuitterRejouer = new HBox(500, exitButton, replayButton);
-
-
-
         this.getChildren().addAll(textInput, hBoxQuitterRejouer);
 
     }
