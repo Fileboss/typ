@@ -1,4 +1,4 @@
-package org.typ.modele;
+package org.typ.model;
 
 import java.util.List;
 

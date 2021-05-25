@@ -1,4 +1,4 @@
-package org.typ.vue;
+package org.typ.view;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -9,14 +9,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import org.typ.modele.Struct;
+import org.typ.model.Struct;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class VueClassicMode extends BorderPane implements Observer {
+public class ViewClassicMode extends BorderPane implements Observer {
 
     private final Label correctLabel;
     private final Label falseLabel;
@@ -26,13 +25,13 @@ public class VueClassicMode extends BorderPane implements Observer {
 
     private Label labelTyp;
     private Label labelChrono;
-    private TextFlow textArea;
+    private TextFlow textFlow;
 
     /**
      * Contructeur de la classe VueClassicMode. Cette classe affiche le titre, le chrono, le texte à recopier, le
      * compteur de mots corrects et faux
      */
-    public VueClassicMode() {
+    public ViewClassicMode() {
         super();
         labelTyp = new Label("Typ");
         labelTyp.setTextFill(Color.GOLDENROD);
@@ -40,7 +39,7 @@ public class VueClassicMode extends BorderPane implements Observer {
         var boxTypChrono = new VBox(12, labelTyp, labelChrono);
 
 
-        textArea = new TextFlow();
+        textFlow = new TextFlow();
         //textArea.setWrapText(true);
         //textArea.setEditable(false);
         correctLabel = new Label("Correct : ");
@@ -52,7 +51,7 @@ public class VueClassicMode extends BorderPane implements Observer {
 
 
         this.setTop(boxTypChrono);
-        this.setCenter(textArea);
+        this.setCenter(textFlow);
         this.setBottom(hBoxCorrectFalse);
 
 
@@ -63,35 +62,34 @@ public class VueClassicMode extends BorderPane implements Observer {
     @Override
     public void update(Observable observable, Object o) {
 
-        textArea = new TextFlow();
+        textFlow = new TextFlow();
 
         Struct struct = (Struct) o;
 
         List<String> wholeText = struct.getText();
 
-
         for(int i = 0; i < wholeText.size(); i++) {
             if (i == struct.getPosition()) {
                 TextHighlight th = new TextHighlight(wholeText.get(i)+" ");
                 th.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
-                textArea.getChildren().add(th);
+                textFlow.getChildren().add(th);
             } else if (struct.getCorrectList().contains(i)) {
                 TextTrue tt = new TextTrue(wholeText.get(i)+" ");
                 tt.setFont(Font.font ("Verdana", 20));
-                textArea.getChildren().add(tt);
+                textFlow.getChildren().add(tt);
             } else if (struct.getFalseList().contains(i)) {
                 TextFalse tf = new TextFalse(wholeText.get(i)+" ");
                 tf.setFont(Font.font ("Verdana", 20));
-                textArea.getChildren().add(tf);
+                textFlow.getChildren().add(tf);
             }else {
                 Text tx =new Text(wholeText.get(i) + " ");
                 tx.setFont(Font.font ("Verdana", 20));
-                textArea.getChildren().add(tx);
+                textFlow.getChildren().add(tx);
             }
         }
 
 
-        this.setCenter(textArea);
+        this.setCenter(textFlow);
 
         correctValue.setText(""+struct.getNbCorrectTotal());
         falseValue.setText(""+struct.getNbFalseTotal());

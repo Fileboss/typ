@@ -1,6 +1,5 @@
-package org.typ.vue;
+package org.typ.view;
 
-import javafx.scene.effect.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 

@@ -2,19 +2,16 @@ package org.typ.controller;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.typ.modele.ModeleTest;
-import org.typ.vue.VueClassicMode;
+import org.typ.model.ModelTest;
 
 public class ControllerClassicMode extends VBox {
 
 
-    private ModeleTest modele;
+    private ModelTest model;
     private HBox hBoxQuitterRejouer;
     private TextField textInput;
     private Button exitButton;
@@ -22,11 +19,11 @@ public class ControllerClassicMode extends VBox {
 
     /**
      *
-     * @param modele : modele
+     * @param model : modele
      */
-    public ControllerClassicMode(ModeleTest modele) {
+    public ControllerClassicMode(ModelTest model) {
         super(20);
-        this.modele = modele;
+        this.model = model;
         textInput = new TextField() {
             @Override public void replaceText(int start, int end, String text) {
                 if (!text.matches("\\s")) {
@@ -44,9 +41,9 @@ public class ControllerClassicMode extends VBox {
             //System.out.println("released : "+e.getCode());
             KeyCode keyPressed = e.getCode();
             if (keyPressed == KeyCode.SPACE) {
-                modele.isValidWord(textInput.getText());
+                model.isValidWord(textInput.getText());
                 textInput.setText("");
-                modele.incrementIndice();
+                model.incrementIndice();
             }
         });
 
@@ -80,7 +77,7 @@ public class ControllerClassicMode extends VBox {
      */
     private void onClickReplayButton(ActionEvent e) {
         System.out.println("Replay ??");
-        modele.reset();
+        model.reset();
         textInput.setText("");
     }
 

@@ -1,10 +1,10 @@
-package org.typ.modele;
+package org.typ.model;
 
-import org.typ.vue.VueClassicMode;
+import org.typ.view.ViewClassicMode;
 
 import java.util.*;
 
-public class ModeleTest extends Observable {
+public class ModelTest extends Observable {
 
     private List<String> text;
     private int currentWordIndice;
@@ -17,7 +17,7 @@ public class ModeleTest extends Observable {
     public static final String TEXT2 = "Non en réalité Tetris est probablement le meilleur codeur de la planete entière";
     public static final String TEXT3 = "Ce qui est sur c'est que Pierre est le meilleur à Mario Kart";
 
-    public ModeleTest(VueClassicMode vue) {
+    public ModelTest(ViewClassicMode vue) {
         text = new ArrayList<>();
 
         changeText();
