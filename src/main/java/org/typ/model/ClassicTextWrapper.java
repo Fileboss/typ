@@ -13,20 +13,11 @@ public class ClassicTextWrapper implements TextWrapper{
         this.wordList = wordList;
     }
 
-    /**
-     * retourne le mot l'indice passé en paramètre dans la liste
-     * @param position indice du mot que l'on veut retourner
-     * @return mot à l'indice passé en paramètre
-     */
     @Override
     public String getWord(int position) {
         return this.wordList.get(position);
     }
 
-    /**
-     * retourne la liste contenant les mots du texte
-     * @return liste contenant les mots du texte
-     */
     @Override
     public List<String> getText() {
         return this.wordList;
