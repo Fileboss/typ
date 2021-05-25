@@ -34,6 +34,9 @@ public class App extends Application {
         layout.setPadding(new Insets(20,20,20,20));
         var scene = new Scene(layout, 800, 600);
 
+        stage.setMinHeight(300);
+        stage.setMinWidth(700);
+
         stage.setScene(scene);
         stage.show();
     }
