@@ -16,6 +16,8 @@ public class ModelTest extends Observable {
     public static final String TEXT1 = "Bonjour je suis Philippe le meilleur codeur de sa génération";
     public static final String TEXT2 = "Non en réalité Tetris est probablement le meilleur codeur de la planete entière";
     public static final String TEXT3 = "Ce qui est sur c'est que Pierre est le meilleur à Mario Kart";
+    public static final String TEXT4 = "Elias rigole souvent quand il est fatigué, notament au Boa Constrictor";
+    public static final String TEXT5 = "Charly mange des oeufs crus, ainsi il devient une montagne de muscles";
 
     public ModelTest(ViewClassicMode vue) {
         text = new ArrayList<>();
@@ -87,28 +89,29 @@ public class ModelTest extends Observable {
         Random rnd = new Random();
         int number = -1;
         do {
-            number = rnd.nextInt(2 - 0 + 1);
+            number = rnd.nextInt(4 - 0 + 1);
         } while (currentTextIndice == number);
         currentTextIndice = number;
         currentWordIndice = 0;
         correctIndicesList = new ArrayList<>();
         falseIndicesList = new ArrayList<>();
 
+        /* Choix du texte */
         switch (number) {
             case 0: text = Arrays.asList(TEXT1.split(" "));
-                setChanged();
-                notifyObservers(new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal));
                 break;
             case 1: text = Arrays.asList(TEXT2.split(" "));
-                setChanged();
-                notifyObservers(new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal));
                 break;
             case 2: text = Arrays.asList(TEXT3.split(" "));
-                setChanged();
-                notifyObservers(new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal));
+                break;
+            case 3: text = Arrays.asList(TEXT4.split(" "));
+                break;
+            case 4 : text = Arrays.asList(TEXT5.split(" "));
                 break;
             default: text = Arrays.asList(TEXT1.split(" ")); break;
         }
+        setChanged();
+        notifyObservers(new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal));
     }
 
     /**
