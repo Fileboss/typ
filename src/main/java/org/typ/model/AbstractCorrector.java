@@ -76,8 +76,12 @@ public abstract class AbstractCorrector extends Observable {
      *
      * @param word le mot à évaluer
      * @param pos la position du mot correcte
+     * @throws PositionDoesNotExistException si pos n'est pas compris entre 0 et getText().size() - 1
      */
-    public void evaluateWord(String word, int pos) {
+    public void evaluateWord(String word, int pos) throws PositionDoesNotExistException {
+        if(pos < 0 || pos >= getText().size()){
+            throw new PositionDoesNotExistException();
+        }
 
         // Si le début du mot correspond
         if(getText().get(pos).startsWith(word)){
