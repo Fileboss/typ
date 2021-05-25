@@ -27,8 +27,20 @@ public class ControllerClassicMode extends VBox {
     public ControllerClassicMode(ModeleTest modele) {
         super(20);
         this.modele = modele;
-        textInput = new TextField();
-        textInput.setOnKeyReleased(e -> {
+        textInput = new TextField() {
+            @Override public void replaceText(int start, int end, String text) {
+                if (!text.matches("\\s")) {
+                    super.replaceText(start, end, text);
+                }
+            }
+            @Override public void replaceSelection(String text) {
+                if (!text.matches("\\s")) {
+                    super.replaceSelection(text);
+                }
+            }
+        };
+
+        textInput.setOnKeyPressed(e -> {
             //System.out.println("released : "+e.getCode());
             KeyCode keyPressed = e.getCode();
             if (keyPressed == KeyCode.SPACE) {
