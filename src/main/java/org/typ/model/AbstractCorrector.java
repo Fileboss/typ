@@ -72,13 +72,29 @@ public abstract class AbstractCorrector extends Observable {
         return stats;
     }
 
+    /** Retourne la liste des position des mots correctes
+     *
+     * @return correctWordPosition
+     */
+    public List<Integer> getCorrectWordsPosition() {
+        return correctWordsPosition;
+    }
+
+    /** Retourne la liste des positions des mots incorrectes
+     *
+     * @return incorrectWordsPosition
+     */
+    public List<Integer> getIncorrectWordsPosition() {
+        return incorrectWordsPosition;
+    }
+
     /** Evalue le mot word avec le mot correpondant à la position pos dans le textWrapper.
      *
      * @param word le mot à évaluer
      * @param pos la position du mot correcte
      * @throws PositionDoesNotExistException si pos n'est pas compris entre 0 et getText().size() - 1
      */
-    public void evaluateWord(String word, int pos) throws PositionDoesNotExistException {
+    public void evaluateWord(String word, int pos) throws PositionDoesNotExistException, EndOfTextException {
         if(pos < 0 || pos >= getText().size()){
             throw new PositionDoesNotExistException();
         }
@@ -93,7 +109,8 @@ public abstract class AbstractCorrector extends Observable {
             incorrectWordsPosition.add(pos);
             stats.incrementNbIncorrectWords();
         }
-        positionCurrentWord++;
+        nextWord();
+
         // Notifier la vue avec les informations nécessaires
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
@@ -106,8 +123,11 @@ public abstract class AbstractCorrector extends Observable {
      * Utile lorsque l'on évalue caratctère par caractère
      *
      */
-    public void nextWord(String word, int pos){
-        //TODO
+    public void nextWord() throws EndOfTextException{
+        if(positionCurrentWord + 1 >= getText().size()){
+            throw new EndOfTextException();
+        }
+        positionCurrentWord++;
     }
 
     /** Indique si la partie est terminé ou pas.
