@@ -4,12 +4,10 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.typ.controller.ControllerClassicMode;
-import org.typ.modele.ModeleTest;
-import org.typ.vue.VueClassicMode;
-import org.typ.vue.VueClassicModeCanvas;
+import org.typ.model.ModelTest;
+import org.typ.view.ViewClassicMode;
 
 
 /**
@@ -22,13 +20,13 @@ public class App extends Application {
 
         stage.setTitle("Typ: classic mode");
 
-        VueClassicMode vue = new VueClassicMode();
+        ViewClassicMode view = new ViewClassicMode();
 
-        ModeleTest modele = new ModeleTest(vue);
+        ModelTest model = new ModelTest(view);
 
-        ControllerClassicMode controller = new ControllerClassicMode(modele);
+        ControllerClassicMode controller = new ControllerClassicMode(model);
 
-        VBox layout = new VBox(20, vue, controller);
+        VBox layout = new VBox(20, view, controller);
 
 
         layout.setPadding(new Insets(20,20,20,20));
