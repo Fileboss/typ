@@ -14,9 +14,9 @@ public class ClassicTextWrapper implements TextWrapper{
     }
 
     /**
-     * retourne le mot l'indice passé en paramètre dans la ltiste
+     * retourne le mot l'indice passé en paramètre dans la liste
      * @param position indice du mot que l'on veut retourner
-     * @return mot à l'indice passé en parmaètre
+     * @return mot à l'indice passé en paramètre
      */
     @Override
     public String getWord(int position) {
