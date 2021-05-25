@@ -43,7 +43,7 @@ public class ModeleTest extends Observable {
      * @return true si le mot est identique, false dans le cas contraire
      */
     public boolean isValidWord(String mot) {
-        boolean valid = mot.equals(text.get(currentWordIndice) + " ");
+        boolean valid = mot.equals(text.get(currentWordIndice));
         if (valid) {
             cptValidTotal++;
             if (!correctIndicesList.contains(currentWordIndice)) {
