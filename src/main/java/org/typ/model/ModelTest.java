@@ -79,7 +79,6 @@ public class ModelTest extends Observable {
             notifyObservers((new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal)));
         }
         System.out.println("Expected word : " + text.get(currentWordIndice));
-
     }
 
     /**
