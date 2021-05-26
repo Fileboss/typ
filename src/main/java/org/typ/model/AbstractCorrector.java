@@ -91,25 +91,19 @@ public abstract class AbstractCorrector extends Observable {
     /** Evalue le mot word avec le mot correpondant à la position pos dans le textWrapper.
      *
      * @param word le mot à évaluer
-     * @param pos la position du mot correcte
-     * @throws PositionDoesNotExistException si pos n'est pas compris entre 0 et getText().size() - 1
      */
-    public void evaluateWord(String word, int pos) throws PositionDoesNotExistException, EndOfTextException {
-        if(pos < 0 || pos >= getText().size()){
-            throw new PositionDoesNotExistException();
-        }
+    public void evaluateWord(String word) {
 
         // Si le début du mot correspond
-        if(getText().get(pos).startsWith(word)){
-            correctWordsPosition.add(pos);
+        if(getText().get(positionCurrentWord).startsWith(word)){
+            correctWordsPosition.add(positionCurrentWord);
             stats.incrementNbCorrectWords();
         }
         // S'il ne correspond pas
         else{
-            incorrectWordsPosition.add(pos);
+            incorrectWordsPosition.add(positionCurrentWord);
             stats.incrementNbIncorrectWords();
         }
-        nextWord();
 
         // Notifier la vue avec les informations nécessaires
         Struct data = new Struct(getText(), positionCurrentWord,
@@ -120,8 +114,8 @@ public abstract class AbstractCorrector extends Observable {
     }
 
     /** Passe au mot suivant.
-     * Utile lorsque l'on évalue caratctère par caractère
      *
+     * @throws EndOfTextException si on a déjà atteint la fin du texte
      */
     public void nextWord() throws EndOfTextException{
         if(positionCurrentWord + 1 >= getText().size()){

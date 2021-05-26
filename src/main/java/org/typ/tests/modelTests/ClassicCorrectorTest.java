@@ -1,12 +1,9 @@
 package org.typ.tests.modelTests;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.typ.model.ClassicCorrector;
 import org.typ.model.EndOfTextException;
-import org.typ.model.PositionDoesNotExistException;
 import org.typ.model.Statistics;
 
 import java.util.ArrayList;
@@ -81,13 +78,18 @@ public class ClassicCorrectorTest {
     /**
      * Test Case : Test quand on valide plusieurs mots, les stats doivent bien correspondre
      */
-    public void getStatsTest() throws PositionDoesNotExistException, EndOfTextException {
+    public void getStatsTest() throws EndOfTextException {
         // CONDITIONS DU TEST
-        corrector.evaluateWord("Bonjour", 0);
-        corrector.evaluateWord("jea", 1);
-        corrector.evaluateWord("suis", 2);
-        corrector.evaluateWord("la", 3);
-        corrector.evaluateWord("stte", 4);
+        corrector.evaluateWord("Bonjour");
+        corrector.nextWord();
+        corrector.evaluateWord("jea");
+        corrector.nextWord();
+        corrector.evaluateWord("suis");
+        corrector.nextWord();
+        corrector.evaluateWord("la");
+        corrector.nextWord();
+        corrector.evaluateWord("stte");
+        corrector.nextWord();
 
         int expectedNbWrongWords = 3;
         int expectedNbRightWords = 2;
@@ -107,7 +109,7 @@ public class ClassicCorrectorTest {
      * Test Case : On évalue des mots correctes et incorrectes,
      * les stats et les positions doivent correspondre.
      */
-    public void evaluateWordTest() throws PositionDoesNotExistException, EndOfTextException {
+    public void evaluateWordTest() throws EndOfTextException {
         // CONDITIONS DU TEST
         int expectedNbWrongWords = 3;
         int expectedNbRightWords = 2;
@@ -122,11 +124,16 @@ public class ClassicCorrectorTest {
         // CHECK EXCEPTION
 
         // EXECUTION DU TEST
-        corrector.evaluateWord("Bonjour", 0);
-        corrector.evaluateWord("jea", 1);
-        corrector.evaluateWord("suis", 2);
-        corrector.evaluateWord("la", 3);
-        corrector.evaluateWord("stte", 4);
+        corrector.evaluateWord("Bonjour");
+        corrector.nextWord();
+        corrector.evaluateWord("jea");
+        corrector.nextWord();
+        corrector.evaluateWord("suis");
+        corrector.nextWord();
+        corrector.evaluateWord("la");
+        corrector.nextWord();
+        corrector.evaluateWord("stte");
+        corrector.nextWord();
 
         // CHECK DU RESULTAT
         Statistics resultStats = corrector.getStats();
