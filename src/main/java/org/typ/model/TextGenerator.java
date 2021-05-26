@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface TextGenerator<T> {
 
-    public List<T> generateText() throws FileNotFoundException;
+    public T generateText() throws FileNotFoundException;
 }
