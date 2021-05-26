@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class ClassicTextGenerator {
+public class ClassicTextGenerator implements TextGenerator {
 
     private String filePath;
 
