@@ -1,5 +1,7 @@
 package org.typ.model;
 
+import org.typ.view.ViewClassicMode;
+
 import java.util.List;
 
 public class ClassicCorrector extends AbstractCorrector{
@@ -9,8 +11,8 @@ public class ClassicCorrector extends AbstractCorrector{
      *
      * @param text le texte qui permet d'évaluer les mots à vérifier
      */
-    public ClassicCorrector(List<String> text) {
-        super(text);
+    public ClassicCorrector(List<String> text, ViewClassicMode view) {
+        super(text, view);
     }
 
     @Override

@@ -6,12 +6,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.typ.model.ClassicCorrector;
+import org.typ.model.EndOfTextException;
 import org.typ.model.ModelTest;
 
 public class ControllerClassicMode extends VBox {
 
 
-    private ModelTest model;
+    private ClassicCorrector model;
     private HBox hBoxQuitterRejouer;
     private TextField textInput;
     private Button exitButton;
@@ -21,7 +23,7 @@ public class ControllerClassicMode extends VBox {
      * Constructeur de la classe ControllerClassicMode
      * @param model : modele
      */
-    public ControllerClassicMode(ModelTest model) {
+    public ControllerClassicMode(ClassicCorrector model) {
         super(20);
         this.model = model;
         /* Redéfinition du textfield pour refuser les espaces */
@@ -42,10 +44,14 @@ public class ControllerClassicMode extends VBox {
         textInput.setOnKeyPressed(e -> {
             //System.out.println("released : "+e.getCode());
             KeyCode keyPressed = e.getCode();
-            if (keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty()) {
-                model.isValidWord(textInput.getText());
+            if (keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty() && !model.isGameOver()) {
+                model.evaluateWord(textInput.getText());
                 textInput.setText("");
-                model.incrementIndice();
+                try {
+                    model.nextWord();
+                } catch (EndOfTextException endOfTextException) {
+                    endOfTextException.printStackTrace();
+                }
             }
         });
 
@@ -73,7 +79,7 @@ public class ControllerClassicMode extends VBox {
      */
     private void onClickReplayButton(ActionEvent e) {
         System.out.println("Replay ??");
-        model.reset();
+
         textInput.setText("");
     }
 

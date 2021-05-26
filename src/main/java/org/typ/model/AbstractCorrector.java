@@ -1,5 +1,7 @@
 package org.typ.model;
 
+import org.typ.view.ViewClassicMode;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -29,7 +31,7 @@ public abstract class AbstractCorrector extends Observable {
      *
      * @param text le texte qui permet d'évaluer les mots à vérifier
      */
-    public AbstractCorrector(List<String> text){
+    public AbstractCorrector(List<String> text, ViewClassicMode view){
 
         // Initialisation des attributs
         positionCurrentWord = 0;
@@ -37,6 +39,13 @@ public abstract class AbstractCorrector extends Observable {
         incorrectWordsPosition = new ArrayList<>();
         textWrapper = new ClassicTextWrapper(text);
         stats = new ClassicStatistics();
+        this.addObserver(view);
+
+        Struct data = new Struct(getText(), positionCurrentWord,
+                correctWordsPosition, incorrectWordsPosition,
+                correctWordsPosition.size(), incorrectWordsPosition.size());
+        setChanged();
+        notifyObservers(data);
 
     }
 
@@ -95,7 +104,7 @@ public abstract class AbstractCorrector extends Observable {
     public void evaluateWord(String word) {
 
         // Si le début du mot correspond
-        if(getText().get(positionCurrentWord).startsWith(word)){
+        if(getText().get(positionCurrentWord).equals(word)){
             correctWordsPosition.add(positionCurrentWord);
             stats.incrementNbCorrectWords();
         }
@@ -109,6 +118,7 @@ public abstract class AbstractCorrector extends Observable {
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
                 correctWordsPosition.size(), incorrectWordsPosition.size());
+        setChanged();
         notifyObservers(data);
 
     }
@@ -122,6 +132,11 @@ public abstract class AbstractCorrector extends Observable {
             throw new EndOfTextException();
         }
         positionCurrentWord++;
+        Struct data = new Struct(getText(), positionCurrentWord,
+                correctWordsPosition, incorrectWordsPosition,
+                correctWordsPosition.size(), incorrectWordsPosition.size());
+        setChanged();
+        notifyObservers(data);
     }
 
     /** Indique si la partie est terminé ou pas.
