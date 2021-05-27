@@ -57,6 +57,12 @@ public class ControllerClassicMode extends VBox {
                     endOfTextException.printStackTrace();
                 }
             }
+            if ( keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty() && model.isGameOver()) {
+                model.evaluateWord(textInput.getText());
+                textInput.setText("");
+                textInput.setEditable(false);
+            }
+
         });
 
         exitButton = new Button("Exit");

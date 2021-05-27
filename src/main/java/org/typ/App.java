@@ -27,7 +27,7 @@ public class App extends Application {
 
         ViewClassicMode view = new ViewClassicMode();
 
-        ClassicTextGenerator ctg = new ClassicTextGenerator("src/main/resources/mots_courants_en.csv", 1500, 100);
+        ClassicTextGenerator ctg = new ClassicTextGenerator("src/main/resources/mots_courants_en.csv", 1500, 50);
 
         ClassicCorrector model = null;
         try {
