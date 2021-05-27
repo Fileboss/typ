@@ -140,7 +140,7 @@ public abstract class AbstractCorrector extends Observable {
     }
 
     /** Démarre l'évaluation du texte et notifie la vue.
-     * Doit être appelé après l'appel à initialize()
+     * Ne Peut être appelé qu'après l'appel à initialize()
      */
     public void start() {
         Struct data = new Struct(getText(), positionCurrentWord,
