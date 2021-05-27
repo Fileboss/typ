@@ -31,7 +31,7 @@ public class App extends Application {
 
         ClassicCorrector model = null;
         try {
-            model = new ClassicCorrector(ctg.generateText(), view);
+            model = new ClassicCorrector(ctg, view);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

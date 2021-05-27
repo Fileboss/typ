@@ -7,8 +7,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.typ.model.ClassicCorrector;
+import org.typ.model.ClassicStatistics;
 import org.typ.model.EndOfTextException;
 import org.typ.model.ModelTest;
+
+import java.io.FileNotFoundException;
 
 public class ControllerClassicMode extends VBox {
 
@@ -26,6 +29,7 @@ public class ControllerClassicMode extends VBox {
     public ControllerClassicMode(ClassicCorrector model) {
         super(20);
         this.model = model;
+        this.model.start();
         /* Redéfinition du textfield pour refuser les espaces */
         textInput = new TextField() {
             @Override public void replaceText(int start, int end, String text) {
@@ -78,9 +82,11 @@ public class ControllerClassicMode extends VBox {
      * @param e
      */
     private void onClickReplayButton(ActionEvent e) {
-        System.out.println("Replay ??");
 
+        model.initialize();
+        model.start();
         textInput.setText("");
+
     }
 
 
