@@ -1,7 +1,10 @@
 package org.typ.controller;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
@@ -54,13 +57,25 @@ public class ControllerClassicMode extends VBox {
                 try {
                     model.nextWord();
                 } catch (EndOfTextException endOfTextException) {
-                    endOfTextException.printStackTrace();
+                    textInput.setEditable(false);
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Game Over");
+                    alert.setHeaderText(null);
+                    alert.setContentText("La partie est terminé");
+
+                    EventHandler<DialogEvent> event =
+                            new EventHandler<DialogEvent>() {
+                                public void handle(DialogEvent e) {
+                                    onClickReplayButton(null);
+                                }
+                            };
+
+                    alert.setOnCloseRequest(event);
+
+                    alert.showAndWait();
                 }
-            }
-            if ( keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty() && model.isGameOver()) {
-                model.evaluateWord(textInput.getText());
-                textInput.setText("");
-                textInput.setEditable(false);
+
             }
 
         });
@@ -92,10 +107,8 @@ public class ControllerClassicMode extends VBox {
         model.initialize();
         model.start();
         textInput.setText("");
+        textInput.setEditable(true);
 
     }
-
-
-
 
 }

@@ -45,7 +45,7 @@ public class ClassicCorrector extends AbstractCorrector{
 
     @Override
     public boolean isGameOver() {
-        return positionCurrentWord + 1 == getText().size();
+        return positionCurrentWord == getText().size();
     }
 
 
