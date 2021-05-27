@@ -1,6 +1,5 @@
 package org.typ.model;
 
-import org.typ.view.ViewClassicMode;
 import org.typ.view.ViewMode;
 
 import java.io.FileNotFoundException;
@@ -22,14 +21,13 @@ public abstract class AbstractCorrector extends Observable {
     /** Liste des positions des mots incorrectements saisies. */
     protected List<Integer> incorrectWordsPosition;
 
-    /** Le texte complet qui permet d'évaluer si les mots donnés sont correctes ou non */
-    //protected TextWrapper textWrapper;
-
+    /** Le texte complet qui permet d'évaluer si les mots donnés sont correctes ou non. */
     protected List<String> text;
 
+    /** C'est le générateur de texte. **/
     protected TextGenerator textGenerator;
 
-    /** Les statistiques concernant l'évaluation d'une partie */
+    /** Les statistiques concernant l'évaluation d'une partie. */
     protected Statistics stats;
 
     /** Initialise un correcteur avec pour première position 0,
@@ -37,26 +35,11 @@ public abstract class AbstractCorrector extends Observable {
      *
      * @param textGenerator le texte qui permet d'évaluer les mots à vérifier
      */
-    public AbstractCorrector(TextGenerator textGenerator, ViewClassicMode view){
-
-        // Initialisation des attributs
-        /*positionCurrentWord = 0;
-        correctWordsPosition = new ArrayList<>();
-        incorrectWordsPosition = new ArrayList<>();
-        textWrapper = new ClassicTextWrapper(text);
-        stats = new ClassicStatistics();
-        this.addObserver(view);
-
-        Struct data = new Struct(getText(), positionCurrentWord,
-                correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size());
-        setChanged();
-        notifyObservers(data);*/
+    public AbstractCorrector(TextGenerator textGenerator, ViewMode view){
         this.addObserver(view);
         this.textGenerator = textGenerator;
 
         this.initialize();
-
 
     }
 
@@ -140,6 +123,9 @@ public abstract class AbstractCorrector extends Observable {
      */
     public abstract boolean isGameOver();
 
+    /** Initialise le correcteur dans l'état nécessaire pour commencer l'évaluation.
+     *
+     */
     public void initialize() {
         positionCurrentWord = 0;
         correctWordsPosition = new ArrayList<>();
@@ -153,6 +139,9 @@ public abstract class AbstractCorrector extends Observable {
 
     }
 
+    /** Démarre l'évaluation du texte et notifie la vue.
+     * Doit être appelé après l'appel à initialize()
+     */
     public void start() {
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
