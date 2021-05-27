@@ -1,17 +1,25 @@
 package org.typ.controller;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DialogEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.typ.model.ClassicCorrector;
+import org.typ.model.ClassicStatistics;
+import org.typ.model.EndOfTextException;
 import org.typ.model.ModelTest;
+
+import java.io.FileNotFoundException;
 
 public class ControllerClassicMode extends VBox {
 
 
-    private ModelTest model;
+    private ClassicCorrector model;
     private HBox hBoxQuitterRejouer;
     private TextField textInput;
     private Button exitButton;
@@ -21,9 +29,10 @@ public class ControllerClassicMode extends VBox {
      * Constructeur de la classe ControllerClassicMode
      * @param model : modele
      */
-    public ControllerClassicMode(ModelTest model) {
+    public ControllerClassicMode(ClassicCorrector model) {
         super(20);
         this.model = model;
+        this.model.start();
         /* Redéfinition du textfield pour refuser les espaces */
         textInput = new TextField() {
             @Override public void replaceText(int start, int end, String text) {
@@ -42,11 +51,33 @@ public class ControllerClassicMode extends VBox {
         textInput.setOnKeyPressed(e -> {
             //System.out.println("released : "+e.getCode());
             KeyCode keyPressed = e.getCode();
-            if (keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty()) {
-                model.isValidWord(textInput.getText());
+            if (keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty() && !model.isGameOver()) {
+                model.evaluateWord(textInput.getText());
                 textInput.setText("");
-                model.incrementIndice();
+                try {
+                    model.nextWord();
+                } catch (EndOfTextException endOfTextException) {
+                    textInput.setEditable(false);
+
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Game Over");
+                    alert.setHeaderText(null);
+                    alert.setContentText("La partie est terminé");
+
+                    EventHandler<DialogEvent> event =
+                            new EventHandler<DialogEvent>() {
+                                public void handle(DialogEvent e) {
+                                    onClickReplayButton(null);
+                                }
+                            };
+
+                    alert.setOnCloseRequest(event);
+
+                    alert.showAndWait();
+                }
+
             }
+
         });
 
         exitButton = new Button("Exit");
@@ -72,12 +103,12 @@ public class ControllerClassicMode extends VBox {
      * @param e
      */
     private void onClickReplayButton(ActionEvent e) {
-        System.out.println("Replay ??");
-        model.reset();
+
+        model.initialize();
+        model.start();
         textInput.setText("");
+        textInput.setEditable(true);
+
     }
-
-
-
 
 }

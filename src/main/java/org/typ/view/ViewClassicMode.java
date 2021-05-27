@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ViewClassicMode extends BorderPane implements Observer {
+public class ViewClassicMode extends BorderPane implements ViewMode {
 
     private final Label correctLabel;
     private final Label falseLabel;

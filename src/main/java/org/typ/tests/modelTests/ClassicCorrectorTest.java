@@ -21,7 +21,7 @@ public class ClassicCorrectorTest {
     @Before
     public void setUp() throws Exception {
         textList = Arrays.asList(text.split(" "));
-        corrector = new ClassicCorrector(textList);
+        corrector = null;//new ClassicCorrector(textList);
     }
 
     @Test

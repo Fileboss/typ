@@ -1,5 +1,8 @@
 package org.typ.model;
 
+import org.typ.view.ViewMode;
+
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -18,25 +21,25 @@ public abstract class AbstractCorrector extends Observable {
     /** Liste des positions des mots incorrectements saisies. */
     protected List<Integer> incorrectWordsPosition;
 
-    /** Le texte complet qui permet d'évaluer si les mots donnés sont correctes ou non */
-    protected TextWrapper textWrapper;
+    /** Le texte complet qui permet d'évaluer si les mots donnés sont correctes ou non. */
+    protected List<String> text;
 
-    /** Les statistiques concernant l'évaluation d'une partie */
+    /** C'est le générateur de texte. **/
+    protected TextGenerator textGenerator;
+
+    /** Les statistiques concernant l'évaluation d'une partie. */
     protected Statistics stats;
 
     /** Initialise un correcteur avec pour première position 0,
      * les listes de mots correctes et incorrectes vides.
      *
-     * @param text le texte qui permet d'évaluer les mots à vérifier
+     * @param textGenerator le texte qui permet d'évaluer les mots à vérifier
      */
-    public AbstractCorrector(List<String> text){
+    public AbstractCorrector(TextGenerator textGenerator, ViewMode view){
+        this.addObserver(view);
+        this.textGenerator = textGenerator;
 
-        // Initialisation des attributs
-        positionCurrentWord = 0;
-        correctWordsPosition = new ArrayList<>();
-        incorrectWordsPosition = new ArrayList<>();
-        textWrapper = new ClassicTextWrapper(text);
-        stats = new ClassicStatistics();
+        this.initialize();
 
     }
 
@@ -45,7 +48,7 @@ public abstract class AbstractCorrector extends Observable {
      * @return le text du TextWrapper
      */
     public List<String> getText(){
-        return textWrapper.getText();
+        return text;
     }
 
     /** Retourne le nombre de mots dans le text complet.
@@ -54,6 +57,10 @@ public abstract class AbstractCorrector extends Observable {
      */
     public int getNbWords(){
         return getText().size();
+    }
+
+    public TextGenerator getTextGenerator() {
+        return textGenerator;
     }
 
     /** Retourne la position du mot en cours d'évaluation.
@@ -92,26 +99,7 @@ public abstract class AbstractCorrector extends Observable {
      *
      * @param word le mot à évaluer
      */
-    public void evaluateWord(String word) {
-
-        // Si le début du mot correspond
-        if(getText().get(positionCurrentWord).startsWith(word)){
-            correctWordsPosition.add(positionCurrentWord);
-            stats.incrementNbCorrectWords();
-        }
-        // S'il ne correspond pas
-        else{
-            incorrectWordsPosition.add(positionCurrentWord);
-            stats.incrementNbIncorrectWords();
-        }
-
-        // Notifier la vue avec les informations nécessaires
-        Struct data = new Struct(getText(), positionCurrentWord,
-                correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size());
-        notifyObservers(data);
-
-    }
+    public abstract void evaluateWord(String word);
 
     /** Passe au mot suivant.
      *
@@ -122,6 +110,11 @@ public abstract class AbstractCorrector extends Observable {
             throw new EndOfTextException();
         }
         positionCurrentWord++;
+        Struct data = new Struct(getText(), positionCurrentWord,
+                correctWordsPosition, incorrectWordsPosition,
+                correctWordsPosition.size(), incorrectWordsPosition.size());
+        setChanged();
+        notifyObservers(data);
     }
 
     /** Indique si la partie est terminé ou pas.
@@ -129,4 +122,33 @@ public abstract class AbstractCorrector extends Observable {
      * @return vrai si la partie est terminé et faux sinon
      */
     public abstract boolean isGameOver();
+
+    /** Initialise le correcteur dans l'état nécessaire pour commencer l'évaluation.
+     *
+     */
+    public void initialize() {
+        positionCurrentWord = 0;
+        correctWordsPosition = new ArrayList<>();
+        incorrectWordsPosition = new ArrayList<>();
+        try {
+            text = textGenerator.generateText();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    /** Démarre l'évaluation du texte et notifie la vue.
+     * Ne Peut être appelé qu'après l'appel à initialize()
+     */
+    public void start() {
+        Struct data = new Struct(getText(), positionCurrentWord,
+                correctWordsPosition, incorrectWordsPosition,
+                correctWordsPosition.size(), incorrectWordsPosition.size());
+        setChanged();
+        notifyObservers(data);
+    }
+
+
 }
