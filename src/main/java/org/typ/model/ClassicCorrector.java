@@ -15,7 +15,7 @@ public class ClassicCorrector extends AbstractCorrector{
      *
      * @param classicTextGenerator le texte qui permet d'évaluer les mots à vérifier
      */
-    public ClassicCorrector(ClassicTextGenerator classicTextGenerator, ViewClassicMode view) throws FileNotFoundException {
+    public ClassicCorrector(ClassicTextGenerator classicTextGenerator, ViewMode view) throws FileNotFoundException {
         super(classicTextGenerator, view);
 
     }

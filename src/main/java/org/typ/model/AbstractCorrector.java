@@ -106,6 +106,7 @@ public abstract class AbstractCorrector extends Observable {
      * @throws EndOfTextException si on a déjà atteint la fin du texte
      */
     public void nextWord() throws EndOfTextException{
+        //TODO modifier car isGameOver ne peut jamais être utilisé
         if(positionCurrentWord + 1 >= getText().size()){
             throw new EndOfTextException();
         }
