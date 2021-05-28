@@ -1,5 +1,7 @@
 package org.typ.view;
 
+import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -85,8 +87,31 @@ public class ViewClassicMode extends BorderPane implements ViewMode {
             }
         }
 
-
         this.setCenter(textFlow);
+       /* Text tDebut = (Text) textFlow.getChildren().get(0);
+        Bounds boundsInScene = tDebut.localToScene(tDebut.getBoundsInLocal());
+        System.out.println("center Y : " + boundsInScene.getCenterY() +
+                "\nmin Y : " + boundsInScene.getMinY() +
+                "\nmax Y : " + boundsInScene.getMaxY());*/
+
+        /*Text tFin = (Text) textFlow.getChildren().get(wholeText.size()-2);
+        boundsInScene = tFin.localToScene(tFin.getBoundsInLocal());
+        System.out.println("center Y : " + boundsInScene.getCenterY() +
+                "\nmin Y : " + boundsInScene.getMinY() +
+                "\nmax Y : " + boundsInScene.getMaxY()); */
+        Text tTest;
+        for (Node n: textFlow.getChildren()) {
+            tTest = (Text) n;
+            Bounds boundsInScene = tTest.localToScene(tTest.getBoundsInLocal());
+            System.out.println("\n"+tTest.getText());
+            System.out.println("min X : " + boundsInScene.getMinX() +
+                    "\nmax X : " + boundsInScene.getMaxX());
+        }
+
+        System.out.println("\nTEXTFLOW");
+        System.out.println(this.getBoundsInLocal());
+
+
 
         correctValue.setText(""+struct.getNbCorrectTotal());
         falseValue.setText(""+struct.getNbFalseTotal());
