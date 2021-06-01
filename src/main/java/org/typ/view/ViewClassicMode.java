@@ -80,6 +80,9 @@ public class ViewClassicMode extends BorderPane implements ViewMode {
                     textFlow.getChildren().add(incorrectPart);
                 } else {
                     // Cas où il y a une partie correcte et une autre partie (fausse ou non)
+                    // Dans ce cas, on utilise une substring pour découper le mot jusqu'au dernier caractère correct
+                    // La deuxième partie du mot sera ecrite soit en rouge (si il y a une erreur), soit dans la police de base
+                    // On utilise la classe CurrentWord pour concatener les deux Text
                     correctString = wholeWord.substring(0, struct.getPositionLastCorrectCharacter() + 1);
                     remainingString = wholeWord.substring(struct.getPositionLastCorrectCharacter() + 1, wholeWord.length());
                     TextTrue correctPart = new TextTrue(correctString);
@@ -90,10 +93,6 @@ public class ViewClassicMode extends BorderPane implements ViewMode {
                     CurrentWord currentWordPart = new CurrentWord(correctPart, remainingPart);
                     textFlow.getChildren().add(currentWordPart);
                 }
-                System.out.println("Last corect indice : " + struct.getPositionLastCorrectCharacter());
-                System.out.println("Last incorrect indice : " + struct.getPositionFirstTypo());
-                System.out.println("Correct string : " + correctString);
-                System.out.println("Remaining string : " + remainingString);
             // Cas des mots corrects
             } else if (struct.getCorrectList().contains(i)) {
                 TextTrue tt = new TextTrue(wholeText.get(i)+" ");

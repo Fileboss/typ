@@ -44,17 +44,22 @@ public class ClassicCorrector extends AbstractCorrector{
 
     @Override
     public void evaluateCharacters(String partialWord) {
+        // Cas où rien est écrit
         if(partialWord.length() == 0){
             this.positionFirstTypo = -1;
             this.positionLastCorrectCharacter = -1;
         }
+        // Cas où le mot écrit est (pour le moment) correct
+        // On met à jour l'indice du dernier caractère correct
         else if (getText().get(positionCurrentWord).startsWith(partialWord)){
             stats.incrementCorrectInput();
             this.positionLastCorrectCharacter = partialWord.length() - 1;
             this.positionFirstTypo = -1;
-        }else{
-            for(int i = 0; i < partialWord.length() && i < this.getText().get(this.positionCurrentWord).length(); i++){
-                if(partialWord.charAt(i) != this.getText().get(this.positionCurrentWord).charAt(i)){
+        } else {
+            // Cas où il y a une erreur
+            // On met à jour l'indice du premier caractère faux
+            for (int i = 0; i < partialWord.length() && i < this.getText().get(this.positionCurrentWord).length(); i++){
+                if (partialWord.charAt(i) != this.getText().get(this.positionCurrentWord).charAt(i)) {
                     this.positionFirstTypo = i;
                     break;
                 }

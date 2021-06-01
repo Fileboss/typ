@@ -15,8 +15,10 @@ public abstract class AbstractCorrector extends Observable {
     /** La position du mot en cours d'évaluation. */
     protected int positionCurrentWord;
 
+    /** La position de la première erreur */
     protected int positionFirstTypo;
 
+    /** La position du dernier caractère correct */
     protected int positionLastCorrectCharacter;
 
     /** Liste des positions des mots correctements saisies. */
@@ -107,7 +109,7 @@ public abstract class AbstractCorrector extends Observable {
      *
      * @param word le mot à évaluer
      */
-    public abstract void evaluateWord(String word);
+    public abstract void evaluateWord(String word) throws EndOfTextException;
 
     /** Evalue le caractère character avec le character correpondant à la position pos dans le textWrapper.
      *
@@ -121,7 +123,7 @@ public abstract class AbstractCorrector extends Observable {
      */
     public void nextWord() throws EndOfTextException{
         if(positionCurrentWord + 1 >= getText().size()){
-            throw new EndOfTextException();
+            throw new EndOfTextException(positionCurrentWord);
         }
         positionCurrentWord++;
         Struct data = new Struct(getText(), positionCurrentWord,
@@ -151,8 +153,6 @@ public abstract class AbstractCorrector extends Observable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-
     }
 
     /** Démarre l'évaluation du texte et notifie la vue.

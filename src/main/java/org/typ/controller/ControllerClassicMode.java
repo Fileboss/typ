@@ -49,7 +49,11 @@ public class ControllerClassicMode extends VBox {
             //System.out.println("released : "+e.getCode());
             KeyCode keyPressed = e.getCode();
             if (keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty() && !model.isGameOver()) {
-                model.evaluateWord(textInput.getText());
+                try {
+                    model.evaluateWord(textInput.getText());
+                } catch (EndOfTextException endOfTextException) {
+                    endOfTextException.printStackTrace();
+                }
                 textInput.setText("");
                 try {
                     model.nextWord();
@@ -77,6 +81,7 @@ public class ControllerClassicMode extends VBox {
 
         });
 
+        // Définition du comportement lors d'un changement sur le textInput. (validation par caractère)
         textInput.textProperty().addListener(this::validateCharacters);
 
         exitButton = new Button("Exit");
@@ -91,8 +96,6 @@ public class ControllerClassicMode extends VBox {
     private void validateCharacters(ObservableValue<? extends String> observable,
                                     String oldValue, String newValue) {
         model.evaluateCharacters(newValue);
-        System.out.println("text change detected!\n");
-        System.out.println(newValue);
     }
 
     /**
