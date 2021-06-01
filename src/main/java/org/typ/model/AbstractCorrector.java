@@ -15,6 +15,10 @@ public abstract class AbstractCorrector extends Observable {
     /** La position du mot en cours d'évaluation. */
     protected int positionCurrentWord;
 
+    protected int positionFirstTypo;
+
+    protected int positionLastCorrectCharacter;
+
     /** Liste des positions des mots correctements saisies. */
     protected List<Integer> correctWordsPosition;
 
@@ -71,6 +75,10 @@ public abstract class AbstractCorrector extends Observable {
         return positionCurrentWord;
     }
 
+    public int getPositionFirstTypo() {
+        return positionFirstTypo;
+    }
+
     /** Retourne les statistiques concerant la partie
      *
      * @return les statistiques
@@ -99,16 +107,26 @@ public abstract class AbstractCorrector extends Observable {
      *
      * @param word le mot à évaluer
      */
-    public abstract void evaluateWord(String word) throws GameOverException;
+    public abstract void evaluateWord(String word);
 
-    /** Passe au mot suivant en incrémentant posCurrentWord de 1.
+    /** Evalue le caractère character avec le character correpondant à la position pos dans le textWrapper.
      *
+     * @param partialWord le mot à évaluer
      */
-    public void nextWord() {
+    public abstract void evaluateCharacters(String partialWord);
+
+    /** Passe au mot suivant.
+     *
+     * @throws EndOfTextException si on a déjà atteint la fin du texte
+     */
+    public void nextWord() throws EndOfTextException{
+        if(positionCurrentWord + 1 >= getText().size()){
+            throw new EndOfTextException();
+        }
         positionCurrentWord++;
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size());
+                correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
         setChanged();
         notifyObservers(data);
     }
@@ -126,6 +144,8 @@ public abstract class AbstractCorrector extends Observable {
         positionCurrentWord = 0;
         correctWordsPosition = new ArrayList<>();
         incorrectWordsPosition = new ArrayList<>();
+        positionFirstTypo = -1;
+        positionLastCorrectCharacter = -1;
         try {
             text = textGenerator.generateText();
         } catch (FileNotFoundException e) {
@@ -141,7 +161,7 @@ public abstract class AbstractCorrector extends Observable {
     public void start() {
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size());
+                correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
         setChanged();
         notifyObservers(data);
     }

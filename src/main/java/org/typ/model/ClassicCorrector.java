@@ -17,7 +17,6 @@ public class ClassicCorrector extends AbstractCorrector{
      */
     public ClassicCorrector(ClassicTextGenerator classicTextGenerator, ViewMode view) throws FileNotFoundException {
         super(classicTextGenerator, view);
-
     }
 
     @Override
@@ -40,9 +39,38 @@ public class ClassicCorrector extends AbstractCorrector{
         // Notifier la vue avec les informations nécessaires
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size());
+                correctWordsPosition.size(), incorrectWordsPosition.size(), this.positionFirstTypo, this.positionLastCorrectCharacter);
         setChanged();
         notifyObservers(data);
+
+    }
+
+    @Override
+    public void evaluateCharacters(String partialWord) {
+        if(partialWord.length() == 0){
+            this.positionFirstTypo = -1;
+            this.positionLastCorrectCharacter = -1;
+        }
+        else if (getText().get(positionCurrentWord).startsWith(partialWord)){
+            stats.incrementCorrectInput();
+            this.positionLastCorrectCharacter = partialWord.length() - 1;
+            this.positionFirstTypo = -1;
+        }else{
+            for(int i = 0; i < partialWord.length() && i < this.getText().get(this.positionCurrentWord).length(); i++){
+                if(partialWord.charAt(i) != this.getText().get(this.positionCurrentWord).charAt(i)){
+                    this.positionFirstTypo = i;
+                    break;
+                }
+            }
+        }
+
+        //Notifier la vue avec les informations nécessaires
+        Struct data = new Struct(getText(), positionCurrentWord,
+                correctWordsPosition, incorrectWordsPosition,
+                correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
+        setChanged();
+        notifyObservers(data);
+        stats.incrementInput();
 
     }
 

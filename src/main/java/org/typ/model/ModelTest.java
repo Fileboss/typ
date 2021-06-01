@@ -36,7 +36,7 @@ public class ModelTest extends Observable {
             wholeText.append(" ");
         }
         setChanged();
-        notifyObservers((new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal)));
+        notifyObservers((new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal, 5,6)));
     }
 
     /**
@@ -76,7 +76,7 @@ public class ModelTest extends Observable {
                 wholeText.append(" ");
             }
             setChanged();
-            notifyObservers((new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal)));
+            notifyObservers((new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal, 5,5)));
         }
         System.out.println("Expected word : " + text.get(currentWordIndice));
     }
@@ -110,7 +110,7 @@ public class ModelTest extends Observable {
             default: text = Arrays.asList(TEXT1.split(" ")); break;
         }
         setChanged();
-        notifyObservers(new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal));
+        notifyObservers(new Struct(text, currentWordIndice, correctIndicesList, falseIndicesList, cptValidTotal, cptFalseTotal,5, 5));
     }
 
     /**
