@@ -1,14 +1,14 @@
 package org.typ;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.typ.controller.ControllerClassicMode;
-import org.typ.model.ModelTest;
-import org.typ.view.ViewClassicMode;
 
+import org.typ.view.menu.*;
+//import org.typ.menu.*;
+
+import java.io.IOException;
 
 /**
  * JavaFX App
@@ -16,25 +16,49 @@ import org.typ.view.ViewClassicMode;
 public class App extends Application {
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException {
 
-        stage.setTitle("Typ: classic mode");
+        MenuController controller = new MenuController();
+        MenuController playController = new MenuController();
+        MenuController settingsController = new MenuController();
+        MenuController statisticsController = new MenuController();
 
-        ViewClassicMode view = new ViewClassicMode();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/menu.fxml"));
+        FXMLLoader playLoader = new FXMLLoader(getClass().getResource("/menu.fxml"));
+        FXMLLoader settingsLoader = new FXMLLoader(getClass().getResource("/menu.fxml"));
+        FXMLLoader statisticsLoader = new FXMLLoader(getClass().getResource("/menu.fxml"));
 
-        ModelTest model = new ModelTest(view);
+        loader.setController(controller);
+        playLoader.setController(playController);
+        settingsLoader.setController(settingsController);
+        statisticsLoader.setController(statisticsController);
 
-        ControllerClassicMode controller = new ControllerClassicMode(model);
+        Scene scene = new Scene(loader.load());
+        Scene playScene = new Scene(playLoader.load());
+        Scene settingsScene = new Scene(settingsLoader.load());
+        Scene statisticsScene = new Scene(statisticsLoader.load());
 
-        VBox layout = new VBox(20, view, controller);
+        controller.setTitle("Menu");
+        controller.addCommandButton("play", new changeSceneCommand(scene, playScene));
+        controller.addCommandButton("statistics", new changeSceneCommand(scene, statisticsScene));
+        controller.addCommandButton("settings", new changeSceneCommand(scene, settingsScene));
+        controller.addCommandButton("exit", new Command() {
+            @Override
+            public void execute() {
+                System.exit(0);
+            }
+        });
 
+        settingsController.setTitle("Settings");
+        settingsController.addCommandButton("back", new changeSceneCommand(settingsScene, scene));
 
-        layout.setPadding(new Insets(20,20,20,20));
-        var scene = new Scene(layout, 800, 600);
+        playController.setTitle("Play");
+        playController.addCommandButton("back", new changeSceneCommand(playScene, scene));
 
-        stage.setMinHeight(300);
-        stage.setMinWidth(700);
+        statisticsController.setTitle("Statistics");
+        statisticsController.addCommandButton("back", new changeSceneCommand(statisticsScene, scene));
 
+        stage.setTitle("Typ");
         stage.setScene(scene);
         stage.show();
     }
