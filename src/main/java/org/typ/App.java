@@ -1,9 +1,11 @@
 package org.typ;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.typ.controller.ControllerClassicMode;
 import org.typ.model.ClassicCorrector;
@@ -11,6 +13,7 @@ import org.typ.model.ClassicTextGenerator;
 import org.typ.view.ViewClassicMode;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 /**
@@ -18,8 +21,10 @@ import java.io.FileNotFoundException;
  */
 public class App extends Application {
 
+    private static Scene scene;
+
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException {
 
         stage.setTitle("Typ: classic mode");
 
@@ -36,14 +41,20 @@ public class App extends Application {
 
         ControllerClassicMode controller = new ControllerClassicMode(model);
 
-        VBox layout = new VBox(20, view, controller);
+        FXMLLoader loaderView = new FXMLLoader(getClass().getResource("fxmlViewClassic.fxml"));
+        FXMLLoader loaderController = new FXMLLoader(getClass().getResource("fxmlControllerClassic.fxml"));
+
+        loaderView.setController(view);
+        loaderController.setController(controller);
 
 
-        layout.setPadding(new Insets(20,20,20,20));
-        var scene = new Scene(layout, 800, 600);
+        VBox layout = new VBox(20, (AnchorPane)loaderView.load(), (AnchorPane)loaderController.load());
+        layout.setBackground(new Background(new BackgroundFill(Color.rgb(7, 39, 69), CornerRadii.EMPTY, Insets.EMPTY)));
+        scene = new Scene(layout);
 
-        stage.setMinHeight(300);
-        stage.setMinWidth(700);
+
+        controller.start();
+        model.start();
 
         stage.setScene(scene);
         stage.show();
