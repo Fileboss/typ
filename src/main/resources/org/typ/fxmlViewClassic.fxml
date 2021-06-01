@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+
+<AnchorPane minHeight="-Infinity" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #072745;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="261.0" prefWidth="600.0" style="-fx-background-color: #072745;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+         <children>
+            <Label text="typ" textFill="#eec521">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
+            <TextFlow fx:id="viewTextFlow" prefHeight="183.0" prefWidth="613.0" style="-fx-background-color: #0c3964;">
+               <VBox.margin>
+                  <Insets left="30.0" right="30.0" top="10.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </opaqueInsets>
+            </TextFlow>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Corrects : " textFill="#eec521" />
+                  <Label fx:id="correctsWordCount" text="O" textFill="#eec521" />
+                  <Label text="Falses : " textFill="#eec521">
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin>
+                  </Label>
+                  <Label fx:id="FalseWordsCount" text="O" textFill="#eec521" />
+               </children>
+               <VBox.margin>
+                  <Insets left="30.0" right="30.0" top="10.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
