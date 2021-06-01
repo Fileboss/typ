@@ -53,8 +53,7 @@ public class ViewClassicMode extends BorderPane implements ViewMode {
 
     @Override
     public void update(Observable observable, Object o) {
-
-        textFlow = new TextFlow();
+        textFlow.getChildren().removeAll(textFlow.getChildren());
 
         Struct struct = (Struct) o;
 
@@ -64,9 +63,35 @@ public class ViewClassicMode extends BorderPane implements ViewMode {
         for(int i = 0; i < wholeText.size(); i++) {
             // Cas du mot courant
             if (i == struct.getPosition()) {
-                TextHighlight th = new TextHighlight(wholeText.get(i)+" ");
-                th.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
-                textFlow.getChildren().add(th);
+                String wholeWord = wholeText.get(i);
+                String correctString = "";
+                String remainingString = "";
+
+                if (struct.getPositionLastCorrectCharacter() == -1 && struct.getPositionFirstTypo() == -1) {
+                    // Cas où il y a rien d'input
+                    TextHighlight notYetWrittenPart = new TextHighlight(wholeText.get(i) + " ");
+                    notYetWrittenPart.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
+                    textFlow.getChildren().add(notYetWrittenPart);
+                } else if (struct.getPositionFirstTypo() != -1 && struct.getPositionLastCorrectCharacter() == -1) {
+                    // Cas où il y a que des erreur dans le mot
+                    TextFalse incorrectPart = new TextFalse(wholeText.get(i) + " ");
+                    incorrectPart.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
+                    textFlow.getChildren().add(incorrectPart);
+                } else {
+                    // Cas où il y a une partie correcte et une autre partie (fausse ou non)
+                    // Dans ce cas, on utilise une substring pour découper le mot jusqu'au dernier caractère correct
+                    // La deuxième partie du mot sera ecrite soit en rouge (si il y a une erreur), soit dans la police de base
+                    // On utilise la classe CurrentWord pour concatener les deux Text
+                    correctString = wholeWord.substring(0, struct.getPositionLastCorrectCharacter() + 1);
+                    remainingString = wholeWord.substring(struct.getPositionLastCorrectCharacter() + 1, wholeWord.length());
+                    TextTrue correctPart = new TextTrue(correctString);
+                    Text remainingPart = new TextHighlight(remainingString + " ");
+                    if (struct.getPositionFirstTypo() != -1) {
+                        remainingPart = new TextFalse(remainingString + " ");
+                    }
+                    CurrentWord currentWordPart = new CurrentWord(correctPart, remainingPart);
+                    textFlow.getChildren().add(currentWordPart);
+                }
             // Cas des mots corrects
             } else if (struct.getCorrectList().contains(i)) {
                 TextTrue tt = new TextTrue(wholeText.get(i)+" ");
@@ -84,9 +109,6 @@ public class ViewClassicMode extends BorderPane implements ViewMode {
                 textFlow.getChildren().add(tx);
             }
         }
-
-
-        this.setCenter(textFlow);
 
         correctValue.setText(""+struct.getNbCorrectTotal());
         falseValue.setText(""+struct.getNbFalseTotal());

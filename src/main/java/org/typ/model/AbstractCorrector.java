@@ -15,6 +15,12 @@ public abstract class AbstractCorrector extends Observable {
     /** La position du mot en cours d'évaluation. */
     protected int positionCurrentWord;
 
+    /** La position de la première erreur */
+    protected int positionFirstTypo;
+
+    /** La position du dernier caractère correct */
+    protected int positionLastCorrectCharacter;
+
     /** Liste des positions des mots correctements saisies. */
     protected List<Integer> correctWordsPosition;
 
@@ -101,6 +107,8 @@ public abstract class AbstractCorrector extends Observable {
      */
     public abstract void evaluateWord(String word) throws GameOverException;
 
+    public abstract void evaluateCharacters(String partialWord);
+
     /** Passe au mot suivant en incrémentant posCurrentWord de 1.
      *
      */
@@ -108,7 +116,7 @@ public abstract class AbstractCorrector extends Observable {
         positionCurrentWord++;
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size());
+                correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
         setChanged();
         notifyObservers(data);
     }
@@ -126,13 +134,13 @@ public abstract class AbstractCorrector extends Observable {
         positionCurrentWord = 0;
         correctWordsPosition = new ArrayList<>();
         incorrectWordsPosition = new ArrayList<>();
+        positionFirstTypo = -1;
+        positionLastCorrectCharacter = -1;
         try {
             text = textGenerator.generateText();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-
     }
 
     /** Démarre l'évaluation du texte et notifie la vue.
@@ -141,7 +149,7 @@ public abstract class AbstractCorrector extends Observable {
     public void start() {
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size());
+                correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
         setChanged();
         notifyObservers(data);
     }

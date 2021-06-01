@@ -1,5 +1,6 @@
 package org.typ.controller;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -77,11 +78,13 @@ public class ControllerClassicMode extends VBox {
 
                 EventHandler<DialogEvent> event =
                         e1 -> onClickReplayButton(null);
-
                 alert.setOnCloseRequest(event);
                 alert.showAndWait();
             }
         });
+
+        // Définition du comportement lors d'un changement sur le textInput. (validation par caractère)
+        textInput.textProperty().addListener(this::validateCharacters);
 
         exitButton = new Button("Exit");
         replayButton = new Button("Replay");
@@ -90,6 +93,11 @@ public class ControllerClassicMode extends VBox {
         hBoxQuitterRejouer = new HBox(500, exitButton, replayButton);
         this.getChildren().addAll(textInput, hBoxQuitterRejouer);
 
+    }
+
+    private void validateCharacters(ObservableValue<? extends String> observable,
+                                    String oldValue, String newValue) {
+        model.evaluateCharacters(newValue);
     }
 
     /**
