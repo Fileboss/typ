@@ -64,36 +64,9 @@ public class ViewClassicMode extends BorderPane implements ViewMode {
         for(int i = 0; i < wholeText.size(); i++) {
             // Cas du mot courant
             if (i == struct.getPosition()) {
-                String wholeWord = wholeText.get(i);
-                String correctString = "";
-                String remainingString = "";
-
-                if (struct.getPositionLastCorrectCharacter() == -1 && struct.getPositionFirstTypo() == -1) {
-                    // Cas où il y a rien d'input
-                    TextHighlight notYetWrittenPart = new TextHighlight(wholeText.get(i) + " ");
-                    notYetWrittenPart.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
-                    textFlow.getChildren().add(notYetWrittenPart);
-                } else if (struct.getPositionFirstTypo() != -1 && struct.getPositionLastCorrectCharacter() == -1) {
-                    // Cas où il y a que des erreur dans le mot
-                    TextFalse incorrectPart = new TextFalse(wholeText.get(i) + " ");
-                    incorrectPart.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
-                    textFlow.getChildren().add(incorrectPart);
-                } else {
-                    // Cas où il y a une partie correcte et une autre partie (fausse ou non)
-                    correctString = wholeWord.substring(0, struct.getPositionLastCorrectCharacter() + 1);
-                    remainingString = wholeWord.substring(struct.getPositionLastCorrectCharacter() + 1, wholeWord.length());
-                    TextTrue correctPart = new TextTrue(correctString);
-                    Text remainingPart = new TextHighlight(remainingString + " ");
-                    if (struct.getPositionFirstTypo() != -1) {
-                        remainingPart = new TextFalse(remainingString + " ");
-                    }
-                    CurrentWord currentWordPart = new CurrentWord(correctPart, remainingPart);
-                    textFlow.getChildren().add(currentWordPart);
-                }
-                System.out.println("Last corect indice : " + struct.getPositionLastCorrectCharacter());
-                System.out.println("Last incorrect indice : " + struct.getPositionFirstTypo());
-                System.out.println("Correct string : " + correctString);
-                System.out.println("Remaining string : " + remainingString);
+                TextHighlight th = new TextHighlight(wholeText.get(i)+" ");
+                th.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
+                textFlow.getChildren().add(th);
             // Cas des mots corrects
             } else if (struct.getCorrectList().contains(i)) {
                 TextTrue tt = new TextTrue(wholeText.get(i)+" ");
@@ -106,13 +79,15 @@ public class ViewClassicMode extends BorderPane implements ViewMode {
                 textFlow.getChildren().add(tf);
             }else {
             // Cas des autres mots
-                Text tx = new Text(wholeText.get(i) + " ");
+                Text tx =new Text(wholeText.get(i) + " ");
                 tx.setFont(Font.font ("Verdana", 20));
                 textFlow.getChildren().add(tx);
             }
         }
 
+
         this.setCenter(textFlow);
+
         correctValue.setText(""+struct.getNbCorrectTotal());
         falseValue.setText(""+struct.getNbFalseTotal());
     }

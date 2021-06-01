@@ -1,6 +1,5 @@
 package org.typ.controller;
 
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -11,7 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.typ.model.ClassicCorrector;
-import org.typ.model.EndOfTextException;
+import org.typ.model.GameOverException;
 
 public class ControllerClassicMode extends VBox {
 
@@ -49,35 +48,40 @@ public class ControllerClassicMode extends VBox {
             //System.out.println("released : "+e.getCode());
             KeyCode keyPressed = e.getCode();
             if (keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty() && !model.isGameOver()) {
-                model.evaluateWord(textInput.getText());
-                textInput.setText("");
                 try {
+                    model.evaluateWord(textInput.getText());
+                    textInput.setText("");
                     model.nextWord();
-                } catch (EndOfTextException endOfTextException) {
+                } catch (GameOverException gameOverException) {
                     textInput.setEditable(false);
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Game Over");
+                    alert.setTitle("Exception");
                     alert.setHeaderText(null);
-                    alert.setContentText("La partie est terminé");
+                    alert.setContentText(gameOverException.getMessage());
 
                     EventHandler<DialogEvent> event =
-                            new EventHandler<DialogEvent>() {
-                                public void handle(DialogEvent e) {
-                                    onClickReplayButton(null);
-                                }
-                            };
+                            e1 -> onClickReplayButton(null);
 
                     alert.setOnCloseRequest(event);
-
                     alert.showAndWait();
                 }
-
             }
+            if (model.isGameOver()){
+                textInput.setEditable(false);
 
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Game Over");
+                alert.setHeaderText(null);
+                alert.setContentText("Fin de la partie");
+
+                EventHandler<DialogEvent> event =
+                        e1 -> onClickReplayButton(null);
+
+                alert.setOnCloseRequest(event);
+                alert.showAndWait();
+            }
         });
-
-        textInput.textProperty().addListener(this::validateCharacters);
 
         exitButton = new Button("Exit");
         replayButton = new Button("Replay");
@@ -86,13 +90,6 @@ public class ControllerClassicMode extends VBox {
         hBoxQuitterRejouer = new HBox(500, exitButton, replayButton);
         this.getChildren().addAll(textInput, hBoxQuitterRejouer);
 
-    }
-
-    private void validateCharacters(ObservableValue<? extends String> observable,
-                                    String oldValue, String newValue) {
-        model.evaluateCharacters(newValue);
-        System.out.println("text change detected!\n");
-        System.out.println(newValue);
     }
 
     /**
