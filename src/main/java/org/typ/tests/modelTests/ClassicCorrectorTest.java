@@ -2,11 +2,10 @@ package org.typ.tests.modelTests;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
-import org.typ.model.ClassicCorrector;
-import org.typ.model.ClassicTextGenerator;
-import org.typ.model.EndOfTextException;
-import org.typ.model.Statistics;
+import org.junit.rules.ExpectedException;
+import org.typ.model.*;
 import org.typ.view.ViewMode;
 
 import java.io.FileNotFoundException;
@@ -17,11 +16,14 @@ import static org.junit.Assert.*;
 
 public class ClassicCorrectorTest {
 
-    private static ClassicTextGenerator ctg;
-    private static ViewMode view;
-    private static List<String> text;
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
-    private ClassicCorrector corrector;
+    public static ClassicTextGenerator ctg;
+    public static ViewMode view;
+    public static List<String> text;
+
+    public ClassicCorrector corrector;
 
     @BeforeClass
     public static void init() throws Exception {
@@ -120,7 +122,7 @@ public class ClassicCorrectorTest {
      * Test Case : On évalue des mots correctes et incorrectes,
      * les stats et les positions doivent correspondre.
      */
-    public void evaluateWordTest() throws EndOfTextException {
+    public void evaluateWordTest_01() throws GameOverException {
         // CONDITIONS DU TEST
         int expectedNbWrongWords = 3;
         int expectedNbRightWords = 2;
@@ -156,9 +158,28 @@ public class ClassicCorrectorTest {
 
     @Test
     /**
+     * Test Case : On évalue un mot mais currentPosition n'existe pas dans le texte
+     */
+    public void evaluateWordTest_02() throws GameOverException {
+        // CONDITIONS DU TEST
+        for (int i = 0; i < text.size(); i++){
+            corrector.nextWord();
+        }
+
+        // CHECK EXCEPTION
+        exceptionRule.expect(EndOfTextException.class);
+
+        // EXECUTION DU TEST
+        corrector.evaluateWord("Test");
+
+        // CHECK DU RESULTAT
+    }
+
+    @Test
+    /**
      * Test Case : Pour le cas normal
      */
-    public void nextWordTest_01() throws EndOfTextException {
+    public void nextWordTest() throws EndOfTextException {
         // CONDITIONS DU TEST
         int expectedPos = 1;
 
@@ -169,24 +190,6 @@ public class ClassicCorrectorTest {
 
         // CHECK DU RESULTAT
         assertEquals(expectedPos, corrector.getPositionCurrentWord());
-    }
-
-    @Test
-    /**
-     * Test Case : Pour le cas d'exception lorsque l'on à déjà atteint la fin du text
-     */
-    public void nextWordTest_02() throws EndOfTextException {
-        // CONDITIONS DU TEST
-        for(int i = 0; i < text.size() - 1; i++){
-            corrector.nextWord();
-        }
-
-        // CHECK EXCEPTION
-        assertThrows(EndOfTextException.class, () -> corrector.nextWord());
-
-        // EXECUTION DU TEST
-
-        // CHECK DU RESULTAT
     }
 
     @Test
@@ -215,10 +218,7 @@ public class ClassicCorrectorTest {
     public void isGameOverTest_02() {
         // CONDITIONS DU TEST
         for(int i = 0; i < text.size(); i++){
-            try {
-                corrector.nextWord();
-            } catch (EndOfTextException e) {
-            }
+            corrector.nextWord();
         }
 
         // CHECK EXCEPTION
