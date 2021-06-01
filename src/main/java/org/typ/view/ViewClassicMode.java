@@ -53,8 +53,7 @@ public class ViewClassicMode extends BorderPane implements ViewMode {
 
     @Override
     public void update(Observable observable, Object o) {
-
-        textFlow = new TextFlow();
+        textFlow.getChildren().removeAll(textFlow.getChildren());
 
         Struct struct = (Struct) o;
 
@@ -105,13 +104,12 @@ public class ViewClassicMode extends BorderPane implements ViewMode {
                 textFlow.getChildren().add(tf);
             }else {
             // Cas des autres mots
-                Text tx = new Text(wholeText.get(i) + " ");
+                Text tx =new Text(wholeText.get(i) + " ");
                 tx.setFont(Font.font ("Verdana", 20));
                 textFlow.getChildren().add(tx);
             }
         }
 
-        this.setCenter(textFlow);
         correctValue.setText(""+struct.getNbCorrectTotal());
         falseValue.setText(""+struct.getNbFalseTotal());
     }

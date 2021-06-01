@@ -15,12 +15,16 @@ public class ClassicCorrector extends AbstractCorrector{
      *
      * @param classicTextGenerator le texte qui permet d'évaluer les mots à vérifier
      */
-    public ClassicCorrector(ClassicTextGenerator classicTextGenerator, ViewClassicMode view) throws FileNotFoundException {
+    public ClassicCorrector(ClassicTextGenerator classicTextGenerator, ViewMode view) throws FileNotFoundException {
         super(classicTextGenerator, view);
+
     }
 
     @Override
-    public void evaluateWord(String word)  {
+    public void evaluateWord(String word) throws EndOfTextException {
+        if (positionCurrentWord >= text.size()){
+            throw new EndOfTextException(positionCurrentWord);
+        }
 
         // Si le début du mot correspond
         if(getText().get(positionCurrentWord).equals(word)){
@@ -70,9 +74,9 @@ public class ClassicCorrector extends AbstractCorrector{
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
                 correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
+
         setChanged();
         notifyObservers(data);
-        stats.incrementInput();
 
     }
 

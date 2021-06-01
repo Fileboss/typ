@@ -17,7 +17,9 @@ public class Struct {
     private List<Integer> correctList, falseList;
 
     /* Nombres de mots correct / faux totaux */
-    private int nbCorrectTotal, nbFalseTotal, positionFirstTypo, positionLastCorrectCharacter;
+    private int nbCorrectTotal, nbFalseTotal;
+
+    private int positionFirstTypo, positionLastCorrectCharacter;
 
     /**
      * Contruit une Struct

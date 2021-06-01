@@ -77,10 +77,6 @@ public abstract class AbstractCorrector extends Observable {
         return positionCurrentWord;
     }
 
-    public int getPositionFirstTypo() {
-        return positionFirstTypo;
-    }
-
     /** Retourne les statistiques concerant la partie
      *
      * @return les statistiques
@@ -109,22 +105,14 @@ public abstract class AbstractCorrector extends Observable {
      *
      * @param word le mot à évaluer
      */
-    public abstract void evaluateWord(String word) throws EndOfTextException;
+    public abstract void evaluateWord(String word) throws GameOverException;
 
-    /** Evalue le caractère character avec le character correpondant à la position pos dans le textWrapper.
-     *
-     * @param partialWord le mot à évaluer
-     */
     public abstract void evaluateCharacters(String partialWord);
 
-    /** Passe au mot suivant.
+    /** Passe au mot suivant en incrémentant posCurrentWord de 1.
      *
-     * @throws EndOfTextException si on a déjà atteint la fin du texte
      */
-    public void nextWord() throws EndOfTextException{
-        if(positionCurrentWord + 1 >= getText().size()){
-            throw new EndOfTextException(positionCurrentWord);
-        }
+    public void nextWord() {
         positionCurrentWord++;
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,

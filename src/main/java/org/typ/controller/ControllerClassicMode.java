@@ -11,7 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.typ.model.ClassicCorrector;
-import org.typ.model.EndOfTextException;
+import org.typ.model.GameOverException;
 
 public class ControllerClassicMode extends VBox {
 
@@ -51,34 +51,36 @@ public class ControllerClassicMode extends VBox {
             if (keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty() && !model.isGameOver()) {
                 try {
                     model.evaluateWord(textInput.getText());
-                } catch (EndOfTextException endOfTextException) {
-                    endOfTextException.printStackTrace();
-                }
-                textInput.setText("");
-                try {
+                    textInput.setText("");
                     model.nextWord();
-                } catch (EndOfTextException endOfTextException) {
+                } catch (GameOverException gameOverException) {
                     textInput.setEditable(false);
 
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Game Over");
+                    alert.setTitle("Exception");
                     alert.setHeaderText(null);
-                    alert.setContentText("La partie est terminé");
+                    alert.setContentText(gameOverException.getMessage());
 
                     EventHandler<DialogEvent> event =
-                            new EventHandler<DialogEvent>() {
-                                public void handle(DialogEvent e) {
-                                    onClickReplayButton(null);
-                                }
-                            };
+                            e1 -> onClickReplayButton(null);
 
                     alert.setOnCloseRequest(event);
-
                     alert.showAndWait();
                 }
-
             }
+            if (model.isGameOver()){
+                textInput.setEditable(false);
 
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Game Over");
+                alert.setHeaderText(null);
+                alert.setContentText("Fin de la partie");
+
+                EventHandler<DialogEvent> event =
+                        e1 -> onClickReplayButton(null);
+                alert.setOnCloseRequest(event);
+                alert.showAndWait();
+            }
         });
 
         // Définition du comportement lors d'un changement sur le textInput. (validation par caractère)
