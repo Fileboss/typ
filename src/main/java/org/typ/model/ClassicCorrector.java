@@ -17,7 +17,6 @@ public class ClassicCorrector extends AbstractCorrector{
      */
     public ClassicCorrector(ClassicTextGenerator classicTextGenerator, ViewClassicMode view) throws FileNotFoundException {
         super(classicTextGenerator, view);
-
     }
 
     @Override
@@ -40,6 +39,11 @@ public class ClassicCorrector extends AbstractCorrector{
                 correctWordsPosition.size(), incorrectWordsPosition.size());
         setChanged();
         notifyObservers(data);
+
+    }
+
+    @Override
+    public void evaluateCharacter(Character character) {
 
     }
 

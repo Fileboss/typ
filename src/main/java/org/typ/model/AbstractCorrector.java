@@ -15,6 +15,8 @@ public abstract class AbstractCorrector extends Observable {
     /** La position du mot en cours d'évaluation. */
     protected int positionCurrentWord;
 
+    protected int positionFirstTypo;
+
     /** Liste des positions des mots correctements saisies. */
     protected List<Integer> correctWordsPosition;
 
@@ -100,6 +102,12 @@ public abstract class AbstractCorrector extends Observable {
      * @param word le mot à évaluer
      */
     public abstract void evaluateWord(String word);
+
+    /** Evalue le caractère character avec le character correpondant à la position pos dans le textWrapper.
+     *
+     * @param character le mot à évaluer
+     */
+    public abstract void evaluateCharacter(Character character);
 
     /** Passe au mot suivant.
      *
