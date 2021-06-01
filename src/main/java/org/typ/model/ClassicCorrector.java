@@ -21,7 +21,10 @@ public class ClassicCorrector extends AbstractCorrector{
     }
 
     @Override
-    public void evaluateWord(String word)  {
+    public void evaluateWord(String word) throws EndOfTextException {
+        if (positionCurrentWord >= text.size()){
+            throw new EndOfTextException(positionCurrentWord);
+        }
 
         // Si le début du mot correspond
         if(getText().get(positionCurrentWord).equals(word)){
