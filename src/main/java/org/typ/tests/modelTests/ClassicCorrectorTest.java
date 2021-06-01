@@ -91,7 +91,7 @@ public class ClassicCorrectorTest {
     /**
      * Test Case : Test quand on valide plusieurs mots, les stats doivent bien correspondre
      */
-    public void getStatsTest() throws EndOfTextException {
+    public void getStatsTest() throws GameOverException {
         // CONDITIONS DU TEST
         corrector.evaluateWord(corrector.getText().get(0));
         corrector.nextWord();

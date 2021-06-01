@@ -101,13 +101,45 @@ public abstract class AbstractCorrector extends Observable {
         return incorrectWordsPosition;
     }
 
-    /** Evalue le mot word avec le mot correpondant à la position pos dans le textWrapper.
+    /** Evalue le mot word avec le mot correpondant à la position positionCurrentWord du texte
+     * et notifie la vue associé.
      *
      * @param word le mot à évaluer
+     * @throws GameOverException une exception de fin de partie
      */
-    public abstract void evaluateWord(String word) throws GameOverException;
+    public void evaluateWord(String word) throws GameOverException{
+        if (positionCurrentWord >= text.size()){
+            throw new EndOfTextException(positionCurrentWord);
+        }
+        evaluateWordTreatment(word);
+        Struct data = generateData();
+        notifyView(data);
+    }
 
-    public abstract void evaluateCharacters(String partialWord);
+    /** Réalise uniquement le traitment relatif à l'évaluation d'un mot
+     *
+     * @param word le mot à évaluer
+     * @throws GameOverException une exception de fin de partie
+     */
+    protected abstract void evaluateWordTreatment(String word) throws GameOverException;
+
+    /** Evalue le mot partialWord par rapport au début du mot
+     * correspond à l'indice posCurrentWord dans le texte.
+     * Permet l'évaluation d'un mot caractère par caractère
+     *
+     * @param partialWord le mot à comparer
+     */
+    public void evaluateCharacters(String partialWord){
+        evaluateCharactersTreatment(partialWord);
+        Struct data = generateData();
+        notifyView(data);
+    }
+
+    /** Réalise uniquement le traitment relatif à l'évaluation du début d'un mot.
+     *
+     * @param partialWord le mot à comparer
+     */
+    public abstract void evaluateCharactersTreatment(String partialWord);
 
     /** Passe au mot suivant en incrémentant posCurrentWord de 1.
      *
@@ -154,5 +186,22 @@ public abstract class AbstractCorrector extends Observable {
         notifyObservers(data);
     }
 
+    /** Notifie la vue avec les données data
+     *
+     * @param data les données
+     */
+    private void notifyView(Struct data){
+        setChanged();
+        notifyObservers(data);
+    }
 
+    /** Retourne les données mises à jour de l'état courant du correcteur
+     *
+     * @return les données de vue
+     */
+    protected Struct generateData(){
+        return new Struct(getText(), positionCurrentWord,
+                correctWordsPosition, incorrectWordsPosition,
+                correctWordsPosition.size(), incorrectWordsPosition.size(), this.positionFirstTypo, this.positionLastCorrectCharacter);
+    }
 }
