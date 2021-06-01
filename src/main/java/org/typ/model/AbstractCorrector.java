@@ -99,16 +99,12 @@ public abstract class AbstractCorrector extends Observable {
      *
      * @param word le mot à évaluer
      */
-    public abstract void evaluateWord(String word);
+    public abstract void evaluateWord(String word) throws GameOverException;
 
-    /** Passe au mot suivant.
+    /** Passe au mot suivant en incrémentant posCurrentWord de 1.
      *
-     * @throws EndOfTextException si on a déjà atteint la fin du texte
      */
-    public void nextWord() throws EndOfTextException{
-        if(positionCurrentWord + 1 >= getText().size()){
-            throw new EndOfTextException();
-        }
+    public void nextWord() {
         positionCurrentWord++;
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
