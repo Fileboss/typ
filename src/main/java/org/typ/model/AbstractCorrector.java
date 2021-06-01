@@ -17,6 +17,8 @@ public abstract class AbstractCorrector extends Observable {
 
     protected int positionFirstTypo;
 
+    protected int positionLastCorrectCharacter;
+
     /** Liste des positions des mots correctements saisies. */
     protected List<Integer> correctWordsPosition;
 
@@ -73,6 +75,10 @@ public abstract class AbstractCorrector extends Observable {
         return positionCurrentWord;
     }
 
+    public int getPositionFirstTypo() {
+        return positionFirstTypo;
+    }
+
     /** Retourne les statistiques concerant la partie
      *
      * @return les statistiques
@@ -105,9 +111,9 @@ public abstract class AbstractCorrector extends Observable {
 
     /** Evalue le caractère character avec le character correpondant à la position pos dans le textWrapper.
      *
-     * @param character le mot à évaluer
+     * @param partialWord le mot à évaluer
      */
-    public abstract void evaluateCharacter(Character character);
+    public abstract void evaluateCharacters(String partialWord);
 
     /** Passe au mot suivant.
      *
@@ -120,7 +126,7 @@ public abstract class AbstractCorrector extends Observable {
         positionCurrentWord++;
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size());
+                correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
         setChanged();
         notifyObservers(data);
     }
@@ -138,6 +144,8 @@ public abstract class AbstractCorrector extends Observable {
         positionCurrentWord = 0;
         correctWordsPosition = new ArrayList<>();
         incorrectWordsPosition = new ArrayList<>();
+        positionFirstTypo = -1;
+        positionLastCorrectCharacter = -1;
         try {
             text = textGenerator.generateText();
         } catch (FileNotFoundException e) {
@@ -153,7 +161,7 @@ public abstract class AbstractCorrector extends Observable {
     public void start() {
         Struct data = new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size());
+                correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
         setChanged();
         notifyObservers(data);
     }

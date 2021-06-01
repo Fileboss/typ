@@ -1,5 +1,6 @@
 package org.typ.controller;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -10,11 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.typ.model.ClassicCorrector;
-import org.typ.model.ClassicStatistics;
 import org.typ.model.EndOfTextException;
-import org.typ.model.ModelTest;
-
-import java.io.FileNotFoundException;
 
 public class ControllerClassicMode extends VBox {
 
@@ -80,6 +77,8 @@ public class ControllerClassicMode extends VBox {
 
         });
 
+        textInput.textProperty().addListener(this::validateCharacters);
+
         exitButton = new Button("Exit");
         replayButton = new Button("Replay");
         replayButton.setOnAction(this::onClickReplayButton);
@@ -87,6 +86,13 @@ public class ControllerClassicMode extends VBox {
         hBoxQuitterRejouer = new HBox(500, exitButton, replayButton);
         this.getChildren().addAll(textInput, hBoxQuitterRejouer);
 
+    }
+
+    private void validateCharacters(ObservableValue<? extends String> observable,
+                                    String oldValue, String newValue) {
+        model.evaluateCharacters(newValue);
+        System.out.println("text change detected!\n");
+        System.out.println(newValue);
     }
 
     /**

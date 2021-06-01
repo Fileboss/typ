@@ -17,7 +17,7 @@ public class Struct {
     private List<Integer> correctList, falseList;
 
     /* Nombres de mots correct / faux totaux */
-    private int nbCorrectTotal, nbFalseTotal;
+    private int nbCorrectTotal, nbFalseTotal, positionFirstTypo, positionLastCorrectCharacter;
 
     /**
      * Contruit une Struct
@@ -28,13 +28,15 @@ public class Struct {
      * @param nbCorrectTotal : nombre total de mots correct durant la partie
      * @param nbFalseTotal : nombre total des mots erronés durant la partie
      */
-    public Struct(List<String> text, int position, List<Integer> correctList, List<Integer> falseList, int nbCorrectTotal, int nbFalseTotal) {
+    public Struct(List<String> text, int position, List<Integer> correctList, List<Integer> falseList, int nbCorrectTotal, int nbFalseTotal, int positionFirstTypo, int positionLastCorrectCharacter) {
         this.text = text;
         this.position = position;
         this.correctList = correctList;
         this.falseList = falseList;
         this.nbCorrectTotal = nbCorrectTotal;
         this.nbFalseTotal = nbFalseTotal;
+        this.positionFirstTypo = positionFirstTypo;
+        this.positionLastCorrectCharacter = positionLastCorrectCharacter;
     }
 
     public List<String> getText() {
@@ -59,5 +61,13 @@ public class Struct {
 
     public int getNbFalseTotal() {
         return nbFalseTotal;
+    }
+
+    public int getPositionFirstTypo() {
+        return positionFirstTypo;
+    }
+
+    public int getPositionLastCorrectCharacter() {
+        return positionLastCorrectCharacter;
     }
 }
