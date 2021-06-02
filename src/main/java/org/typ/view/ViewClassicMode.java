@@ -1,5 +1,6 @@
 package org.typ.view;
 
+import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -15,23 +16,23 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-public class ViewClassicMode extends BorderPane implements Observer {
+public class ViewClassicMode extends BorderPane implements ViewMode {
 
-    private final Label correctLabel;
-    private final Label falseLabel;
-    private HBox hBoxCorrectFalse;
-    private Label falseValue;
-    private Label correctValue;
 
-    private Label labelTyp;
-    private Label labelChrono;
-    private TextFlow textFlow;
+    @FXML
+    private TextFlow viewTextFlow;
+
+    @FXML
+    private Label correctsWordCount;
+
+    @FXML
+    private Label FalseWordsCount;
 
     /**
      * Contructeur de la classe VueClassicMode. Cette classe affiche le titre, le chrono, le texte à recopier, le
      * compteur de mots corrects et faux
      */
-    public ViewClassicMode() {
+    /*public ViewClassicMode() {
         super();
         labelTyp = new Label("Typ");
         labelTyp.setTextFill(Color.GOLDENROD);
@@ -48,47 +49,70 @@ public class ViewClassicMode extends BorderPane implements Observer {
         this.setTop(boxTypChrono);
         this.setCenter(textFlow);
         this.setBottom(hBoxCorrectFalse);
-    }
+    }*/
 
 
     @Override
     public void update(Observable observable, Object o) {
-
-        textFlow = new TextFlow();
+        viewTextFlow.getChildren().removeAll(viewTextFlow.getChildren());
 
         Struct struct = (Struct) o;
 
         List<String> wholeText = struct.getText();
 
-        /* Ajouter le texte au textFlow.  */
+        /* Ajouter le texte au viewTextFlow.  */
         for(int i = 0; i < wholeText.size(); i++) {
             // Cas du mot courant
             if (i == struct.getPosition()) {
-                TextHighlight th = new TextHighlight(wholeText.get(i)+" ");
-                th.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
-                textFlow.getChildren().add(th);
+                String wholeWord = wholeText.get(i);
+                String correctString = "";
+                String remainingString = "";
+
+                if (struct.getPositionLastCorrectCharacter() == -1 && struct.getPositionFirstTypo() == -1) {
+                    // Cas où il y a rien d'input
+                    TextHighlight notYetWrittenPart = new TextHighlight(wholeText.get(i) + " ");
+                    notYetWrittenPart.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
+                    viewTextFlow.getChildren().add(notYetWrittenPart);
+                } else if (struct.getPositionFirstTypo() != -1 && struct.getPositionLastCorrectCharacter() == -1) {
+                    // Cas où il y a que des erreur dans le mot
+                    TextFalse incorrectPart = new TextFalse(wholeText.get(i) + " ");
+                    incorrectPart.setFont(Font.font ("Verdana", FontWeight.BOLD, 20));
+                    viewTextFlow.getChildren().add(incorrectPart);
+                } else {
+                    // Cas où il y a une partie correcte et une autre partie (fausse ou non)
+                    // Dans ce cas, on utilise une substring pour découper le mot jusqu'au dernier caractère correct
+                    // La deuxième partie du mot sera ecrite soit en rouge (si il y a une erreur), soit dans la police de base
+                    // On utilise la classe CurrentWord pour concatener les deux Text
+                    correctString = wholeWord.substring(0, struct.getPositionLastCorrectCharacter() + 1);
+                    remainingString = wholeWord.substring(struct.getPositionLastCorrectCharacter() + 1, wholeWord.length());
+                    TextTrue correctPart = new TextTrue(correctString);
+                    Text remainingPart = new TextHighlight(remainingString + " ");
+                    if (struct.getPositionFirstTypo() != -1) {
+                        remainingPart = new TextFalse(remainingString + " ");
+                    }
+                    CurrentWord currentWordPart = new CurrentWord(correctPart, remainingPart);
+                    viewTextFlow.getChildren().add(currentWordPart);
+                }
             // Cas des mots corrects
             } else if (struct.getCorrectList().contains(i)) {
                 TextTrue tt = new TextTrue(wholeText.get(i)+" ");
                 tt.setFont(Font.font ("Verdana", 20));
-                textFlow.getChildren().add(tt);
+                viewTextFlow.getChildren().add(tt);
             // Cas des mots faux
             } else if (struct.getFalseList().contains(i)) {
                 TextFalse tf = new TextFalse(wholeText.get(i)+" ");
                 tf.setFont(Font.font ("Verdana", 20));
-                textFlow.getChildren().add(tf);
+                viewTextFlow.getChildren().add(tf);
             }else {
             // Cas des autres mots
                 Text tx =new Text(wholeText.get(i) + " ");
                 tx.setFont(Font.font ("Verdana", 20));
-                textFlow.getChildren().add(tx);
+                tx.setFill(Color.rgb(197,176,40));
+                viewTextFlow.getChildren().add(tx);
             }
         }
 
-
-        this.setCenter(textFlow);
-
-        correctValue.setText(""+struct.getNbCorrectTotal());
-        falseValue.setText(""+struct.getNbFalseTotal());
+        correctsWordCount.setText(""+struct.getNbCorrectTotal());
+        FalseWordsCount.setText(""+struct.getNbFalseTotal());
     }
 }

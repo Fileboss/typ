@@ -11,13 +11,15 @@ public class Struct {
     private List<String> text;
 
     /* Position du mot courant */
-    private int position;
+    protected int position;
 
     /* Listes des indices des mots valides et des mots erronés */
     private List<Integer> correctList, falseList;
 
     /* Nombres de mots correct / faux totaux */
     private int nbCorrectTotal, nbFalseTotal;
+
+    private int positionFirstTypo, positionLastCorrectCharacter;
 
     /**
      * Contruit une Struct
@@ -28,13 +30,26 @@ public class Struct {
      * @param nbCorrectTotal : nombre total de mots correct durant la partie
      * @param nbFalseTotal : nombre total des mots erronés durant la partie
      */
-    public Struct(List<String> text, int position, List<Integer> correctList, List<Integer> falseList, int nbCorrectTotal, int nbFalseTotal) {
+    public Struct(List<String> text, int position, List<Integer> correctList, List<Integer> falseList, int nbCorrectTotal, int nbFalseTotal, int positionFirstTypo, int positionLastCorrectCharacter) {
         this.text = text;
         this.position = position;
         this.correctList = correctList;
         this.falseList = falseList;
         this.nbCorrectTotal = nbCorrectTotal;
         this.nbFalseTotal = nbFalseTotal;
+        this.positionFirstTypo = positionFirstTypo;
+        this.positionLastCorrectCharacter = positionLastCorrectCharacter;
+    }
+
+    public Struct(Struct copie){
+        this(copie.text,
+                copie.position,
+                copie.correctList,
+                copie.falseList,
+                copie.nbCorrectTotal,
+                copie.nbFalseTotal,
+                copie.positionFirstTypo,
+                copie.positionLastCorrectCharacter);
     }
 
     public List<String> getText() {
@@ -59,5 +74,13 @@ public class Struct {
 
     public int getNbFalseTotal() {
         return nbFalseTotal;
+    }
+
+    public int getPositionFirstTypo() {
+        return positionFirstTypo;
+    }
+
+    public int getPositionLastCorrectCharacter() {
+        return positionLastCorrectCharacter;
     }
 }
