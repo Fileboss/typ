@@ -2,18 +2,10 @@ package org.typ;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.typ.controller.ControllerClassicMode;
-import org.typ.model.ClassicCorrector;
-import org.typ.model.ClassicTextGenerator;
-import org.typ.view.ViewClassicMode;
-import org.typ.view.menu.*;
+import org.typ.controller.menu.*;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
@@ -34,10 +26,10 @@ public class App extends Application {
         MenuController settingsController = new MenuController();
         MenuController statisticsController = new MenuController();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/menu.fxml"));
-        FXMLLoader playLoader = new FXMLLoader(getClass().getResource("/menu.fxml"));
-        FXMLLoader settingsLoader = new FXMLLoader(getClass().getResource("/menu.fxml"));
-        FXMLLoader statisticsLoader = new FXMLLoader(getClass().getResource("/menu.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/typ/menu.fxml"));
+        FXMLLoader playLoader = new FXMLLoader(getClass().getResource("/org/typ/menu.fxml"));
+        FXMLLoader settingsLoader = new FXMLLoader(getClass().getResource("/org/typ/menu.fxml"));
+        FXMLLoader statisticsLoader = new FXMLLoader(getClass().getResource("/org/typ/menu.fxml"));
 
         loader.setController(controller);
         playLoader.setController(playController);
@@ -50,9 +42,9 @@ public class App extends Application {
         Scene statisticsScene = new Scene(statisticsLoader.load());
 
         controller.setTitle("Menu");
-        controller.addCommandButton("play", new changeSceneCommand(scene, playScene));
-        controller.addCommandButton("statistics", new changeSceneCommand(scene, statisticsScene));
-        controller.addCommandButton("settings", new changeSceneCommand(scene, settingsScene));
+        controller.addCommandButton("play", new ChangeSceneCommand(scene, playScene));
+        controller.addCommandButton("statistics", new ChangeSceneCommand(scene, statisticsScene));
+        controller.addCommandButton("settings", new ChangeSceneCommand(scene, settingsScene));
         controller.addCommandButton("exit", new Command() {
             @Override
             public void execute() {
@@ -61,15 +53,15 @@ public class App extends Application {
         });
 
         settingsController.setTitle("Settings");
-        settingsController.addCommandButton("back", new changeSceneCommand(settingsScene, scene));
+        settingsController.addCommandButton("back", new ChangeSceneCommand(settingsScene, scene));
 
         playController.setTitle("Play");
         playController.addCommandButton("Classic Mode", new StartClassicModeCommand(playScene));
         //playController.addCommandButton("Classic Mode", null);
-        playController.addCommandButton("back", new changeSceneCommand(playScene, scene));
+        playController.addCommandButton("back", new ChangeSceneCommand(playScene, scene));
 
         statisticsController.setTitle("Statistics");
-        statisticsController.addCommandButton("back", new changeSceneCommand(statisticsScene, scene));
+        statisticsController.addCommandButton("back", new ChangeSceneCommand(statisticsScene, scene));
 
         stage.setTitle("Typ");
         stage.setScene(scene);

@@ -55,7 +55,7 @@ public class ControllerClassicMode extends VBox {
      */
     @FXML
     private void onClickExitButton(ActionEvent e) {
-        System.exit(1);
+        System.exit(0);
     }
 
     /**

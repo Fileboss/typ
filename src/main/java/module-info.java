@@ -8,6 +8,7 @@ module org.typ {
 
     opens org.typ to javafx.fxml;
     opens org.typ.view to javafx.fxml;
-    opens org.typ.view.menu to javafx.fxml;
+    opens org.typ.controller.menu to javafx.fxml;
     opens org.typ.controller to javafx.fxml;
+    exports org.typ.controller.menu;
 }

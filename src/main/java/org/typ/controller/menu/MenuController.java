@@ -1,4 +1,4 @@
-package org.typ.view.menu;
+package org.typ.controller.menu;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
