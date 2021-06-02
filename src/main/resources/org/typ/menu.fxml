@@ -7,16 +7,16 @@
 
 <VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <FlowPane alignment="CENTER" prefHeight="43.0" prefWidth="400.0" style="-fx-background-color: #808080;" VBox.vgrow="NEVER">
+      <FlowPane alignment="CENTER" prefHeight="43.0" prefWidth="400.0" style="-fx-background-color: #051e35;" VBox.vgrow="NEVER">
          <children>
-            <Text fx:id="menuTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="typ." textAlignment="CENTER">
+            <Text fx:id="menuTitle" fill="#eec521" strokeType="OUTSIDE" strokeWidth="0.0" text="typ." textAlignment="CENTER">
                <font>
-                  <Font size="22.0" />
+                  <Font name="System Bold" size="26.0" />
                </font>
             </Text>
          </children>
       </FlowPane>
-      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="270.0" prefWidth="532.0" VBox.vgrow="NEVER">
+      <FlowPane alignment="CENTER" columnHalignment="CENTER" prefHeight="270.0" prefWidth="532.0" style="-fx-background-color: #072745;" VBox.vgrow="NEVER">
          <children>
             <VBox fx:id="commandList" alignment="CENTER" prefHeight="201.0" prefWidth="181.0" spacing="15.0" />
          </children>
