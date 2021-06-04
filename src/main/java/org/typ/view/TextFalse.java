@@ -10,6 +10,10 @@ public class TextFalse extends Text {
 
     public TextFalse(String word) {
         super(word);
-        this.setFill(Color.RED);
+        String colorStr = "#eb4034";
+        setFill(Color.rgb(
+                Integer.valueOf( colorStr.substring( 1, 3 ), 16 ),
+                Integer.valueOf( colorStr.substring( 3, 5 ), 16 ),
+                Integer.valueOf( colorStr.substring( 5, 7 ), 16 ) ));
     }
 }

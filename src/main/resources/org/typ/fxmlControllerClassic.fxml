@@ -13,14 +13,17 @@
    <children>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="137.0" prefWidth="600.0" style="-fx-background-color: #072745;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <NoSpacetextField fx:id="textInput" onKeyPressed="#onSpacePressed" style="-fx-background-color: #2f72b0;">
+            <NoSpacetextField fx:id="textInput" onKeyPressed="#onSpacePressed" style="-fx-background-color: #0c3964; -fx-text-fill: #c5b028;">
                <VBox.margin>
                   <Insets bottom="20.0" left="40.0" right="40.0" top="5.0" />
                </VBox.margin>
+               <font>
+                  <Font name="DejaVu Sans Mono" size="18.0" />
+               </font>
             </NoSpacetextField>
             <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #072745;">
                <children>
-                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onClickExitButton" style="-fx-background-color: #2f72b0;" text="Quit" textAlignment="CENTER" textFill="#c5b028">
+                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#onClickExitButton" style="-fx-background-color: #23527e;" text="Quit" textAlignment="CENTER" textFill="#c5b028">
                      <HBox.margin>
                         <Insets left="50.0" />
                      </HBox.margin>
@@ -28,7 +31,7 @@
                         <Font name="DejaVu Sans Bold" size="18.0" />
                      </font>
                   </Button>
-                  <Button fx:id="replayButton" mnemonicParsing="false" onAction="#onClickReplayButton" style="-fx-background-color: #2f72b0;" text="Replay" textFill="#c5b028">
+                  <Button fx:id="replayButton" mnemonicParsing="false" onAction="#onClickReplayButton" style="-fx-background-color: #23527e;" text="Replay" textFill="#c5b028">
                      <HBox.margin>
                         <Insets left="100.0" right="50.0" />
                      </HBox.margin>
