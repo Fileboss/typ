@@ -46,8 +46,12 @@ public class ClassicCorrector extends AbstractCorrector{
         } else {
             // Cas où il y a une erreur
             // On met à jour l'indice du premier caractère faux
-            for (int i = 0; i < partialWord.length() && i < this.getText().get(this.positionCurrentWord).length(); i++){
-                if (partialWord.charAt(i) != this.getText().get(this.positionCurrentWord).charAt(i)) {
+            for (int i = 0; i < partialWord.length(); i++){
+                if (i < this.getText().get(this.positionCurrentWord).length() && partialWord.charAt(i) != this.getText().get(this.positionCurrentWord).charAt(i)) {
+                    this.positionFirstTypo = i;
+                    break;
+                }
+                if(i >= this.getText().get(this.positionCurrentWord).length()){
                     this.positionFirstTypo = i;
                     break;
                 }
