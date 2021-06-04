@@ -27,7 +27,7 @@ public class ClassicCorrectorTest {
 
     @BeforeClass
     public static void init() throws Exception {
-        ctg = new ClassicTextGenerator("src/main/resources/mots_courants_en.csv", 50, 50);
+        ctg = new ClassicTextGenerator("src/main/resources/org/typ/dictionaries/mots_courants_en.csv", 50, 50);
         text = ctg.generateText();
         view = JunitUtils.dummyViewMode();
     }
