@@ -16,8 +16,6 @@ public class Struct {
     /* Listes des indices des mots valides et des mots erronés */
     private List<Integer> correctList, falseList;
 
-    /* Nombres de mots correct / faux totaux */
-    private int nbCorrectTotal, nbFalseTotal;
 
     private int positionFirstTypo, positionLastCorrectCharacter;
 
@@ -27,16 +25,12 @@ public class Struct {
      * @param position : position du mot courant
      * @param correctList : liste des indices des mots valdies
      * @param falseList : liste des indices des mots erronés
-     * @param nbCorrectTotal : nombre total de mots correct durant la partie
-     * @param nbFalseTotal : nombre total des mots erronés durant la partie
      */
-    public Struct(List<String> text, int position, List<Integer> correctList, List<Integer> falseList, int nbCorrectTotal, int nbFalseTotal, int positionFirstTypo, int positionLastCorrectCharacter) {
+    public Struct(List<String> text, int position, List<Integer> correctList, List<Integer> falseList, int positionFirstTypo, int positionLastCorrectCharacter) {
         this.text = text;
         this.position = position;
         this.correctList = correctList;
         this.falseList = falseList;
-        this.nbCorrectTotal = nbCorrectTotal;
-        this.nbFalseTotal = nbFalseTotal;
         this.positionFirstTypo = positionFirstTypo;
         this.positionLastCorrectCharacter = positionLastCorrectCharacter;
     }
@@ -46,8 +40,6 @@ public class Struct {
                 copie.position,
                 copie.correctList,
                 copie.falseList,
-                copie.nbCorrectTotal,
-                copie.nbFalseTotal,
                 copie.positionFirstTypo,
                 copie.positionLastCorrectCharacter);
     }
@@ -66,14 +58,6 @@ public class Struct {
 
     public List<Integer> getFalseList() {
         return falseList;
-    }
-
-    public int getNbCorrectTotal() {
-        return nbCorrectTotal;
-    }
-
-    public int getNbFalseTotal() {
-        return nbFalseTotal;
     }
 
     public int getPositionFirstTypo() {

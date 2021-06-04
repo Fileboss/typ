@@ -210,6 +210,6 @@ public abstract class AbstractCorrector{
     protected Struct generateData(){
         return new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size(), this.positionFirstTypo, this.positionLastCorrectCharacter);
+                this.positionFirstTypo, this.positionLastCorrectCharacter);
     }
 }
