@@ -30,7 +30,8 @@ public class StartClassicModeCommand implements Command {
 
         ClassicCorrector model = null;
         try {
-            model = new ClassicCorrector(ctg, view);
+            model = new ClassicCorrector(ctg);
+            model.addPropertyChangeListener(view);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -53,7 +54,7 @@ public class StartClassicModeCommand implements Command {
         Scene scene = new Scene(layout);
 
 
-        controller.start();
+        controller.start(view);
         model.start();
 
         Stage stage = (Stage) this.playScene.getWindow();
