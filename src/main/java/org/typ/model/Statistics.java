@@ -41,10 +41,16 @@ public interface Statistics {
     /**
      * Incrémente le nombre des entrées de l'utilisateur.
      */
-    void incrementInput();
+    void incrementNbInput();
 
     /**
      * Incrémente le nombre des entrées correctes de l'utilisateur.
      */
-    void incrementCorrectInput();
+    void incrementNbCorrectInput();
+
+    /**
+     * Remet les statistics dans un état initial
+     */
+    void reset();
+
 }

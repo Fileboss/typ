@@ -34,7 +34,8 @@ public class App extends Application {
 
         ClassicCorrector model = null;
         try {
-            model = new ClassicCorrector(ctg, view);
+            model = new ClassicCorrector(ctg);
+            model.addPropertyChangeListener(view);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -53,7 +54,8 @@ public class App extends Application {
         scene = new Scene(layout);
 
 
-        controller.start();
+        //TODO to refactor parce que c bizard ça le controller.start()
+        controller.start(view);
         model.start();
 
         stage.setScene(scene);

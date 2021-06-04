@@ -1,10 +1,7 @@
 package org.typ.model;
 
-import org.typ.view.ViewClassicMode;
-import org.typ.view.ViewMode;
 
 import java.io.FileNotFoundException;
-import java.util.List;
 
 public class ClassicCorrector extends AbstractCorrector{
 
@@ -15,13 +12,12 @@ public class ClassicCorrector extends AbstractCorrector{
      *
      * @param classicTextGenerator le texte qui permet d'évaluer les mots à vérifier
      */
-    public ClassicCorrector(ClassicTextGenerator classicTextGenerator, ViewMode view) throws FileNotFoundException {
-        super(classicTextGenerator, view);
-
+    public ClassicCorrector(ClassicTextGenerator classicTextGenerator) throws FileNotFoundException {
+        super(new ClassicStatistics(), classicTextGenerator);
     }
 
     @Override
-    protected void evaluateWordTreatment(String word) throws GameOverException {
+    protected void evaluateWordTreatment(String word) {
         // Si le début du mot correspond
         if(getText().get(positionCurrentWord).equals(word)){
             correctWordsPosition.add(positionCurrentWord);
@@ -44,7 +40,7 @@ public class ClassicCorrector extends AbstractCorrector{
         // Cas où le mot écrit est (pour le moment) correct
         // On met à jour l'indice du dernier caractère correct
         else if (getText().get(positionCurrentWord).startsWith(partialWord)){
-            stats.incrementCorrectInput();
+            stats.incrementNbCorrectInput();
             this.positionLastCorrectCharacter = partialWord.length() - 1;
             this.positionFirstTypo = -1;
         } else {
@@ -62,12 +58,5 @@ public class ClassicCorrector extends AbstractCorrector{
     @Override
     public boolean isGameOver() {
         return positionCurrentWord == getText().size();
-    }
-
-
-    @Override
-    public void initialize() {
-        super.initialize();
-        stats = new ClassicStatistics();
     }
 }
