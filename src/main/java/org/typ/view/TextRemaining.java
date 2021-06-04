@@ -4,16 +4,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 /**
- * Textes en vert
+ * Texte mis en valeur (utilisé pour le mot courant)
  */
-public class TextTrue extends Text {
+public class TextRemaining extends Text {
 
-    public TextTrue(String s) {
-        super(s);
-        String colorStr = "#529c48";
+    public TextRemaining(String word) {
+        super(word);
+        String colorStr = "#c5b028";
         setFill(Color.rgb(
                 Integer.valueOf( colorStr.substring( 1, 3 ), 16 ),
                 Integer.valueOf( colorStr.substring( 3, 5 ), 16 ),
                 Integer.valueOf( colorStr.substring( 5, 7 ), 16 ) ));
+
     }
 }
