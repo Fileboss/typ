@@ -80,8 +80,10 @@ public class ControllerClassicMode extends VBox {
         if (keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty() && !model.isGameOver()) {
             try {
                 System.out.println(textInput.getText());
-                model.evaluateWord(textInput.getText());
+                String word = textInput.getText();
+                // Notifie evaluate character
                 textInput.setText("");
+                model.evaluateWord(word);
                 model.nextWord();
             } catch (GameOverException gameOverException) {
                 textInput.setEditable(false);
@@ -115,7 +117,7 @@ public class ControllerClassicMode extends VBox {
 
     //TODO moi je veux renommer bind peut être à faire dans une autre fonction
     public void start(ViewClassicMode view) {
-        //textInput.textProperty().addListener(this::validateCharacters);
+        textInput.textProperty().addListener(this::validateCharacters);
         ClassicStatistics stats = (ClassicStatistics) model.getStats();
 
         stats.nbCorrectWordsProperty().addListener((observable, oldval, newval) ->

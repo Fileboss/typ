@@ -17,7 +17,7 @@ public class ClassicCorrector extends AbstractCorrector{
     }
 
     @Override
-    protected void evaluateWordTreatment(String word) {
+    protected void wordEvaluationProcess(String word) {
         // Si le début du mot correspond
         if(getText().get(positionCurrentWord).equals(word)){
             correctWordsPosition.add(positionCurrentWord);
@@ -31,7 +31,7 @@ public class ClassicCorrector extends AbstractCorrector{
     }
 
     @Override
-    public void evaluateCharactersTreatment(String partialWord) {
+    public void characterEvaluationProcess(String partialWord) {
         // Cas où rien est écrit
         if(partialWord.length() == 0){
             this.positionFirstTypo = -1;

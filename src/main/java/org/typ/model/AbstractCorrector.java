@@ -1,9 +1,5 @@
 package org.typ.model;
 
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.value.ObservableIntegerValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -13,8 +9,6 @@ import javafx.beans.value.ObservableValue;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 
 /** Représente un arbitre/correcteur qui va valider ou
  * non les mots qu'on lui donne par rapport à un texte.
@@ -104,7 +98,7 @@ public abstract class AbstractCorrector{
         return positionCurrentWord;
     }
 
-    /** Retourne les statistiques concerant la partie
+    /** Retourne les statistiques concernant la partie
      *
      * @return les statistiques
      */
@@ -138,9 +132,7 @@ public abstract class AbstractCorrector{
         if (positionCurrentWord >= text.size()){
             throw new EndOfTextException(positionCurrentWord);
         }
-        evaluateWordTreatment(word);
-        Struct data = generateData();
-        notifyView(data);
+        wordEvaluationProcess(word);
     }
 
     /** Réalise uniquement le traitment relatif à l'évaluation d'un mot
@@ -148,7 +140,7 @@ public abstract class AbstractCorrector{
      * @param word le mot à évaluer
      * @throws GameOverException une exception de fin de partie
      */
-    protected abstract void evaluateWordTreatment(String word) throws GameOverException;
+    protected abstract void wordEvaluationProcess(String word) throws GameOverException;
 
     /** Evalue le mot partialWord par rapport au début du mot
      * correspond à l'indice posCurrentWord dans le texte.
@@ -157,7 +149,7 @@ public abstract class AbstractCorrector{
      * @param partialWord le mot à comparer
      */
     public void evaluateCharacters(String partialWord){
-        evaluateCharactersTreatment(partialWord);
+        characterEvaluationProcess(partialWord);
         Struct data = generateData();
         notifyView(data);
     }
@@ -166,7 +158,7 @@ public abstract class AbstractCorrector{
      *
      * @param partialWord le mot à comparer
      */
-    public abstract void evaluateCharactersTreatment(String partialWord);
+    public abstract void characterEvaluationProcess(String partialWord);
 
     /** Passe au mot suivant en incrémentant posCurrentWord de 1.
      *
@@ -174,7 +166,9 @@ public abstract class AbstractCorrector{
     public void nextWord() {
         positionCurrentWord++;
         Struct data = generateData();
-        notifyView(data);
+        if (positionCurrentWord < text.size()){
+            notifyView(data);
+        }
     }
 
     /** Indique si la partie est terminé ou pas.
@@ -231,8 +225,7 @@ public abstract class AbstractCorrector{
      * @return les données de vue
      */
     protected Struct generateData(){
-        return new Struct(getText(), positionCurrentWord,
-                getCorrectWordsPosition(), incorrectWordsPosition,
+        return new Struct(positionCurrentWord,
                 this.positionFirstTypo, this.positionLastCorrectCharacter);
     }
 }

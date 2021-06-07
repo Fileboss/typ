@@ -55,44 +55,36 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("done!!!");
         Struct struct = (Struct) evt.getNewValue();
 
-            // Cas du mot courant
-            String wholeWord = fullText.get(struct.getPosition());
-            String correctString = "";
-            String remainingString = "";
-            Text remainingPart;
-            TextTrue correctPart;
+        // Cas du mot courant
+        String wholeWord = fullText.get(struct.getPosition());
+        String correctString = "";
+        String remainingString = "";
+        Text remainingPart;
+        TextTrue correctPart;
 
-            if (struct.getPositionLastCorrectCharacter() == -1 && struct.getPositionFirstTypo() == -1) {
-                // Cas où il y a rien d'input
-                correctString = "";
-                remainingString = wholeWord;
-                correctPart = new TextTrue("");
-                remainingPart = new TextRemaining(remainingString);
-            } else if ((struct.getPositionFirstTypo() != -1 && struct.getPositionLastCorrectCharacter() == -1) || (struct.getPositionFirstTypo() >= wholeWord.length())) {
-                // Cas où il y a que des erreur dans le mot
-                remainingString = wholeWord;
-                correctPart = new TextTrue("");
-                remainingPart = new TextFalse(remainingString);
-            } else {
-                // Cas où il y a une partie correcte et une autre partie (fausse ou non)
-                // Dans ce cas, on utilise une substring pour découper le mot jusqu'au dernier caractère correct
-                // La deuxième partie du mot sera ecrite soit en rouge (si il y a une erreur), soit dans la police de base
-                // On utilise la classe CurrentWord pour concatener les deux Text
-                correctString = wholeWord.substring(0, struct.getPositionLastCorrectCharacter() + 1);
-                remainingString = wholeWord.substring(struct.getPositionLastCorrectCharacter() + 1, wholeWord.length());
-                correctPart = new TextTrue(correctString);
-                remainingPart = new TextRemaining(remainingString);
-                if (struct.getPositionFirstTypo() != -1) {
-                    remainingPart = new TextFalse(remainingString);
-                }
+        if (!(struct.getPositionLastCorrectCharacter() == -1 && struct.getPositionFirstTypo() == -1) &&
+            !((struct.getPositionFirstTypo() != -1 && struct.getPositionLastCorrectCharacter() == -1) || (struct.getPositionFirstTypo() >= wholeWord.length()))) {
+            // Cas où il y a une partie correcte et une autre partie (fausse ou non)
+            // Dans ce cas, on utilise une substring pour découper le mot jusqu'au dernier caractère correct
+            // La deuxième partie du mot sera ecrite soit en rouge (si il y a une erreur), soit dans la police de base
+            // On utilise la classe CurrentWord pour concatener les deux Text
+            correctString = wholeWord.substring(0, struct.getPositionLastCorrectCharacter() + 1);
+            remainingString = wholeWord.substring(struct.getPositionLastCorrectCharacter() + 1, wholeWord.length());
+        }else{
+            remainingString = wholeWord;
+        }
 
-                CurrentWord currentWordPart = new CurrentWord(correctPart, remainingPart);
-                viewTextFlow.getChildren().remove(struct.getPosition());
-                viewTextFlow.getChildren().add(struct.getPosition(), currentWordPart);
-            }
+        correctPart = new TextTrue(correctString);
+        remainingPart = new TextRemaining(remainingString);
+        if (struct.getPositionFirstTypo() != -1) {
+            remainingPart = new TextFalse(remainingString);
+        }
+
+        CurrentWord currentWordPart = new CurrentWord(correctPart, remainingPart);
+        viewTextFlow.getChildren().remove(struct.getPosition());
+        viewTextFlow.getChildren().add(struct.getPosition(), currentWordPart);
     }
 
     /**
@@ -103,14 +95,14 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
         viewTextFlow.getChildren().remove(index);
         TextTrue tt = new TextTrue(this.fullText.get(index)+" ");
         tt.setFont(Font.font ("Verdana", 20));
-        viewTextFlow.getChildren().add(index, tt);
+        viewTextFlow.getChildren().add(index, new TextFlow(tt));
     }
 
     public void colorIncorrectWord(int index){
         viewTextFlow.getChildren().remove(index);
         TextFalse tf = new TextFalse(this.fullText.get(index)+" ");
         tf.setFont(Font.font ("Verdana", 20));
-        viewTextFlow.getChildren().add(index, tf);
+        viewTextFlow.getChildren().add(index, new TextFlow(tf));
     }
 
     public void updateText(List<String> text){
@@ -121,7 +113,7 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
             Text tx =new Text(word + " ");
             tx.setFont(Font.font ("Verdana", 20));
             tx.setFill(Color.rgb(197,176,40));
-            viewTextFlow.getChildren().add(tx);
+            viewTextFlow.getChildren().add(new TextFlow(tx));
         }
 
     }
@@ -135,7 +127,7 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
     }
 
     public void displayChronometer(int time){
-        this.FalseWordsCount.setText(time + "");
+        System.out.println(time);
     }
 
     /**
