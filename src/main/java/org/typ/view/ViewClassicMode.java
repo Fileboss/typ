@@ -55,68 +55,44 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        viewTextFlow.getChildren().clear();
-
+        System.out.println("done!!!");
         Struct struct = (Struct) evt.getNewValue();
 
-        List<String> wholeText = struct.getText();
-
-        /* Ajouter le texte au viewTextFlow.  */
-        for(int i = 0; i < wholeText.size(); i++) {
             // Cas du mot courant
-            if (i == struct.getPosition()) {
-                String wholeWord = wholeText.get(i);
-                String correctString = "";
-                String remainingString = "";
-                Text remainingPart;
-                TextTrue correctPart;
+            String wholeWord = fullText.get(struct.getPosition());
+            String correctString = "";
+            String remainingString = "";
+            Text remainingPart;
+            TextTrue correctPart;
 
-                if (struct.getPositionLastCorrectCharacter() == -1 && struct.getPositionFirstTypo() == -1) {
-                    // Cas où il y a rien d'input
-                    correctString = "";
-                    remainingString = wholeWord;
-                    correctPart = new TextTrue("");
-                    remainingPart = new TextRemaining(remainingString);
-                } else if ((struct.getPositionFirstTypo() != -1 && struct.getPositionLastCorrectCharacter() == -1) || (struct.getPositionFirstTypo() >= wholeWord.length())) {
-                    // Cas où il y a que des erreur dans le mot
-                    remainingString = wholeWord;
-                    correctPart = new TextTrue("");
+            if (struct.getPositionLastCorrectCharacter() == -1 && struct.getPositionFirstTypo() == -1) {
+                // Cas où il y a rien d'input
+                correctString = "";
+                remainingString = wholeWord;
+                correctPart = new TextTrue("");
+                remainingPart = new TextRemaining(remainingString);
+            } else if ((struct.getPositionFirstTypo() != -1 && struct.getPositionLastCorrectCharacter() == -1) || (struct.getPositionFirstTypo() >= wholeWord.length())) {
+                // Cas où il y a que des erreur dans le mot
+                remainingString = wholeWord;
+                correctPart = new TextTrue("");
+                remainingPart = new TextFalse(remainingString);
+            } else {
+                // Cas où il y a une partie correcte et une autre partie (fausse ou non)
+                // Dans ce cas, on utilise une substring pour découper le mot jusqu'au dernier caractère correct
+                // La deuxième partie du mot sera ecrite soit en rouge (si il y a une erreur), soit dans la police de base
+                // On utilise la classe CurrentWord pour concatener les deux Text
+                correctString = wholeWord.substring(0, struct.getPositionLastCorrectCharacter() + 1);
+                remainingString = wholeWord.substring(struct.getPositionLastCorrectCharacter() + 1, wholeWord.length());
+                correctPart = new TextTrue(correctString);
+                remainingPart = new TextRemaining(remainingString);
+                if (struct.getPositionFirstTypo() != -1) {
                     remainingPart = new TextFalse(remainingString);
-                } else {
-                    // Cas où il y a une partie correcte et une autre partie (fausse ou non)
-                    // Dans ce cas, on utilise une substring pour découper le mot jusqu'au dernier caractère correct
-                    // La deuxième partie du mot sera ecrite soit en rouge (si il y a une erreur), soit dans la police de base
-                    // On utilise la classe CurrentWord pour concatener les deux Text
-                    correctString = wholeWord.substring(0, struct.getPositionLastCorrectCharacter() + 1);
-                    remainingString = wholeWord.substring(struct.getPositionLastCorrectCharacter() + 1, wholeWord.length());
-                    correctPart = new TextTrue(correctString);
-                    remainingPart = new TextRemaining(remainingString);
-                    if (struct.getPositionFirstTypo() != -1) {
-                        remainingPart = new TextFalse(remainingString);
-                    }
-
                 }
-                CurrentWord currentWordPart = new CurrentWord(correctPart, remainingPart);
-                viewTextFlow.getChildren().add(currentWordPart);
-            // Cas des mots corrects
-            } else if (struct.getCorrectList().contains(i)) {
-                TextTrue tt = new TextTrue(wholeText.get(i)+" ");
-                tt.setFont(Font.font ("Verdana", 20));
-                viewTextFlow.getChildren().add(tt);
-            // Cas des mots faux
-            } else if (struct.getFalseList().contains(i)) {
-                TextFalse tf = new TextFalse(wholeText.get(i)+" ");
-                tf.setFont(Font.font ("Verdana", 20));
-                viewTextFlow.getChildren().add(tf);
-            }else {
-            // Cas des autres mots
-                Text tx =new Text(wholeText.get(i) + " ");
-                tx.setFont(Font.font ("Verdana", 20));
-                tx.setFill(Color.rgb(197,176,40));
-                viewTextFlow.getChildren().add(tx);
-            }
-        }
 
+                CurrentWord currentWordPart = new CurrentWord(correctPart, remainingPart);
+                viewTextFlow.getChildren().remove(struct.getPosition());
+                viewTextFlow.getChildren().add(struct.getPosition(), currentWordPart);
+            }
     }
 
     /**
@@ -124,12 +100,14 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
      * @param index la position du mot
      */
     public void colorCorrectWord(int index){
+        viewTextFlow.getChildren().remove(index);
         TextTrue tt = new TextTrue(this.fullText.get(index)+" ");
         tt.setFont(Font.font ("Verdana", 20));
         viewTextFlow.getChildren().add(index, tt);
     }
 
     public void colorIncorrectWord(int index){
+        viewTextFlow.getChildren().remove(index);
         TextFalse tf = new TextFalse(this.fullText.get(index)+" ");
         tf.setFont(Font.font ("Verdana", 20));
         viewTextFlow.getChildren().add(index, tf);
