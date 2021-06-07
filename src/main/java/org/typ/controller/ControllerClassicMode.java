@@ -45,6 +45,9 @@ public class ControllerClassicMode extends VBox {
     // Définition du comportement lors d'un changement sur le textInput. (validation par caractère)
     private void validateCharacters(ObservableValue<? extends String> observable,
                                     String oldValue, String newValue) {
+        if(newValue.length() > oldValue.length()){
+            model.getStats().incrementNbInput();
+        }
         model.evaluateCharacters(newValue);
     }
 
@@ -66,7 +69,6 @@ public class ControllerClassicMode extends VBox {
     private void onClickReplayButton(ActionEvent e) {
 
         model.initialize();
-        model.start();
         textInput.setText("");
         textInput.setEditable(true);
 
@@ -122,6 +124,10 @@ public class ControllerClassicMode extends VBox {
 
         stats.nbIncorrectWordsProperty().addListener((observable, oldvalue, newvalue) ->
                 view.setFalseWordsCount((Integer) newvalue)
+        );
+
+        stats.chronometerProperty().addListener((observable, oldval, newval) ->
+                view.displayChronometer((Integer) newval)
         );
     }
 

@@ -3,11 +3,8 @@ package org.typ.view;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.typ.model.Struct;
@@ -15,6 +12,7 @@ import org.typ.model.Struct;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+import java.util.Observable;
 
 public class ViewClassicMode extends BorderPane implements PropertyChangeListener {
 
@@ -116,8 +114,6 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
             }
         }
 
-        //correctsWordCount.setText(""+struct.getNbCorrectTotal());
-       // FalseWordsCount.setText(""+struct.getNbFalseTotal());
     }
 
     /**
@@ -126,6 +122,10 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
      */
     public void setCorrectsWordCount(int count){
         correctsWordCount.setText(""+count);
+    }
+
+    public void displayChronometer(int time){
+        this.FalseWordsCount.setText(time + "");
     }
 
     /**

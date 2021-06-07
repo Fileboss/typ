@@ -1,9 +1,14 @@
 package org.typ.model;
 
-import javafx.beans.property.IntegerProperty;
+  import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.util.Duration;
+
+import java.util.Timer;
 
 /**
  * Implémentation des statistiques pour le mode classique
@@ -15,21 +20,32 @@ public class ClassicStatistics implements Statistics{
     ReadOnlyIntegerWrapper nbInput;            // Nombre des entrées de l'utilisateur
     ReadOnlyIntegerWrapper nbCorrectInput;     // Nombre des entrées correctes de l'utilisateur
 
+    private ReadOnlyIntegerWrapper chronometer;
+    private Timeline chronometerHandler;
+
     public ClassicStatistics() {
         // Début de partie définition des variables à 0
         this.nbCorrectWords = new ReadOnlyIntegerWrapper();
         this.nbIncorrectWords = new ReadOnlyIntegerWrapper();
         this.nbInput = new ReadOnlyIntegerWrapper();
         this.nbCorrectInput = new ReadOnlyIntegerWrapper();
+        this.chronometer = new ReadOnlyIntegerWrapper();
+        chronometerHandler = new Timeline(
+                new KeyFrame(Duration.seconds(1), this::incrementChronometer));
+        chronometerHandler.setCycleCount(Timeline.INDEFINITE);
     }
 
     @Override
     public void reset(){
+        chronometerHandler.stop();
+
+        this.chronometer.set(0);
         this.nbCorrectWords.set(0);
         this.nbIncorrectWords.set(0);
         this.nbInput.set(0);
         this.nbCorrectInput.set(0);
     }
+
 
     @Override
     public int getNbCorrectWords() {
@@ -67,6 +83,14 @@ public class ClassicStatistics implements Statistics{
         return this.nbInput.getReadOnlyProperty();
     }
 
+    public ReadOnlyIntegerProperty chronometerProperty(){
+        return this.chronometer.getReadOnlyProperty();
+    }
+
+    public int getChronometer(){
+        return this.chronometer.getValue();
+    }
+
     @Override
     public void incrementNbCorrectWords() {
         this.nbCorrectWords.setValue(nbCorrectWords.getValue() + 1);
@@ -85,5 +109,13 @@ public class ClassicStatistics implements Statistics{
     @Override
     public void incrementNbCorrectInput() {
         this.nbCorrectInput.setValue(nbCorrectInput.getValue() + 1);
+    }
+
+    private void incrementChronometer(ActionEvent event){
+        this.chronometer.set(this.chronometer.getValue() +1 );
+    }
+
+    public void startChrono(){
+        this.chronometerHandler.play();
     }
 }

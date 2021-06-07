@@ -55,7 +55,8 @@ public class StartClassicModeCommand implements Command {
 
 
         controller.start(view);
-        model.start();
+
+        model.initialize();
 
         Stage stage = (Stage) this.playScene.getWindow();
         stage.setScene(scene);

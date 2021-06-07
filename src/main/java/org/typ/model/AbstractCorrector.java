@@ -1,5 +1,8 @@
 package org.typ.model;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.FileNotFoundException;
@@ -143,6 +146,7 @@ public abstract class AbstractCorrector{
      * @param partialWord le mot à comparer
      */
     public void evaluateCharacters(String partialWord){
+
         evaluateCharactersTreatment(partialWord);
         Struct data = generateData();
         notifyView(data);
@@ -179,19 +183,28 @@ public abstract class AbstractCorrector{
         positionFirstTypo = -1;
         positionLastCorrectCharacter = -1;
         stats.reset();
+
+        stats.nbInputProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                start();
+                stats.nbInputProperty().removeListener(this);
+            }
+        });
+
         try {
             text = textGenerator.generateText();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    /** Démarre l'évaluation du texte et notifie la vue.
-     * Ne Peut être appelé qu'après l'appel à initialize()
-     */
-    public void start() {
         Struct data = generateData();
         notifyView(data);
+    }
+
+    /** Démarre l'évaluation du texte.
+     * Ne Peut être appelé qu'après l'appel à initialize()
+     */
+    protected void start() {
     }
 
     /** Notifie la vue avec les données data

@@ -63,4 +63,9 @@ public class ClassicCorrector extends AbstractCorrector{
     public boolean isGameOver() {
         return positionCurrentWord == getText().size();
     }
+
+    @Override
+    public void start(){
+        ((ClassicStatistics) stats).startChrono();
+    }
 }
