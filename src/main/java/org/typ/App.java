@@ -68,43 +68,11 @@ public class App extends Application {
 
         stage.setTitle("Typ");
         stage.setScene(mainScene);
+
+        stage.setMinHeight(450);
+        stage.setWidth(900);
+
         stage.show();
-
-        // Fin FT-12
-
-        /*
-        ViewClassicMode view = new ViewClassicMode();
-
-        ClassicTextGenerator ctg = new ClassicTextGenerator("src/main/resources/mots_courants_en.csv", 1500, 50);
-
-        ClassicCorrector model = null;
-        try {
-            model = new ClassicCorrector(ctg, view);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        ControllerClassicMode controller = new ControllerClassicMode(model);
-
-        FXMLLoader loaderView = new FXMLLoader(getClass().getResource("fxmlViewClassic.fxml"));
-        FXMLLoader loaderController = new FXMLLoader(getClass().getResource("fxmlControllerClassic.fxml"));
-
-        loaderView.setController(view);
-        loaderController.setController(controller);
-
-
-        VBox layout = new VBox(20, (AnchorPane)loaderView.load(), (AnchorPane)loaderController.load());
-        layout.setBackground(new Background(new BackgroundFill(Color.rgb(7, 39, 69), CornerRadii.EMPTY, Insets.EMPTY)));
-        scene = new Scene(layout);
-
-
-        controller.start();
-        model.start();
-
-        stage.setScene(scene);
-        stage.show();
-
-         */
     }
 
     public static void main(String[] args) {
