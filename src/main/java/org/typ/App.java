@@ -20,8 +20,6 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        stage.setTitle("Typ: classic mode");
-
         MenuController controller = new MenuController();
         MenuController playController = new MenuController();
         MenuController settingsController = new MenuController();
