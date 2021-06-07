@@ -2,6 +2,7 @@ package org.typ;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.typ.controller.menu.*;
@@ -36,15 +37,17 @@ public class App extends Application {
         settingsLoader.setController(settingsController);
         statisticsLoader.setController(statisticsController);
 
-        Scene scene = new Scene(loader.load());
-        Scene playScene = new Scene(playLoader.load());
-        Scene settingsScene = new Scene(settingsLoader.load());
-        Scene statisticsScene = new Scene(statisticsLoader.load());
+        Parent mainRoot = loader.load();
+        Parent playRoot = playLoader.load();
+        Parent settingsRoot = settingsLoader.load();
+        Parent statisticsRoot = statisticsLoader.load();
+
+        Scene mainScene = new Scene(mainRoot);
 
         controller.setTitle("Menu");
-        controller.addCommandButton("play", new ChangeSceneCommand(scene, playScene));
-        controller.addCommandButton("statistics", new ChangeSceneCommand(scene, statisticsScene));
-        controller.addCommandButton("settings", new ChangeSceneCommand(scene, settingsScene));
+        controller.addCommandButton("play", new ChangeRootSceneCommand(mainScene, playRoot));
+        controller.addCommandButton("statistics", new ChangeRootSceneCommand(mainScene, statisticsRoot));
+        controller.addCommandButton("settings", new ChangeRootSceneCommand(mainScene, settingsRoot));
         controller.addCommandButton("exit", new Command() {
             @Override
             public void execute() {
@@ -53,18 +56,18 @@ public class App extends Application {
         });
 
         settingsController.setTitle("Settings");
-        settingsController.addCommandButton("back", new ChangeSceneCommand(settingsScene, scene));
+        settingsController.addCommandButton("back", new ChangeRootSceneCommand(mainScene, mainRoot));
 
         playController.setTitle("Play");
-        playController.addCommandButton("Classic Mode", new StartClassicModeCommand(playScene));
+        playController.addCommandButton("Classic Mode", new StartClassicModeCommand(mainScene));
         //playController.addCommandButton("Classic Mode", null);
-        playController.addCommandButton("back", new ChangeSceneCommand(playScene, scene));
+        playController.addCommandButton("back", new ChangeRootSceneCommand(mainScene, mainRoot));
 
         statisticsController.setTitle("Statistics");
-        statisticsController.addCommandButton("back", new ChangeSceneCommand(statisticsScene, scene));
+        statisticsController.addCommandButton("back",new ChangeRootSceneCommand(mainScene, mainRoot));
 
         stage.setTitle("Typ");
-        stage.setScene(scene);
+        stage.setScene(mainScene);
         stage.show();
 
         // Fin FT-12

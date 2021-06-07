@@ -16,10 +16,10 @@ import java.io.IOException;
 
 public class StartClassicModeCommand implements Command {
 
-    private Scene playScene;
+    private Scene scene;
 
-    public StartClassicModeCommand(Scene playScene) {
-        this.playScene = playScene;
+    public StartClassicModeCommand(Scene scene) {
+        this.scene = scene;
     }
 
     @Override
@@ -50,13 +50,10 @@ public class StartClassicModeCommand implements Command {
             e.printStackTrace();
         }
         layout.setBackground(new Background(new BackgroundFill(Color.rgb(7, 39, 69), CornerRadii.EMPTY, Insets.EMPTY)));
-        Scene scene = new Scene(layout);
-
 
         controller.start();
         model.start();
 
-        Stage stage = (Stage) this.playScene.getWindow();
-        stage.setScene(scene);
+        scene.setRoot(layout);
     }
 }
