@@ -15,7 +15,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.typ.model.ClassicCorrector;
+import org.typ.model.ClassicStatistics;
 import org.typ.model.GameOverException;
+import org.typ.view.ViewClassicMode;
 
 public class ControllerClassicMode extends VBox {
 
@@ -38,14 +40,9 @@ public class ControllerClassicMode extends VBox {
     public ControllerClassicMode(ClassicCorrector model) {
         super(20);
         this.model = model;
-
-        // Définition du comportement lors d'un changement sur le textInput. (validation par caractère)
-
-        // TODO
-        //textInput.textProperty().addListener(this::validateCharacters);
-
     }
 
+    // Définition du comportement lors d'un changement sur le textInput. (validation par caractère)
     private void validateCharacters(ObservableValue<? extends String> observable,
                                     String oldValue, String newValue) {
         model.evaluateCharacters(newValue);
@@ -114,7 +111,18 @@ public class ControllerClassicMode extends VBox {
         }
     }
 
-    public void start() {
+    //TODO moi je veux renommer bind peut être à faire dans une autre fonction
+    public void start(ViewClassicMode view) {
         textInput.textProperty().addListener(this::validateCharacters);
+        ClassicStatistics stats = (ClassicStatistics) model.getStats();
+
+        stats.nbCorrectWordsProperty().addListener((observable, oldvalue, newvalue) ->
+                view.setCorrectsWordCount((Integer) newvalue)
+        );
+
+        stats.nbIncorrectWordsProperty().addListener((observable, oldvalue, newvalue) ->
+                view.setFalseWordsCount((Integer) newvalue)
+        );
     }
+
 }

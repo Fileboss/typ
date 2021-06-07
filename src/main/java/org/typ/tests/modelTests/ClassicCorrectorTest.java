@@ -6,9 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.typ.model.*;
-import org.typ.view.ViewMode;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +18,6 @@ public class ClassicCorrectorTest {
     public ExpectedException exceptionRule = ExpectedException.none();
 
     public static ClassicTextGenerator ctg;
-    public static ViewMode view;
     public static List<String> text;
 
     public ClassicCorrector corrector;
@@ -29,12 +26,11 @@ public class ClassicCorrectorTest {
     public static void init() throws Exception {
         ctg = new ClassicTextGenerator("src/main/resources/org/typ/dictionaries/mots_courants_en.csv", 50, 50);
         text = ctg.generateText();
-        view = JunitUtils.dummyViewMode();
     }
 
     @Before
     public void setUp() throws Exception {
-        corrector = new ClassicCorrector(ctg, view);
+        corrector = new ClassicCorrector(ctg);
     }
 
     @Test

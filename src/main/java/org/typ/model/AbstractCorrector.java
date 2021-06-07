@@ -1,17 +1,16 @@
 package org.typ.model;
 
-import org.typ.view.ViewMode;
-
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
 /** Représente un arbitre/correcteur qui va valider ou
  * non les mots qu'on lui donne par rapport à un texte.
  *
  */
-public abstract class AbstractCorrector extends Observable {
+public abstract class AbstractCorrector{
     /** La position du mot en cours d'évaluation. */
     protected int positionCurrentWord;
 
@@ -36,17 +35,31 @@ public abstract class AbstractCorrector extends Observable {
     /** Les statistiques concernant l'évaluation d'une partie. */
     protected Statistics stats;
 
+    /** S'occupe de notifier la vue  **/
+    private PropertyChangeSupport support;
+
+    private Struct data;
+
     /** Initialise un correcteur avec pour première position 0,
      * les listes de mots correctes et incorrectes vides.
      *
      * @param textGenerator le texte qui permet d'évaluer les mots à vérifier
      */
-    public AbstractCorrector(TextGenerator textGenerator, ViewMode view){
-        this.addObserver(view);
+    public AbstractCorrector(Statistics stats, TextGenerator textGenerator){
+        this.support = new PropertyChangeSupport(this);
         this.textGenerator = textGenerator;
+        this.stats = stats;
 
         this.initialize();
+    }
 
+    //TODO add javadoc or refactor
+    public final void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
+
+    public final void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
     }
 
     /** Renvoie la liste de mot du textWrapper.
@@ -146,11 +159,8 @@ public abstract class AbstractCorrector extends Observable {
      */
     public void nextWord() {
         positionCurrentWord++;
-        Struct data = new Struct(getText(), positionCurrentWord,
-                correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
-        setChanged();
-        notifyObservers(data);
+        Struct data = generateData();
+        notifyView(data);
     }
 
     /** Indique si la partie est terminé ou pas.
@@ -168,6 +178,7 @@ public abstract class AbstractCorrector extends Observable {
         incorrectWordsPosition = new ArrayList<>();
         positionFirstTypo = -1;
         positionLastCorrectCharacter = -1;
+        stats.reset();
         try {
             text = textGenerator.generateText();
         } catch (FileNotFoundException e) {
@@ -179,11 +190,8 @@ public abstract class AbstractCorrector extends Observable {
      * Ne Peut être appelé qu'après l'appel à initialize()
      */
     public void start() {
-        Struct data = new Struct(getText(), positionCurrentWord,
-                correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
-        setChanged();
-        notifyObservers(data);
+        Struct data = generateData();
+        notifyView(data);
     }
 
     /** Notifie la vue avec les données data
@@ -191,8 +199,8 @@ public abstract class AbstractCorrector extends Observable {
      * @param data les données
      */
     private void notifyView(Struct data){
-        setChanged();
-        notifyObservers(data);
+        support.firePropertyChange("correctorData", this.data, data);
+        this.data = data;
     }
 
     /** Retourne les données mises à jour de l'état courant du correcteur
@@ -202,6 +210,6 @@ public abstract class AbstractCorrector extends Observable {
     protected Struct generateData(){
         return new Struct(getText(), positionCurrentWord,
                 correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size(), this.positionFirstTypo, this.positionLastCorrectCharacter);
+                this.positionFirstTypo, this.positionLastCorrectCharacter);
     }
 }
