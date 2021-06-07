@@ -21,11 +21,7 @@ public class ClassicCorrector extends AbstractCorrector{
     }
 
     @Override
-    public void evaluateWord(String word) throws EndOfTextException {
-        if (positionCurrentWord >= text.size()){
-            throw new EndOfTextException(positionCurrentWord);
-        }
-
+    protected void evaluateWordTreatment(String word) throws GameOverException {
         // Si le début du mot correspond
         if(getText().get(positionCurrentWord).equals(word)){
             correctWordsPosition.add(positionCurrentWord);
@@ -36,18 +32,10 @@ public class ClassicCorrector extends AbstractCorrector{
             incorrectWordsPosition.add(positionCurrentWord);
             stats.incrementNbIncorrectWords();
         }
-
-        // Notifier la vue avec les informations nécessaires
-        Struct data = new Struct(getText(), positionCurrentWord,
-                correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size(), this.positionFirstTypo, this.positionLastCorrectCharacter);
-        setChanged();
-        notifyObservers(data);
-
     }
 
     @Override
-    public void evaluateCharacters(String partialWord) {
+    public void evaluateCharactersTreatment(String partialWord) {
         // Cas où rien est écrit
         if(partialWord.length() == 0){
             this.positionFirstTypo = -1;
@@ -62,22 +50,17 @@ public class ClassicCorrector extends AbstractCorrector{
         } else {
             // Cas où il y a une erreur
             // On met à jour l'indice du premier caractère faux
-            for (int i = 0; i < partialWord.length() && i < this.getText().get(this.positionCurrentWord).length(); i++){
-                if (partialWord.charAt(i) != this.getText().get(this.positionCurrentWord).charAt(i)) {
+            for (int i = 0; i < partialWord.length(); i++){
+                if (i < this.getText().get(this.positionCurrentWord).length() && partialWord.charAt(i) != this.getText().get(this.positionCurrentWord).charAt(i)) {
+                    this.positionFirstTypo = i;
+                    break;
+                }
+                if(i >= this.getText().get(this.positionCurrentWord).length()){
                     this.positionFirstTypo = i;
                     break;
                 }
             }
         }
-
-        //Notifier la vue avec les informations nécessaires
-        Struct data = new Struct(getText(), positionCurrentWord,
-                correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
-
-        setChanged();
-        notifyObservers(data);
-
     }
 
     @Override
@@ -91,5 +74,4 @@ public class ClassicCorrector extends AbstractCorrector{
         super.initialize();
         stats = new ClassicStatistics();
     }
-
 }
