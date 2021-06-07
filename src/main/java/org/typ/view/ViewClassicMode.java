@@ -12,6 +12,7 @@ import org.typ.model.Struct;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+import java.util.Observable;
 
 public class ViewClassicMode extends BorderPane implements PropertyChangeListener {
 
@@ -116,8 +117,6 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
             }
         }
 
-        //correctsWordCount.setText(""+struct.getNbCorrectTotal());
-       // FalseWordsCount.setText(""+struct.getNbFalseTotal());
     }
 
     /**
@@ -155,6 +154,10 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
      */
     public void setCorrectsWordCount(int count){
         correctsWordCount.setText(""+count);
+    }
+
+    public void displayChronometer(int time){
+        this.FalseWordsCount.setText(time + "");
     }
 
     /**

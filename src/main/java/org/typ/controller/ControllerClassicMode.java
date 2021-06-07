@@ -1,7 +1,6 @@
 package org.typ.controller;
 
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -45,6 +44,9 @@ public class ControllerClassicMode extends VBox {
     // Définition du comportement lors d'un changement sur le textInput. (validation par caractère)
     private void validateCharacters(ObservableValue<? extends String> observable,
                                     String oldValue, String newValue) {
+        if(newValue.length() > oldValue.length()){
+            model.getStats().incrementNbInput();
+        }
         model.evaluateCharacters(newValue);
     }
 
@@ -66,7 +68,6 @@ public class ControllerClassicMode extends VBox {
     private void onClickReplayButton(ActionEvent e) {
 
         model.initialize();
-        model.start();
         textInput.setText("");
         textInput.setEditable(true);
 
@@ -138,6 +139,10 @@ public class ControllerClassicMode extends VBox {
             c.next();
             view.updateText(((List<String>) c.getList()));
         });
+
+        stats.chronometerProperty().addListener((observable, oldval, newval) ->
+                view.displayChronometer((Integer) newval)
+        );
     }
 
 }

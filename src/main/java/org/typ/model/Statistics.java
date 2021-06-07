@@ -1,5 +1,7 @@
 package org.typ.model;
 
+import javafx.beans.property.ReadOnlyIntegerProperty;
+
 /**
  * Définition des statistiques pour tous les modes de jeu.
  */
@@ -42,6 +44,8 @@ public interface Statistics {
      * Incrémente le nombre des entrées de l'utilisateur.
      */
     void incrementNbInput();
+
+    public ReadOnlyIntegerProperty nbInputProperty();
 
     /**
      * Incrémente le nombre des entrées correctes de l'utilisateur.
