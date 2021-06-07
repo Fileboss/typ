@@ -15,7 +15,7 @@ public class ClassicStatistics implements Statistics{
     ReadOnlyIntegerWrapper nbInput;            // Nombre des entrées de l'utilisateur
     ReadOnlyIntegerWrapper nbCorrectInput;     // Nombre des entrées correctes de l'utilisateur
 
-    public ClassicStatistics() {
+    public  ClassicStatistics() {
         // Début de partie définition des variables à 0
         this.nbCorrectWords = new ReadOnlyIntegerWrapper();
         this.nbIncorrectWords = new ReadOnlyIntegerWrapper();

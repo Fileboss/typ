@@ -1,6 +1,7 @@
 package org.typ.controller;
 
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -10,14 +11,13 @@ import javafx.scene.control.DialogEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import org.typ.model.ClassicCorrector;
 import org.typ.model.ClassicStatistics;
 import org.typ.model.GameOverException;
 import org.typ.view.ViewClassicMode;
+
+import java.util.List;
 
 public class ControllerClassicMode extends VBox {
 
@@ -113,16 +113,31 @@ public class ControllerClassicMode extends VBox {
 
     //TODO moi je veux renommer bind peut être à faire dans une autre fonction
     public void start(ViewClassicMode view) {
-        textInput.textProperty().addListener(this::validateCharacters);
+        //textInput.textProperty().addListener(this::validateCharacters);
         ClassicStatistics stats = (ClassicStatistics) model.getStats();
 
-        stats.nbCorrectWordsProperty().addListener((observable, oldvalue, newvalue) ->
-                view.setCorrectsWordCount((Integer) newvalue)
+        stats.nbCorrectWordsProperty().addListener((observable, oldval, newval) ->
+                view.setCorrectsWordCount((Integer) newval)
         );
 
-        stats.nbIncorrectWordsProperty().addListener((observable, oldvalue, newvalue) ->
-                view.setFalseWordsCount((Integer) newvalue)
+        stats.nbIncorrectWordsProperty().addListener((observable, oldval, newval) ->
+                view.setFalseWordsCount((Integer) newval)
         );
+
+        model.getCorrectWordsPosition().addListener((ListChangeListener<? super Integer>)(c) ->{
+                    c.next();
+                    view.colorCorrectWord(c.getAddedSubList().get(0));
+        });
+
+        model.getIncorrectWordsPosition().addListener((ListChangeListener<? super Integer>)(c) -> {
+            c.next();
+            view.colorIncorrectWord(c.getAddedSubList().get(0));
+        });
+
+        model.getText().addListener((ListChangeListener<? super String>) (c) -> {
+            c.next();
+            view.updateText(((List<String>) c.getList()));
+        });
     }
 
 }

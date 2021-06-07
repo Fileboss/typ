@@ -1,5 +1,6 @@
 package org.typ.tests.modelTests;
 
+import javafx.collections.ObservableList;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -43,7 +44,7 @@ public class ClassicCorrectorTest {
         // CHECK EXCEPTION
 
         // EXECUTION DU TEST
-        List<String> result = corrector.getText();
+        List<String> result = (ObservableList) corrector.getText();
 
         // CHECK DU RESULTAT
         assertTrue(text.containsAll(result));

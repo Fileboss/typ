@@ -1,5 +1,12 @@
 package org.typ.model;
 
+import javafx.beans.property.ReadOnlyListProperty;
+import javafx.beans.property.ReadOnlyListWrapper;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.value.ObservableIntegerValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.FileNotFoundException;
@@ -21,13 +28,13 @@ public abstract class AbstractCorrector{
     protected int positionLastCorrectCharacter;
 
     /** Liste des positions des mots correctements saisies. */
-    protected List<Integer> correctWordsPosition;
+    protected ObservableList<Integer> correctWordsPosition;
 
     /** Liste des positions des mots incorrectements saisies. */
-    protected List<Integer> incorrectWordsPosition;
+    protected ObservableList<Integer>  incorrectWordsPosition;
 
     /** Le texte complet qui permet d'évaluer si les mots donnés sont correctes ou non. */
-    protected List<String> text;
+    protected ObservableList<String> text;
 
     /** C'est le générateur de texte. **/
     protected TextGenerator textGenerator;
@@ -50,6 +57,10 @@ public abstract class AbstractCorrector{
         this.textGenerator = textGenerator;
         this.stats = stats;
 
+        this.correctWordsPosition = FXCollections.observableArrayList();
+        this.incorrectWordsPosition = FXCollections.observableArrayList();
+        this.text = FXCollections.observableArrayList();
+
         this.initialize();
     }
 
@@ -66,8 +77,8 @@ public abstract class AbstractCorrector{
      *
      * @return le text du TextWrapper
      */
-    public List<String> getText(){
-        return text;
+    public ObservableList<String> getText(){
+        return FXCollections.unmodifiableObservableList(text);
     }
 
     /** Retourne le nombre de mots dans le text complet.
@@ -98,20 +109,20 @@ public abstract class AbstractCorrector{
         return stats;
     }
 
-    /** Retourne la liste des position des mots correctes
+    /** Retourne la liste non modifiable des position des mots correctes
      *
      * @return correctWordPosition
      */
-    public List<Integer> getCorrectWordsPosition() {
-        return correctWordsPosition;
+    public ObservableList<Integer> getCorrectWordsPosition() {
+        return FXCollections.unmodifiableObservableList(correctWordsPosition);
     }
 
     /** Retourne la liste des positions des mots incorrectes
      *
      * @return incorrectWordsPosition
      */
-    public List<Integer> getIncorrectWordsPosition() {
-        return incorrectWordsPosition;
+    public ObservableList<Integer> getIncorrectWordsPosition() {
+        return FXCollections.unmodifiableObservableList(incorrectWordsPosition);
     }
 
     /** Evalue le mot word avec le mot correpondant à la position positionCurrentWord du texte
@@ -174,13 +185,13 @@ public abstract class AbstractCorrector{
      */
     public void initialize() {
         positionCurrentWord = 0;
-        correctWordsPosition = new ArrayList<>();
-        incorrectWordsPosition = new ArrayList<>();
+        correctWordsPosition.clear();
+        incorrectWordsPosition.clear();
         positionFirstTypo = -1;
         positionLastCorrectCharacter = -1;
         stats.reset();
         try {
-            text = textGenerator.generateText();
+            text.setAll(textGenerator.generateText());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -209,7 +220,7 @@ public abstract class AbstractCorrector{
      */
     protected Struct generateData(){
         return new Struct(getText(), positionCurrentWord,
-                correctWordsPosition, incorrectWordsPosition,
+                getCorrectWordsPosition(), incorrectWordsPosition,
                 this.positionFirstTypo, this.positionLastCorrectCharacter);
     }
 }

@@ -3,11 +3,8 @@ package org.typ.view;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import org.typ.model.Struct;
@@ -27,6 +24,9 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
 
     @FXML
     private Label FalseWordsCount;
+
+    /** Le text complet qui vient du model **/
+    private List<String> fullText;
 
     /**
      * Contructeur de la classe VueClassicMode. Cette classe affiche le titre, le chrono, le texte à recopier, le
@@ -54,7 +54,7 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        viewTextFlow.getChildren().removeAll(viewTextFlow.getChildren());
+        viewTextFlow.getChildren().clear();
 
         Struct struct = (Struct) evt.getNewValue();
 
@@ -118,6 +118,35 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
 
         //correctsWordCount.setText(""+struct.getNbCorrectTotal());
        // FalseWordsCount.setText(""+struct.getNbFalseTotal());
+    }
+
+    /**
+     * Change la couleur du mot pour indiquer qu'il a été correctement écris.
+     * @param index la position du mot
+     */
+    public void colorCorrectWord(int index){
+        TextTrue tt = new TextTrue(this.fullText.get(index)+" ");
+        tt.setFont(Font.font ("Verdana", 20));
+        viewTextFlow.getChildren().add(index, tt);
+    }
+
+    public void colorIncorrectWord(int index){
+        TextFalse tf = new TextFalse(this.fullText.get(index)+" ");
+        tf.setFont(Font.font ("Verdana", 20));
+        viewTextFlow.getChildren().add(index, tf);
+    }
+
+    public void updateText(List<String> text){
+        this.fullText = text;
+        viewTextFlow.getChildren().clear();
+        for (String word : text) {
+            // Cas des autres mots
+            Text tx =new Text(word + " ");
+            tx.setFont(Font.font ("Verdana", 20));
+            tx.setFill(Color.rgb(197,176,40));
+            viewTextFlow.getChildren().add(tx);
+        }
+
     }
 
     /**
