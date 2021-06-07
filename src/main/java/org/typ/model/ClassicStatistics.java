@@ -1,9 +1,11 @@
 package org.typ.model;
 
-import javafx.beans.property.IntegerProperty;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.event.ActionEvent;
+import javafx.util.Duration;
 
 /**
  * Implémentation des statistiques pour le mode classique
