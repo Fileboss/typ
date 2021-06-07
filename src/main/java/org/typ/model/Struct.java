@@ -11,7 +11,7 @@ public class Struct {
     private List<String> text;
 
     /* Position du mot courant */
-    private int position;
+    protected int position;
 
     /* Listes des indices des mots valides et des mots erronés */
     private List<Integer> correctList, falseList;
@@ -39,6 +39,17 @@ public class Struct {
         this.nbFalseTotal = nbFalseTotal;
         this.positionFirstTypo = positionFirstTypo;
         this.positionLastCorrectCharacter = positionLastCorrectCharacter;
+    }
+
+    public Struct(Struct copie){
+        this(copie.text,
+                copie.position,
+                copie.correctList,
+                copie.falseList,
+                copie.nbCorrectTotal,
+                copie.nbFalseTotal,
+                copie.positionFirstTypo,
+                copie.positionLastCorrectCharacter);
     }
 
     public List<String> getText() {
