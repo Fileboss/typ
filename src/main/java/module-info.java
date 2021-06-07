@@ -3,6 +3,7 @@ module org.typ {
     requires javafx.fxml;
     requires opencsv;
     requires junit;
+    requires snakeyaml;
     exports org.typ;
     exports org.typ.tests.modelTests;
 
