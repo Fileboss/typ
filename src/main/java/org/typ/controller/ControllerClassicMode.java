@@ -1,5 +1,6 @@
 package org.typ.controller;
 
+import javafx.beans.Observable;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,7 +16,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import org.typ.model.ClassicCorrector;
+import org.typ.model.ClassicStatisticsReport;
 import org.typ.model.GameOverException;
+
+import java.io.IOException;
 
 public class ControllerClassicMode extends VBox {
 
@@ -49,6 +53,9 @@ public class ControllerClassicMode extends VBox {
     private void validateCharacters(ObservableValue<? extends String> observable,
                                     String oldValue, String newValue) {
         model.evaluateCharacters(newValue);
+    }
+
+    private void test(Observable observable) {
     }
 
     /**
@@ -101,6 +108,12 @@ public class ControllerClassicMode extends VBox {
         }
         if (model.isGameOver()){
             textInput.setEditable(false);
+
+            try {
+                ClassicStatisticsReport.generateFile(model.getStats());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Game Over");
