@@ -4,16 +4,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 public class ChangeRootSceneCommand implements Command {
-    private Scene scene;
     private Parent root;
 
-    public ChangeRootSceneCommand(Scene scene, Parent root) {
-        this.scene = scene;
+    public ChangeRootSceneCommand(Parent root) {
         this.root = root;
     }
 
     @Override
     public void execute() {
-        this.scene.setRoot(root);
+        this.root.toFront();
     }
 }

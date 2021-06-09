@@ -48,6 +48,7 @@ public class ControllerClassicMode extends VBox {
         if(newValue.length() > oldValue.length()){
             model.getStats().incrementNbInput();
         }
+        System.out.println(newValue);
         model.evaluateCharacters(newValue);
     }
 

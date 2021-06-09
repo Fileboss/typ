@@ -4,6 +4,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.typ.controller.menu.*;
 
@@ -40,12 +42,16 @@ public class App extends Application {
         Parent settingsRoot = settingsLoader.load();
         Parent statisticsRoot = statisticsLoader.load();
 
-        Scene mainScene = new Scene(mainRoot);
+        StackPane stack = new StackPane();
+        stack.getChildren().addAll(mainRoot, playRoot, settingsRoot, statisticsRoot);
+        mainRoot.toFront();
+
+        Scene mainScene = new Scene(stack);
 
         controller.setTitle("Menu");
-        controller.addCommandButton("play", new ChangeRootSceneCommand(mainScene, playRoot));
-        controller.addCommandButton("statistics", new ChangeRootSceneCommand(mainScene, statisticsRoot));
-        controller.addCommandButton("settings", new ChangeRootSceneCommand(mainScene, settingsRoot));
+        controller.addCommandButton("play", new ChangeRootSceneCommand(playRoot));
+        controller.addCommandButton("statistics", new ChangeRootSceneCommand(statisticsRoot));
+        controller.addCommandButton("settings", new ChangeRootSceneCommand(settingsRoot));
         controller.addCommandButton("exit", new Command() {
             @Override
             public void execute() {
@@ -54,15 +60,15 @@ public class App extends Application {
         });
 
         settingsController.setTitle("Settings");
-        settingsController.addCommandButton("back", new ChangeRootSceneCommand(mainScene, mainRoot));
+        settingsController.addCommandButton("back", new ChangeRootSceneCommand(mainRoot));
 
         playController.setTitle("Play");
-        playController.addCommandButton("Classic Mode", new StartClassicModeCommand(mainScene));
+        playController.addCommandButton("Classic Mode", new StartClassicModeCommand(stack));
         //playController.addCommandButton("Classic Mode", null);
-        playController.addCommandButton("back", new ChangeRootSceneCommand(mainScene, mainRoot));
+        playController.addCommandButton("back", new ChangeRootSceneCommand(mainRoot));
 
         statisticsController.setTitle("Statistics");
-        statisticsController.addCommandButton("back",new ChangeRootSceneCommand(mainScene, mainRoot));
+        statisticsController.addCommandButton("back",new ChangeRootSceneCommand(mainRoot));
 
         stage.setTitle("Typ");
         stage.setScene(mainScene);

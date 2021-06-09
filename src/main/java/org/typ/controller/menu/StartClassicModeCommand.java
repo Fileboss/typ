@@ -16,9 +16,9 @@ import java.io.IOException;
 
 public class StartClassicModeCommand implements Command {
 
-    private Scene scene;
+    private Pane scene;
 
-    public StartClassicModeCommand(Scene scene) {
+    public StartClassicModeCommand(Pane scene) {
         this.scene = scene;
     }
 
@@ -56,6 +56,7 @@ public class StartClassicModeCommand implements Command {
 
         model.initialize();
 
-        scene.setRoot(layout);
+        scene.getChildren().add(layout);
+        layout.toFront();
     }
 }
