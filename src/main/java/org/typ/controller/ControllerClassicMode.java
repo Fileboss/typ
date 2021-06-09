@@ -48,7 +48,6 @@ public class ControllerClassicMode extends VBox {
         if(newValue.length() > oldValue.length()){
             model.getStats().incrementNbInput();
         }
-        System.out.println(newValue);
         model.evaluateCharacters(newValue);
     }
 
@@ -80,7 +79,6 @@ public class ControllerClassicMode extends VBox {
         KeyCode keyPressed = e.getCode();
         if (keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty() && !model.isGameOver()) {
             try {
-                System.out.println(textInput.getText());
                 String word = textInput.getText();
                 // Notifie evaluate character
                 textInput.setText("");
