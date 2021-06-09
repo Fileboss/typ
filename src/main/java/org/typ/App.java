@@ -67,8 +67,8 @@ public class App extends Application {
         stage.setTitle("Typ");
         stage.setScene(mainScene);
 
-        stage.setMinHeight(450);
-        stage.setWidth(900);
+        stage.setMinHeight(475);
+        stage.setMinWidth(900);
 
         stage.show();
     }
