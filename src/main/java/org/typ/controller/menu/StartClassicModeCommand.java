@@ -16,9 +16,9 @@ import java.io.IOException;
 
 public class StartClassicModeCommand implements Command {
 
-    private Scene scene;
+    private Pane scene;
 
-    public StartClassicModeCommand(Scene scene) {
+    public StartClassicModeCommand(Pane scene) {
         this.scene = scene;
     }
 
@@ -26,11 +26,12 @@ public class StartClassicModeCommand implements Command {
     public void execute() {
         ViewClassicMode view = new ViewClassicMode();
 
-        ClassicTextGenerator ctg = new ClassicTextGenerator("src/main/resources/org/typ/dictionaries/mots_courants_fr.csv", 1500, 50);
+        ClassicTextGenerator ctg = new ClassicTextGenerator("src/main/resources/org/typ/dictionaries/mots_courants_fr.csv", 1500, 15);
 
         ClassicCorrector model = null;
         try {
-            model = new ClassicCorrector(ctg, view);
+            model = new ClassicCorrector(ctg);
+            model.addPropertyChangeListener(view);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -51,9 +52,11 @@ public class StartClassicModeCommand implements Command {
         }
         layout.setBackground(new Background(new BackgroundFill(Color.rgb(7, 39, 69), CornerRadii.EMPTY, Insets.EMPTY)));
 
-        controller.start();
-        model.start();
+        controller.start(view);
 
-        scene.setRoot(layout);
+        model.initialize();
+
+        scene.getChildren().add(layout);
+        layout.toFront();
     }
 }

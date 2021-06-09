@@ -1,17 +1,20 @@
 package org.typ.model;
 
-import org.typ.view.ViewMode;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
 
 /** Représente un arbitre/correcteur qui va valider ou
  * non les mots qu'on lui donne par rapport à un texte.
  *
  */
-public abstract class AbstractCorrector extends Observable {
+public abstract class AbstractCorrector{
     /** La position du mot en cours d'évaluation. */
     protected int positionCurrentWord;
 
@@ -22,13 +25,13 @@ public abstract class AbstractCorrector extends Observable {
     protected int positionLastCorrectCharacter;
 
     /** Liste des positions des mots correctements saisies. */
-    protected List<Integer> correctWordsPosition;
+    protected ObservableList<Integer> correctWordsPosition;
 
     /** Liste des positions des mots incorrectements saisies. */
-    protected List<Integer> incorrectWordsPosition;
+    protected ObservableList<Integer>  incorrectWordsPosition;
 
     /** Le texte complet qui permet d'évaluer si les mots donnés sont correctes ou non. */
-    protected List<String> text;
+    protected ObservableList<String> text;
 
     /** C'est le générateur de texte. **/
     protected TextGenerator textGenerator;
@@ -36,25 +39,43 @@ public abstract class AbstractCorrector extends Observable {
     /** Les statistiques concernant l'évaluation d'une partie. */
     protected Statistics stats;
 
+    /** S'occupe de notifier la vue  **/
+    private PropertyChangeSupport support;
+
+    private Struct data;
+
     /** Initialise un correcteur avec pour première position 0,
      * les listes de mots correctes et incorrectes vides.
      *
      * @param textGenerator le texte qui permet d'évaluer les mots à vérifier
      */
-    public AbstractCorrector(TextGenerator textGenerator, ViewMode view){
-        this.addObserver(view);
+    public AbstractCorrector(Statistics stats, TextGenerator textGenerator){
+        this.support = new PropertyChangeSupport(this);
         this.textGenerator = textGenerator;
+        this.stats = stats;
+
+        this.correctWordsPosition = FXCollections.observableArrayList();
+        this.incorrectWordsPosition = FXCollections.observableArrayList();
+        this.text = FXCollections.observableArrayList();
 
         this.initialize();
+    }
 
+    //TODO add javadoc or refactor
+    public final void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
+
+    public final void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
     }
 
     /** Renvoie la liste de mot du textWrapper.
      *
      * @return le text du TextWrapper
      */
-    public List<String> getText(){
-        return text;
+    public ObservableList<String> getText(){
+        return FXCollections.unmodifiableObservableList(text);
     }
 
     /** Retourne le nombre de mots dans le text complet.
@@ -77,7 +98,7 @@ public abstract class AbstractCorrector extends Observable {
         return positionCurrentWord;
     }
 
-    /** Retourne les statistiques concerant la partie
+    /** Retourne les statistiques concernant la partie
      *
      * @return les statistiques
      */
@@ -85,20 +106,20 @@ public abstract class AbstractCorrector extends Observable {
         return stats;
     }
 
-    /** Retourne la liste des position des mots correctes
+    /** Retourne la liste non modifiable des position des mots correctes
      *
      * @return correctWordPosition
      */
-    public List<Integer> getCorrectWordsPosition() {
-        return correctWordsPosition;
+    public ObservableList<Integer> getCorrectWordsPosition() {
+        return FXCollections.unmodifiableObservableList(correctWordsPosition);
     }
 
     /** Retourne la liste des positions des mots incorrectes
      *
      * @return incorrectWordsPosition
      */
-    public List<Integer> getIncorrectWordsPosition() {
-        return incorrectWordsPosition;
+    public ObservableList<Integer> getIncorrectWordsPosition() {
+        return FXCollections.unmodifiableObservableList(incorrectWordsPosition);
     }
 
     /** Evalue le mot word avec le mot correpondant à la position positionCurrentWord du texte
@@ -111,9 +132,7 @@ public abstract class AbstractCorrector extends Observable {
         if (positionCurrentWord >= text.size()){
             throw new EndOfTextException(positionCurrentWord);
         }
-        evaluateWordTreatment(word);
-        Struct data = generateData();
-        notifyView(data);
+        wordEvaluationProcess(word);
     }
 
     /** Réalise uniquement le traitment relatif à l'évaluation d'un mot
@@ -121,7 +140,7 @@ public abstract class AbstractCorrector extends Observable {
      * @param word le mot à évaluer
      * @throws GameOverException une exception de fin de partie
      */
-    protected abstract void evaluateWordTreatment(String word) throws GameOverException;
+    protected abstract void wordEvaluationProcess(String word) throws GameOverException;
 
     /** Evalue le mot partialWord par rapport au début du mot
      * correspond à l'indice posCurrentWord dans le texte.
@@ -130,7 +149,7 @@ public abstract class AbstractCorrector extends Observable {
      * @param partialWord le mot à comparer
      */
     public void evaluateCharacters(String partialWord){
-        evaluateCharactersTreatment(partialWord);
+        characterEvaluationProcess(partialWord);
         Struct data = generateData();
         notifyView(data);
     }
@@ -139,18 +158,17 @@ public abstract class AbstractCorrector extends Observable {
      *
      * @param partialWord le mot à comparer
      */
-    public abstract void evaluateCharactersTreatment(String partialWord);
+    public abstract void characterEvaluationProcess(String partialWord);
 
     /** Passe au mot suivant en incrémentant posCurrentWord de 1.
      *
      */
     public void nextWord() {
         positionCurrentWord++;
-        Struct data = new Struct(getText(), positionCurrentWord,
-                correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
-        setChanged();
-        notifyObservers(data);
+        Struct data = generateData();
+        if (positionCurrentWord < text.size()){
+            notifyView(data);
+        }
     }
 
     /** Indique si la partie est terminé ou pas.
@@ -164,26 +182,33 @@ public abstract class AbstractCorrector extends Observable {
      */
     public void initialize() {
         positionCurrentWord = 0;
-        correctWordsPosition = new ArrayList<>();
-        incorrectWordsPosition = new ArrayList<>();
+        correctWordsPosition.clear();
+        incorrectWordsPosition.clear();
         positionFirstTypo = -1;
         positionLastCorrectCharacter = -1;
+        stats.reset();
+
+        stats.nbInputProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                start();
+                stats.nbInputProperty().removeListener(this);
+            }
+        });
+
         try {
-            text = textGenerator.generateText();
+            text.setAll(textGenerator.generateText());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        Struct data = generateData();
+        notifyView(data);
     }
 
-    /** Démarre l'évaluation du texte et notifie la vue.
+    /** Démarre l'évaluation du texte.
      * Ne Peut être appelé qu'après l'appel à initialize()
      */
-    public void start() {
-        Struct data = new Struct(getText(), positionCurrentWord,
-                correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size(), positionFirstTypo, positionLastCorrectCharacter);
-        setChanged();
-        notifyObservers(data);
+    protected void start() {
     }
 
     /** Notifie la vue avec les données data
@@ -191,8 +216,8 @@ public abstract class AbstractCorrector extends Observable {
      * @param data les données
      */
     private void notifyView(Struct data){
-        setChanged();
-        notifyObservers(data);
+        support.firePropertyChange("correctorData", this.data, data);
+        this.data = data;
     }
 
     /** Retourne les données mises à jour de l'état courant du correcteur
@@ -200,8 +225,7 @@ public abstract class AbstractCorrector extends Observable {
      * @return les données de vue
      */
     protected Struct generateData(){
-        return new Struct(getText(), positionCurrentWord,
-                correctWordsPosition, incorrectWordsPosition,
-                correctWordsPosition.size(), incorrectWordsPosition.size(), this.positionFirstTypo, this.positionLastCorrectCharacter);
+        return new Struct(positionCurrentWord,
+                this.positionFirstTypo, this.positionLastCorrectCharacter);
     }
 }

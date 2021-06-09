@@ -1,6 +1,7 @@
 package org.typ.controller;
 
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -10,12 +11,13 @@ import javafx.scene.control.DialogEvent;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import org.typ.model.ClassicCorrector;
+import org.typ.model.ClassicStatistics;
 import org.typ.model.GameOverException;
+import org.typ.view.ViewClassicMode;
+
+import java.util.List;
 
 public class ControllerClassicMode extends VBox {
 
@@ -38,16 +40,14 @@ public class ControllerClassicMode extends VBox {
     public ControllerClassicMode(ClassicCorrector model) {
         super(20);
         this.model = model;
-
-        // Définition du comportement lors d'un changement sur le textInput. (validation par caractère)
-
-        // TODO
-        //textInput.textProperty().addListener(this::validateCharacters);
-
     }
 
+    // Définition du comportement lors d'un changement sur le textInput. (validation par caractère)
     private void validateCharacters(ObservableValue<? extends String> observable,
                                     String oldValue, String newValue) {
+        if(newValue.length() > oldValue.length()){
+            model.getStats().incrementNbInput();
+        }
         model.evaluateCharacters(newValue);
     }
 
@@ -69,7 +69,6 @@ public class ControllerClassicMode extends VBox {
     private void onClickReplayButton(ActionEvent e) {
 
         model.initialize();
-        model.start();
         textInput.setText("");
         textInput.setEditable(true);
 
@@ -80,9 +79,10 @@ public class ControllerClassicMode extends VBox {
         KeyCode keyPressed = e.getCode();
         if (keyPressed == KeyCode.SPACE && !textInput.getText().isEmpty() && !model.isGameOver()) {
             try {
-                System.out.println(textInput.getText());
-                model.evaluateWord(textInput.getText());
+                String word = textInput.getText();
+                // Notifie evaluate character
                 textInput.setText("");
+                model.evaluateWord(word);
                 model.nextWord();
             } catch (GameOverException gameOverException) {
                 textInput.setEditable(false);
@@ -114,7 +114,41 @@ public class ControllerClassicMode extends VBox {
         }
     }
 
-    public void start() {
+    //TODO moi je veux renommer bind peut être à faire dans une autre fonction
+    public void start(ViewClassicMode view) {
         textInput.textProperty().addListener(this::validateCharacters);
+        ClassicStatistics stats = (ClassicStatistics) model.getStats();
+
+        stats.nbCorrectWordsProperty().addListener((observable, oldval, newval) ->
+                view.setCorrectsWordCount((Integer) newval)
+        );
+
+        stats.nbIncorrectWordsProperty().addListener((observable, oldval, newval) ->
+                view.setFalseWordsCount((Integer) newval)
+        );
+
+        model.getCorrectWordsPosition().addListener((ListChangeListener<? super Integer>)(c) ->{
+                c.next();
+                if (c.wasAdded()){
+                    view.colorCorrectWord(c.getAddedSubList().get(0));
+                }
+        });
+
+        model.getIncorrectWordsPosition().addListener((ListChangeListener<? super Integer>)(c) -> {
+                c.next();
+                if (c.wasAdded()){
+                    view.colorIncorrectWord(c.getAddedSubList().get(0));
+                }
+        });
+
+        model.getText().addListener((ListChangeListener<? super String>) (c) -> {
+                c.next();
+                view.updateText(((List<String>) c.getList()));
+        });
+
+        stats.chronometerProperty().addListener((observable, oldval, newval) ->
+                view.displayChronometer((Integer) newval)
+        );
     }
+
 }
