@@ -9,6 +9,8 @@ import javafx.beans.value.ObservableValue;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 /** Représente un arbitre/correcteur qui va valider ou
  * non les mots qu'on lui donne par rapport à un texte.
@@ -25,10 +27,10 @@ public abstract class AbstractCorrector{
     protected int positionLastCorrectCharacter;
 
     /** Liste des positions des mots correctements saisies. */
-    protected ObservableList<Integer> correctWordsPosition;
+    protected List<Integer> correctWordsPosition;
 
     /** Liste des positions des mots incorrectements saisies. */
-    protected ObservableList<Integer>  incorrectWordsPosition;
+    protected List<Integer>  incorrectWordsPosition;
 
     /** Le texte complet qui permet d'évaluer si les mots donnés sont correctes ou non. */
     protected ObservableList<String> text;
@@ -54,8 +56,8 @@ public abstract class AbstractCorrector{
         this.textGenerator = textGenerator;
         this.stats = stats;
 
-        this.correctWordsPosition = FXCollections.observableArrayList();
-        this.incorrectWordsPosition = FXCollections.observableArrayList();
+        this.correctWordsPosition = new ArrayList<>();
+        this.incorrectWordsPosition = new ArrayList<>();
         this.text = FXCollections.observableArrayList();
 
         this.initialize();
@@ -110,16 +112,16 @@ public abstract class AbstractCorrector{
      *
      * @return correctWordPosition
      */
-    public ObservableList<Integer> getCorrectWordsPosition() {
-        return FXCollections.unmodifiableObservableList(correctWordsPosition);
+    public List<Integer> getCorrectWordsPosition() {
+        return correctWordsPosition;
     }
 
     /** Retourne la liste des positions des mots incorrectes
      *
      * @return incorrectWordsPosition
      */
-    public ObservableList<Integer> getIncorrectWordsPosition() {
-        return FXCollections.unmodifiableObservableList(incorrectWordsPosition);
+    public List<Integer> getIncorrectWordsPosition() {
+        return incorrectWordsPosition;
     }
 
     /** Evalue le mot word avec le mot correpondant à la position positionCurrentWord du texte
@@ -226,6 +228,6 @@ public abstract class AbstractCorrector{
      */
     protected Struct generateData(){
         return new Struct(positionCurrentWord,
-                this.positionFirstTypo, this.positionLastCorrectCharacter);
+                this.positionFirstTypo, this.positionLastCorrectCharacter, this.correctWordsPosition, this.incorrectWordsPosition);
     }
 }

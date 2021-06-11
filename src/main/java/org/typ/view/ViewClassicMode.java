@@ -56,6 +56,7 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         Struct struct = (Struct) evt.getNewValue();
+        Struct oldStruct = (Struct) evt.getOldValue();
 
         // Cas du mot courant
         String wholeWord = fullText.get(struct.getPosition());
@@ -85,6 +86,20 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
         CurrentWord currentWordPart = new CurrentWord(correctPart, remainingPart);
         viewTextFlow.getChildren().remove(struct.getPosition());
         viewTextFlow.getChildren().add(struct.getPosition(), currentWordPart);
+
+        // coloration d'un mot après évaluation
+        // La position du mot courant à changer
+        if (oldStruct.getPosition() < struct.getPosition()){
+            int pos = oldStruct.getPosition();
+            if(oldStruct.getCorrectWordsPosition().size() < struct.getCorrectWordsPosition().size()){
+                // Cas des bons mots
+                colorCorrectWord(pos);
+            }
+            else{
+                // Cas des mauvais mots
+                colorIncorrectWord(pos);
+            }
+        }
     }
 
     /**

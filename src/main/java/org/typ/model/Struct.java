@@ -1,5 +1,6 @@
 package org.typ.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,20 +13,26 @@ public class Struct {
 
     private int positionFirstTypo, positionLastCorrectCharacter;
 
+    private List<Integer> correctWordsPosition, incorrectWordsPosition;
+
     /**
      * Contruit une Struct
      * @param position : position du mot courant
      */
-    public Struct(int position, int positionFirstTypo, int positionLastCorrectCharacter) {
+    public Struct(int position, int positionFirstTypo, int positionLastCorrectCharacter, List<Integer> correctWordPosition, List<Integer> incorrectWordPosition) {
         this.position = position;
         this.positionFirstTypo = positionFirstTypo;
         this.positionLastCorrectCharacter = positionLastCorrectCharacter;
+        this.correctWordsPosition = new ArrayList<>(correctWordPosition);
+        this.incorrectWordsPosition = new ArrayList<>(incorrectWordPosition);
     }
 
     public Struct(Struct copie){
         this(copie.position,
                 copie.positionFirstTypo,
-                copie.positionLastCorrectCharacter);
+                copie.positionLastCorrectCharacter,
+                copie.correctWordsPosition,
+                copie.incorrectWordsPosition);
     }
 
     public int getPosition() {
@@ -38,5 +45,13 @@ public class Struct {
 
     public int getPositionLastCorrectCharacter() {
         return positionLastCorrectCharacter;
+    }
+
+    public List<Integer> getCorrectWordsPosition() {
+        return correctWordsPosition;
+    }
+
+    public List<Integer> getIncorrectWordsPosition() {
+        return incorrectWordsPosition;
     }
 }
