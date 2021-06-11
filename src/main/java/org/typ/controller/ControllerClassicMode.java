@@ -12,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import org.typ.controller.menu.Command;
 import org.typ.model.ClassicCorrector;
 import org.typ.model.ClassicStatistics;
 import org.typ.model.GameOverException;
@@ -149,6 +150,19 @@ public class ControllerClassicMode extends VBox {
         stats.chronometerProperty().addListener((observable, oldval, newval) ->
                 view.displayChronometer((Integer) newval)
         );
+    }
+
+    /**
+     * Définit la commande à exécuter lors de l'activation du bouton `exit`
+     * @param commande
+     */
+    public void setActionExitButton(Command commande) {
+        this.exitButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                commande.execute();
+            }
+        });
     }
 
 }
