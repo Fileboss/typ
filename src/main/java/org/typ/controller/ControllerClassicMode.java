@@ -34,6 +34,10 @@ public class ControllerClassicMode extends VBox {
     @FXML
     private Button replayButton;
 
+    private ListChangeListener<? super Integer> incorrectWordsPositionListener;
+
+    private ListChangeListener<? super Integer> correctWordsPositionListener;
+
     /**
      * Constructeur de la classe ControllerClassicMode
      * @param model : modele
@@ -128,23 +132,9 @@ public class ControllerClassicMode extends VBox {
                 view.setFalseWordsCount((Integer) newval)
         );
 
-        model.getCorrectWordsPosition().addListener((ListChangeListener<? super Integer>)(c) ->{
-                c.next();
-                if (c.wasAdded()){
-                    view.colorCorrectWord(c.getAddedSubList().get(0));
-                }
-        });
-
-        model.getIncorrectWordsPosition().addListener((ListChangeListener<? super Integer>)(c) -> {
-                c.next();
-                if (c.wasAdded()){
-                    view.colorIncorrectWord(c.getAddedSubList().get(0));
-                }
-        });
-
         model.getText().addListener((ListChangeListener<? super String>) (c) -> {
-                c.next();
-                view.updateText(((List<String>) c.getList()));
+            c.next();
+            view.updateText(((List<String>) c.getList()));
         });
 
         stats.chronometerProperty().addListener((observable, oldval, newval) ->
