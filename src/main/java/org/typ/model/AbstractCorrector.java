@@ -3,9 +3,6 @@ package org.typ.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.FileNotFoundException;
@@ -138,7 +135,7 @@ public abstract class AbstractCorrector{
      * @throws GameOverException une exception de fin de partie
      */
     public void evaluateWord(String word) throws GameOverException{
-        if (positionCurrentWord >= text.size()){
+        if (positionCurrentWord == text.size()){
             throw new EndOfTextException(positionCurrentWord);
         }
         wordEvaluationProcess(word);

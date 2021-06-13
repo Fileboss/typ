@@ -71,6 +71,7 @@ public class ControllerClassicMode extends VBox {
     @FXML
     private void onClickReplayButton(ActionEvent e) {
 
+        model.stop();
         model.initialize();
         textInput.setText("");
         textInput.setEditable(true);
