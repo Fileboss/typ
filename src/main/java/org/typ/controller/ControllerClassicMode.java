@@ -13,7 +13,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import org.typ.controller.menu.Command;
-import org.typ.model.*;
+
+import org.typ.model.ClassicCorrector;
+import org.typ.model.GameOverException;
+import org.typ.model.SimpleTimedStatisticsProxy;
+import org.typ.model.TimedStatistics;
 import org.typ.view.ViewClassicMode;
 
 import java.util.List;
@@ -31,10 +35,6 @@ public class ControllerClassicMode extends VBox {
 
     @FXML
     private Button replayButton;
-
-    private ListChangeListener<? super Integer> incorrectWordsPositionListener;
-
-    private ListChangeListener<? super Integer> correctWordsPositionListener;
 
     /**
      * Constructeur de la classe ControllerClassicMode

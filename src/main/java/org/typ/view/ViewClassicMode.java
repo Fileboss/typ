@@ -11,6 +11,7 @@ import org.typ.model.Struct;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Observable;
 
@@ -25,6 +26,9 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
 
     @FXML
     private Label FalseWordsCount;
+
+    @FXML
+    private Label chronometer;
 
     /** Le text complet qui vient du model **/
     private List<String> fullText;
@@ -142,7 +146,8 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
     }
 
     public void displayChronometer(int time){
-        System.out.println(time);
+        String formattedTime = new SimpleDateFormat("mm:ss").format(time*1000);
+        chronometer.setText(formattedTime);
     }
 
     /**

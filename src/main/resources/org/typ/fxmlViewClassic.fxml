@@ -8,14 +8,18 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-
 <AnchorPane minHeight="-Infinity" prefHeight="300.0" prefWidth="640.0" style="-fx-background-color: #072745;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="261.0" prefWidth="600.0" style="-fx-background-color: #072745;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="261.0" prefWidth="600.0" style="-fx-background-color: #072745;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
          <children>
             <Label text="typ" textFill="#eec521">
                <font>
                   <Font size="36.0" />
+               </font>
+            </Label>
+            <Label id="chronometer" fx:id="chronometer" text="00:00" textFill="#eec521">
+               <font>
+                  <Font size="19.0" />
                </font>
             </Label>
             <TextFlow fx:id="viewTextFlow" prefHeight="183.0" prefWidth="613.0" style="-fx-background-color: #0c3964;">
