@@ -3,9 +3,6 @@ package org.typ.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.FileNotFoundException;
@@ -17,6 +14,9 @@ import java.util.List;
  *
  */
 public abstract class AbstractCorrector{
+    /** Décrit l'état du correcteur **/
+    protected enum State{RESET, STARTED, STOPPED}
+
     /** La position du mot en cours d'évaluation. */
     protected int positionCurrentWord;
 
@@ -46,12 +46,16 @@ public abstract class AbstractCorrector{
 
     private Struct data;
 
+    /** État courant des statistics **/
+    private State state;
+
     /** Initialise un correcteur avec pour première position 0,
      * les listes de mots correctes et incorrectes vides.
      *
      * @param textGenerator le texte qui permet d'évaluer les mots à vérifier
      */
     public AbstractCorrector(Statistics stats, TextGenerator textGenerator){
+        this.state = State.STOPPED;
         this.support = new PropertyChangeSupport(this);
         this.textGenerator = textGenerator;
         this.stats = stats;
@@ -104,9 +108,7 @@ public abstract class AbstractCorrector{
      *
      * @return les statistiques
      */
-    public Statistics getStats() {
-        return stats;
-    }
+    public abstract Statistics getStats();
 
     /** Retourne la liste non modifiable des position des mots correctes
      *
@@ -131,7 +133,7 @@ public abstract class AbstractCorrector{
      * @throws GameOverException une exception de fin de partie
      */
     public void evaluateWord(String word) throws GameOverException{
-        if (positionCurrentWord >= text.size()){
+        if (positionCurrentWord == text.size()){
             throw new EndOfTextException(positionCurrentWord);
         }
         wordEvaluationProcess(word);
@@ -151,6 +153,9 @@ public abstract class AbstractCorrector{
      * @param partialWord le mot à comparer
      */
     public void evaluateCharacters(String partialWord){
+        if(state == State.RESET){
+            start();
+        }
         characterEvaluationProcess(partialWord);
         Struct data = generateData();
         notifyView(data);
@@ -183,20 +188,16 @@ public abstract class AbstractCorrector{
      *
      */
     public void initialize() {
+        if (state != State.STOPPED){
+            throw new UnsupportedStateException(State.STOPPED.toString(), state.toString());
+        }
+        state = State.RESET;
         positionCurrentWord = 0;
         correctWordsPosition.clear();
         incorrectWordsPosition.clear();
         positionFirstTypo = -1;
         positionLastCorrectCharacter = -1;
         stats.reset();
-
-        stats.nbInputProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                start();
-                stats.nbInputProperty().removeListener(this);
-            }
-        });
 
         try {
             text.setAll(textGenerator.generateText());
@@ -211,6 +212,18 @@ public abstract class AbstractCorrector{
      * Ne Peut être appelé qu'après l'appel à initialize()
      */
     protected void start() {
+        if (state != State.RESET){
+            throw  new UnsupportedStateException(State.RESET.toString(), state.toString());
+        }
+        state = State.STARTED;
+        stats.start();
+    }
+
+    /** Stoppe l'évaluation du texte.
+     */
+    public void stop(){
+        state = State.STOPPED;
+        stats.stop();
     }
 
     /** Notifie la vue avec les données data

@@ -13,9 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import org.typ.controller.menu.Command;
-import org.typ.model.ClassicCorrector;
-import org.typ.model.ClassicStatistics;
-import org.typ.model.GameOverException;
+import org.typ.model.*;
 import org.typ.view.ViewClassicMode;
 
 import java.util.List;
@@ -50,9 +48,6 @@ public class ControllerClassicMode extends VBox {
     // Définition du comportement lors d'un changement sur le textInput. (validation par caractère)
     private void validateCharacters(ObservableValue<? extends String> observable,
                                     String oldValue, String newValue) {
-        if(newValue.length() > oldValue.length()){
-            model.getStats().incrementNbInput();
-        }
         model.evaluateCharacters(newValue);
     }
 
@@ -73,6 +68,7 @@ public class ControllerClassicMode extends VBox {
     @FXML
     private void onClickReplayButton(ActionEvent e) {
 
+        model.stop();
         model.initialize();
         textInput.setText("");
         textInput.setEditable(true);
@@ -90,6 +86,7 @@ public class ControllerClassicMode extends VBox {
                 model.evaluateWord(word);
                 model.nextWord();
             } catch (GameOverException gameOverException) {
+                model.stop();
                 textInput.setEditable(false);
 
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -105,6 +102,7 @@ public class ControllerClassicMode extends VBox {
             }
         }
         if (model.isGameOver()){
+            model.stop();
             textInput.setEditable(false);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -122,7 +120,7 @@ public class ControllerClassicMode extends VBox {
     //TODO moi je veux renommer bind peut être à faire dans une autre fonction
     public void start(ViewClassicMode view) {
         textInput.textProperty().addListener(this::validateCharacters);
-        ClassicStatistics stats = (ClassicStatistics) model.getStats();
+        SimpleTimedStatisticsProxy stats = (SimpleTimedStatisticsProxy) model.getStats();
 
         stats.nbCorrectWordsProperty().addListener((observable, oldval, newval) ->
                 view.setCorrectsWordCount((Integer) newval)
@@ -137,7 +135,7 @@ public class ControllerClassicMode extends VBox {
             view.updateText(((List<String>) c.getList()));
         });
 
-        stats.chronometerProperty().addListener((observable, oldval, newval) ->
+        ((TimedStatistics)stats).timeProperty().addListener((observable, oldval, newval) ->
                 view.displayChronometer((Integer) newval)
         );
     }
@@ -147,11 +145,9 @@ public class ControllerClassicMode extends VBox {
      * @param commande
      */
     public void setActionExitButton(Command commande) {
-        this.exitButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                commande.execute();
-            }
+        this.exitButton.setOnAction(event -> {
+            commande.execute();
+            model.stop();
         });
     }
 
