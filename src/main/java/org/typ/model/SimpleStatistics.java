@@ -134,7 +134,7 @@ public class SimpleStatistics implements Statistics{
 
     @Override
     public ReadOnlyIntegerProperty nbCorrectInputsProperty(){
-        return nbIncorrectInputs.getReadOnlyProperty();
+        return nbCorrectInputs.getReadOnlyProperty();
     }
 
     @Override

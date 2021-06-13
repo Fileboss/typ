@@ -40,19 +40,27 @@ public class ClassicCorrector extends AbstractCorrector{
         // Cas où le mot écrit est (pour le moment) correct
         // On met à jour l'indice du dernier caractère correct
         else if (getText().get(positionCurrentWord).startsWith(partialWord)){
-            stats.incrementNbCorrectInputs();
+            // Incrémente uniquement lorsque l'on ajoute des caractères
+            if (partialWord.length() - 1 > positionLastCorrectCharacter){
+                stats.incrementNbCorrectInputs();
+            }
             this.positionLastCorrectCharacter = partialWord.length() - 1;
             this.positionFirstTypo = -1;
         } else {
             // Cas où il y a une erreur
-            stats.incrementNbIncorrectInputs();
             // On met à jour l'indice du premier caractère faux
             for (int i = 0; i < partialWord.length(); i++){
                 if (i < this.getText().get(this.positionCurrentWord).length() && partialWord.charAt(i) != this.getText().get(this.positionCurrentWord).charAt(i)) {
+                    if (i != positionFirstTypo){
+                        stats.incrementNbIncorrectInputs();
+                    }
                     this.positionFirstTypo = i;
                     break;
                 }
                 if(i >= this.getText().get(this.positionCurrentWord).length()){
+                    if (i != positionFirstTypo){
+                        stats.incrementNbIncorrectInputs();
+                    }
                     this.positionFirstTypo = i;
                     break;
                 }
