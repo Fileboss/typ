@@ -1,5 +1,6 @@
 package org.typ.controller;
 
+import javafx.beans.InvalidationListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
@@ -140,6 +141,10 @@ public class ControllerClassicMode extends VBox {
                     view.colorIncorrectWord(c.getAddedSubList().get(0));
                 }
         });
+
+        model.getIncorrectWordsPosition().addListener((InvalidationListener)(observable) ->
+                System.out.println("invalide")
+        );
 
         model.getText().addListener((ListChangeListener<? super String>) (c) -> {
                 c.next();

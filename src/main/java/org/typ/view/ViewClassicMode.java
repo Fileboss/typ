@@ -11,6 +11,7 @@ import org.typ.model.Struct;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Observable;
 
@@ -25,6 +26,9 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
 
     @FXML
     private Label FalseWordsCount;
+
+    @FXML
+    private Label chronometer;
 
     /** Le text complet qui vient du model **/
     private List<String> fullText;
@@ -85,6 +89,7 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
         CurrentWord currentWordPart = new CurrentWord(correctPart, remainingPart);
         viewTextFlow.getChildren().remove(struct.getPosition());
         viewTextFlow.getChildren().add(struct.getPosition(), currentWordPart);
+        System.out.println("update done");
     }
 
     /**
@@ -96,6 +101,7 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
         TextTrue tt = new TextTrue(this.fullText.get(index)+" ");
         tt.setFont(Font.font ("Verdana", 20));
         viewTextFlow.getChildren().add(index, new TextFlow(tt));
+        System.out.println("color correct word done");
     }
 
     public void colorIncorrectWord(int index){
@@ -103,6 +109,7 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
         TextFalse tf = new TextFalse(this.fullText.get(index)+" ");
         tf.setFont(Font.font ("Verdana", 20));
         viewTextFlow.getChildren().add(index, new TextFlow(tf));
+        System.out.println("color incorrect word done");
     }
 
     public void updateText(List<String> text){
@@ -127,7 +134,8 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
     }
 
     public void displayChronometer(int time){
-        System.out.println(time);
+        String formattedTime = new SimpleDateFormat("mm:ss").format(time*1000);
+        chronometer.setText(formattedTime);
     }
 
     /**
