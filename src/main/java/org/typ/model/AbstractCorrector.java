@@ -108,9 +108,7 @@ public abstract class AbstractCorrector{
      *
      * @return les statistiques
      */
-    public Statistics getStats() {
-        return stats;
-    }
+    public abstract Statistics getStats();
 
     /** Retourne la liste non modifiable des position des mots correctes
      *

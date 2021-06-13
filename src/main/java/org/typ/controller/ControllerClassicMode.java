@@ -13,10 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import org.typ.controller.menu.Command;
-import org.typ.model.ClassicCorrector;
-import org.typ.model.SimpleStatistics;
-import org.typ.model.GameOverException;
-import org.typ.model.TimedStatistics;
+import org.typ.model.*;
 import org.typ.view.ViewClassicMode;
 
 import java.util.List;
@@ -123,7 +120,7 @@ public class ControllerClassicMode extends VBox {
     //TODO moi je veux renommer bind peut être à faire dans une autre fonction
     public void start(ViewClassicMode view) {
         textInput.textProperty().addListener(this::validateCharacters);
-        SimpleStatistics stats = (SimpleStatistics) model.getStats();
+        SimpleTimedStatisticsProxy stats = (SimpleTimedStatisticsProxy) model.getStats();
 
         stats.nbCorrectWordsProperty().addListener((observable, oldval, newval) ->
                 view.setCorrectsWordCount((Integer) newval)

@@ -65,4 +65,9 @@ public class ClassicCorrector extends AbstractCorrector{
         return positionCurrentWord == getText().size();
     }
 
+    @Override
+    public Statistics getStats(){
+        return new SimpleTimedStatisticsProxy(stats);
+    }
+
 }
