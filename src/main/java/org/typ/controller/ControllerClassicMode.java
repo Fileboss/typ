@@ -13,9 +13,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import org.typ.controller.menu.Command;
+
 import org.typ.model.ClassicCorrector;
-import org.typ.model.ClassicStatistics;
 import org.typ.model.GameOverException;
+import org.typ.model.SimpleTimedStatisticsProxy;
+import org.typ.model.TimedStatistics;
 import org.typ.view.ViewClassicMode;
 
 import java.util.List;
