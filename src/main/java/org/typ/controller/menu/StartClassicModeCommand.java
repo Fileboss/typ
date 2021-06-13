@@ -55,6 +55,7 @@ public class StartClassicModeCommand implements Command {
         controller.setActionExitButton(new ExitGameCommand(scene, layout));
         controller.start(view);
 
+        model.stop();
         model.initialize();
 
         scene.getChildren().add(layout);

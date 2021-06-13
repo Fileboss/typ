@@ -13,7 +13,7 @@ public class ClassicCorrector extends AbstractCorrector{
      * @param classicTextGenerator le texte qui permet d'évaluer les mots à vérifier
      */
     public ClassicCorrector(ClassicTextGenerator classicTextGenerator) throws FileNotFoundException {
-        super(new ClassicStatistics(), classicTextGenerator);
+        super(new SimpleTimedStatistics(), classicTextGenerator);
     }
 
     @Override
@@ -40,11 +40,12 @@ public class ClassicCorrector extends AbstractCorrector{
         // Cas où le mot écrit est (pour le moment) correct
         // On met à jour l'indice du dernier caractère correct
         else if (getText().get(positionCurrentWord).startsWith(partialWord)){
-            stats.incrementNbCorrectInput();
+            stats.incrementNbCorrectInputs();
             this.positionLastCorrectCharacter = partialWord.length() - 1;
             this.positionFirstTypo = -1;
         } else {
             // Cas où il y a une erreur
+            stats.incrementNbIncorrectInputs();
             // On met à jour l'indice du premier caractère faux
             for (int i = 0; i < partialWord.length(); i++){
                 if (i < this.getText().get(this.positionCurrentWord).length() && partialWord.charAt(i) != this.getText().get(this.positionCurrentWord).charAt(i)) {
@@ -64,8 +65,4 @@ public class ClassicCorrector extends AbstractCorrector{
         return positionCurrentWord == getText().size();
     }
 
-    @Override
-    public void start(){
-        ((ClassicStatistics) stats).startChrono();
-    }
 }
