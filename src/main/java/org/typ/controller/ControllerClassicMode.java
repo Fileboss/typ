@@ -1,6 +1,5 @@
 package org.typ.controller;
 
-import javafx.beans.InvalidationListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
@@ -13,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import org.typ.controller.menu.Command;
 import org.typ.model.ClassicCorrector;
 import org.typ.model.ClassicStatistics;
 import org.typ.model.GameOverException;
@@ -128,32 +128,22 @@ public class ControllerClassicMode extends VBox {
                 view.setFalseWordsCount((Integer) newval)
         );
 
-        model.getCorrectWordsPosition().addListener((ListChangeListener<? super Integer>)(c) ->{
-                c.next();
-                if (c.wasAdded()){
-                    view.colorCorrectWord(c.getAddedSubList().get(0));
-                }
-        });
-
-        model.getIncorrectWordsPosition().addListener((ListChangeListener<? super Integer>)(c) -> {
-                c.next();
-                if (c.wasAdded()){
-                    view.colorIncorrectWord(c.getAddedSubList().get(0));
-                }
-        });
-
-        model.getIncorrectWordsPosition().addListener((InvalidationListener)(observable) ->
-                System.out.println("invalide")
-        );
-
         model.getText().addListener((ListChangeListener<? super String>) (c) -> {
-                c.next();
-                view.updateText(((List<String>) c.getList()));
+            c.next();
+            view.updateText(((List<String>) c.getList()));
         });
 
         stats.chronometerProperty().addListener((observable, oldval, newval) ->
                 view.displayChronometer((Integer) newval)
         );
+    }
+
+    /**
+     * Définit la commande à exécuter lors de l'activation du bouton `exit`
+     * @param commande
+     */
+    public void setActionExitButton(Command commande) {
+        this.exitButton.setOnAction(event -> commande.execute());
     }
 
 }

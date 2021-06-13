@@ -52,6 +52,7 @@ public class StartClassicModeCommand implements Command {
         }
         layout.setBackground(new Background(new BackgroundFill(Color.rgb(7, 39, 69), CornerRadii.EMPTY, Insets.EMPTY)));
 
+        controller.setActionExitButton(new ExitGameCommand(scene, layout));
         controller.start(view);
 
         model.initialize();

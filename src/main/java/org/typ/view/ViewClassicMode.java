@@ -60,6 +60,7 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         Struct struct = (Struct) evt.getNewValue();
+        Struct oldStruct = (Struct) evt.getOldValue();
 
         // Cas du mot courant
         String wholeWord = fullText.get(struct.getPosition());
@@ -89,7 +90,20 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
         CurrentWord currentWordPart = new CurrentWord(correctPart, remainingPart);
         viewTextFlow.getChildren().remove(struct.getPosition());
         viewTextFlow.getChildren().add(struct.getPosition(), currentWordPart);
-        System.out.println("update done");
+
+        // coloration d'un mot après évaluation
+        // La position du mot courant à changer
+        if (oldStruct.getPosition() < struct.getPosition()){
+            int pos = oldStruct.getPosition();
+            if(oldStruct.getCorrectWordsPosition().size() < struct.getCorrectWordsPosition().size()){
+                // Cas des bons mots
+                colorCorrectWord(pos);
+            }
+            else{
+                // Cas des mauvais mots
+                colorIncorrectWord(pos);
+            }
+        }
     }
 
     /**
@@ -101,7 +115,6 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
         TextTrue tt = new TextTrue(this.fullText.get(index)+" ");
         tt.setFont(Font.font ("Verdana", 20));
         viewTextFlow.getChildren().add(index, new TextFlow(tt));
-        System.out.println("color correct word done");
     }
 
     public void colorIncorrectWord(int index){
@@ -109,7 +122,6 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
         TextFalse tf = new TextFalse(this.fullText.get(index)+" ");
         tf.setFont(Font.font ("Verdana", 20));
         viewTextFlow.getChildren().add(index, new TextFlow(tf));
-        System.out.println("color incorrect word done");
     }
 
     public void updateText(List<String> text){
