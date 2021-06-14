@@ -16,21 +16,22 @@ import java.io.IOException;
 
 public class StartClassicModeCommand implements Command {
 
-    private Scene playScene;
+    private Pane scene;
 
-    public StartClassicModeCommand(Scene playScene) {
-        this.playScene = playScene;
+    public StartClassicModeCommand(Pane scene) {
+        this.scene = scene;
     }
 
     @Override
     public void execute() {
         ViewClassicMode view = new ViewClassicMode();
 
-        ClassicTextGenerator ctg = new ClassicTextGenerator("src/main/resources/org/typ/dictionaries/mots_courants_fr.csv", 1500, 50);
+        ClassicTextGenerator ctg = new ClassicTextGenerator("src/main/resources/org/typ/dictionaries/mots_courants_fr.csv", 1500, 15);
 
         ClassicCorrector model = null;
         try {
-            model = new ClassicCorrector(ctg, view);
+            model = new ClassicCorrector(ctg);
+            model.addPropertyChangeListener(view);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -50,13 +51,14 @@ public class StartClassicModeCommand implements Command {
             e.printStackTrace();
         }
         layout.setBackground(new Background(new BackgroundFill(Color.rgb(7, 39, 69), CornerRadii.EMPTY, Insets.EMPTY)));
-        Scene scene = new Scene(layout);
 
+        controller.setActionExitButton(new ExitGameCommand(scene, layout));
+        controller.start(view);
 
-        controller.start();
-        model.start();
+        model.stop();
+        model.initialize();
 
-        Stage stage = (Stage) this.playScene.getWindow();
-        stage.setScene(scene);
+        scene.getChildren().add(layout);
+        layout.toFront();
     }
 }

@@ -2,7 +2,10 @@ package org.typ;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.typ.controller.menu.*;
 
@@ -19,8 +22,6 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        stage.setTitle("Typ: classic mode");
-
         MenuController controller = new MenuController();
         MenuController playController = new MenuController();
         MenuController settingsController = new MenuController();
@@ -36,15 +37,21 @@ public class App extends Application {
         settingsLoader.setController(settingsController);
         statisticsLoader.setController(statisticsController);
 
-        Scene scene = new Scene(loader.load());
-        Scene playScene = new Scene(playLoader.load());
-        Scene settingsScene = new Scene(settingsLoader.load());
-        Scene statisticsScene = new Scene(statisticsLoader.load());
+        Parent mainRoot = loader.load();
+        Parent playRoot = playLoader.load();
+        Parent settingsRoot = settingsLoader.load();
+        Parent statisticsRoot = statisticsLoader.load();
+
+        StackPane stack = new StackPane();
+        stack.getChildren().addAll(mainRoot, playRoot, settingsRoot, statisticsRoot);
+        mainRoot.toFront();
+
+        Scene mainScene = new Scene(stack);
 
         controller.setTitle("Menu");
-        controller.addCommandButton("play", new ChangeSceneCommand(scene, playScene));
-        controller.addCommandButton("statistics", new ChangeSceneCommand(scene, statisticsScene));
-        controller.addCommandButton("settings", new ChangeSceneCommand(scene, settingsScene));
+        controller.addCommandButton("play", new ChangeRootSceneCommand(playRoot));
+        controller.addCommandButton("statistics", new ChangeRootSceneCommand(statisticsRoot));
+        controller.addCommandButton("settings", new ChangeRootSceneCommand(settingsRoot));
         controller.addCommandButton("exit", new Command() {
             @Override
             public void execute() {
@@ -53,55 +60,23 @@ public class App extends Application {
         });
 
         settingsController.setTitle("Settings");
-        settingsController.addCommandButton("back", new ChangeSceneCommand(settingsScene, scene));
+        settingsController.addCommandButton("back", new ChangeRootSceneCommand(mainRoot));
 
         playController.setTitle("Play");
-        playController.addCommandButton("Classic Mode", new StartClassicModeCommand(playScene));
+        playController.addCommandButton("Classic Mode", new StartClassicModeCommand(stack));
         //playController.addCommandButton("Classic Mode", null);
-        playController.addCommandButton("back", new ChangeSceneCommand(playScene, scene));
+        playController.addCommandButton("back", new ChangeRootSceneCommand(mainRoot));
 
         statisticsController.setTitle("Statistics");
-        statisticsController.addCommandButton("back", new ChangeSceneCommand(statisticsScene, scene));
+        statisticsController.addCommandButton("back",new ChangeRootSceneCommand(mainRoot));
 
         stage.setTitle("Typ");
-        stage.setScene(scene);
+        stage.setScene(mainScene);
+
+        stage.setMinHeight(475);
+        stage.setMinWidth(900);
+
         stage.show();
-
-        // Fin FT-12
-
-        /*
-        ViewClassicMode view = new ViewClassicMode();
-
-        ClassicTextGenerator ctg = new ClassicTextGenerator("src/main/resources/mots_courants_en.csv", 1500, 50);
-
-        ClassicCorrector model = null;
-        try {
-            model = new ClassicCorrector(ctg, view);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        ControllerClassicMode controller = new ControllerClassicMode(model);
-
-        FXMLLoader loaderView = new FXMLLoader(getClass().getResource("fxmlViewClassic.fxml"));
-        FXMLLoader loaderController = new FXMLLoader(getClass().getResource("fxmlControllerClassic.fxml"));
-
-        loaderView.setController(view);
-        loaderController.setController(controller);
-
-
-        VBox layout = new VBox(20, (AnchorPane)loaderView.load(), (AnchorPane)loaderController.load());
-        layout.setBackground(new Background(new BackgroundFill(Color.rgb(7, 39, 69), CornerRadii.EMPTY, Insets.EMPTY)));
-        scene = new Scene(layout);
-
-
-        controller.start();
-        model.start();
-
-        stage.setScene(scene);
-        stage.show();
-
-         */
     }
 
     public static void main(String[] args) {

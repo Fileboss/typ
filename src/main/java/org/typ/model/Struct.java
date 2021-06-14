@@ -1,5 +1,6 @@
 package org.typ.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,73 +8,35 @@ import java.util.List;
  */
 public class Struct {
 
-    /* Texte, stocké sous forme de tableau de mots */
-    private List<String> text;
-
     /* Position du mot courant */
     protected int position;
 
-    /* Listes des indices des mots valides et des mots erronés */
-    private List<Integer> correctList, falseList;
-
-    /* Nombres de mots correct / faux totaux */
-    private int nbCorrectTotal, nbFalseTotal;
-
     private int positionFirstTypo, positionLastCorrectCharacter;
+
+    private List<Integer> correctWordsPosition, incorrectWordsPosition;
 
     /**
      * Contruit une Struct
-     * @param text : le texte
      * @param position : position du mot courant
-     * @param correctList : liste des indices des mots valdies
-     * @param falseList : liste des indices des mots erronés
-     * @param nbCorrectTotal : nombre total de mots correct durant la partie
-     * @param nbFalseTotal : nombre total des mots erronés durant la partie
      */
-    public Struct(List<String> text, int position, List<Integer> correctList, List<Integer> falseList, int nbCorrectTotal, int nbFalseTotal, int positionFirstTypo, int positionLastCorrectCharacter) {
-        this.text = text;
+    public Struct(int position, int positionFirstTypo, int positionLastCorrectCharacter, List<Integer> correctWordPosition, List<Integer> incorrectWordPosition) {
         this.position = position;
-        this.correctList = correctList;
-        this.falseList = falseList;
-        this.nbCorrectTotal = nbCorrectTotal;
-        this.nbFalseTotal = nbFalseTotal;
         this.positionFirstTypo = positionFirstTypo;
         this.positionLastCorrectCharacter = positionLastCorrectCharacter;
+        this.correctWordsPosition = new ArrayList<>(correctWordPosition);
+        this.incorrectWordsPosition = new ArrayList<>(incorrectWordPosition);
     }
 
     public Struct(Struct copie){
-        this(copie.text,
-                copie.position,
-                copie.correctList,
-                copie.falseList,
-                copie.nbCorrectTotal,
-                copie.nbFalseTotal,
+        this(copie.position,
                 copie.positionFirstTypo,
-                copie.positionLastCorrectCharacter);
-    }
-
-    public List<String> getText() {
-        return text;
+                copie.positionLastCorrectCharacter,
+                copie.correctWordsPosition,
+                copie.incorrectWordsPosition);
     }
 
     public int getPosition() {
         return position;
-    }
-
-    public List<Integer> getCorrectList() {
-        return correctList;
-    }
-
-    public List<Integer> getFalseList() {
-        return falseList;
-    }
-
-    public int getNbCorrectTotal() {
-        return nbCorrectTotal;
-    }
-
-    public int getNbFalseTotal() {
-        return nbFalseTotal;
     }
 
     public int getPositionFirstTypo() {
@@ -82,5 +45,13 @@ public class Struct {
 
     public int getPositionLastCorrectCharacter() {
         return positionLastCorrectCharacter;
+    }
+
+    public List<Integer> getCorrectWordsPosition() {
+        return correctWordsPosition;
+    }
+
+    public List<Integer> getIncorrectWordsPosition() {
+        return incorrectWordsPosition;
     }
 }
