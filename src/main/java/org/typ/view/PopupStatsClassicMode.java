@@ -29,7 +29,7 @@ public class PopupStatsClassicMode extends Alert {
         this.nbIncorrectInputsLabel = new String("Incorrect inputs : " + stats.getNbIncorrectInputs());
 
         StringBuilder builder = new StringBuilder();
-        builder.append(timeLabel + "s\n");
+        builder.append(timeLabel + "\n");
         builder.append(nbCorrectWordsLabel + "\n");
         builder.append(nbIncorrectWordsLabel + "\n");
         builder.append(nbCorrectInputsLabel + "\n");
