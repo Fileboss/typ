@@ -5,6 +5,8 @@ import javafx.scene.control.Label;
 import org.typ.model.Statistics;
 import org.typ.model.TimedStatistics;
 
+import java.text.SimpleDateFormat;
+
 public class PopupStatsClassicMode extends Alert {
     private String timeLabel;
 
@@ -18,7 +20,9 @@ public class PopupStatsClassicMode extends Alert {
 
     public PopupStatsClassicMode(Statistics stats) {
         super(Alert.AlertType.INFORMATION);
-        this.timeLabel = new String("Temps : " + ((TimedStatistics)stats).getTime());
+        int time = ((TimedStatistics)stats).getTime();
+        String formattedTime = new SimpleDateFormat("mm:ss").format(time * 1000);
+        this.timeLabel = new String("Temps : " + formattedTime.toString());
         this.nbCorrectWordsLabel = new String("Correct words : " + stats.getNbCorrectWords());
         this.nbIncorrectWordsLabel = new String("Incorrect words : " + stats.getNbIncorrectWords());
         this.nbCorrectInputsLabel = new String("Correct inputs : " + stats.getNbCorrectInputs());
