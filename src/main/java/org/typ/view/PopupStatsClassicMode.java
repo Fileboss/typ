@@ -1,32 +1,38 @@
 package org.typ.view;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.stage.Popup;
 import org.typ.model.Statistics;
 import org.typ.model.TimedStatistics;
 
-public class PopupStatsClassicMode extends Popup {
-    private Label timeLabel;
+public class PopupStatsClassicMode extends Alert {
+    private String timeLabel;
 
-    private Label nbCorrectWordsLabel;
+    private String nbCorrectWordsLabel;
 
-    private Label nbIncorrectWordsLabel;
+    private String nbIncorrectWordsLabel;
 
-    private Label nbCorrectInputsLabel;
+    private String nbCorrectInputsLabel;
 
-    private Label nbIncorrectInputsLabel;
+    private String nbIncorrectInputsLabel;
 
     public PopupStatsClassicMode(Statistics stats) {
-        this.timeLabel = new Label("Temps : " + ((TimedStatistics)stats).getTime());
-        this.nbCorrectWordsLabel = new Label("Correct words : " + stats.getNbCorrectWords());
-        this.nbIncorrectWordsLabel = new Label("Incorrect words : " + stats.getNbIncorrectWords());
-        this.nbCorrectInputsLabel = new Label("Correct inputs : " + stats.getNbCorrectInputs());
-        this.nbIncorrectInputsLabel = new Label("Incorrect inputs : " + stats.getNbIncorrectInputs());
+        super(Alert.AlertType.INFORMATION);
+        this.timeLabel = new String("Temps : " + ((TimedStatistics)stats).getTime());
+        this.nbCorrectWordsLabel = new String("Correct words : " + stats.getNbCorrectWords());
+        this.nbIncorrectWordsLabel = new String("Incorrect words : " + stats.getNbIncorrectWords());
+        this.nbCorrectInputsLabel = new String("Correct inputs : " + stats.getNbCorrectInputs());
+        this.nbIncorrectInputsLabel = new String("Incorrect inputs : " + stats.getNbIncorrectInputs());
 
-        this.getContent().add(timeLabel);
-        this.getContent().add(nbCorrectWordsLabel);
-        this.getContent().add(nbIncorrectWordsLabel);
-        this.getContent().add(nbCorrectInputsLabel);
-        this.getContent().add(nbIncorrectInputsLabel);
+        StringBuilder builder = new StringBuilder();
+        builder.append(timeLabel + "s\n");
+        builder.append(nbCorrectWordsLabel + "\n");
+        builder.append(nbIncorrectWordsLabel + "\n");
+        builder.append(nbCorrectInputsLabel + "\n");
+        builder.append(nbIncorrectInputsLabel + "\n");
+
+        this.setTitle("Game Over");
+        this.setHeaderText(null);
+        this.setContentText(builder.toString());
     }
 }
