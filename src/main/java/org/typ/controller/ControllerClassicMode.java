@@ -18,6 +18,7 @@ import org.typ.model.ClassicCorrector;
 import org.typ.model.GameOverException;
 import org.typ.model.SimpleTimedStatisticsProxy;
 import org.typ.model.TimedStatistics;
+import org.typ.view.PopupStatsClassicMode;
 import org.typ.view.ViewClassicMode;
 
 import java.util.List;
@@ -105,10 +106,7 @@ public class ControllerClassicMode extends VBox {
             model.stop();
             textInput.setEditable(false);
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Game Over");
-            alert.setHeaderText(null);
-            alert.setContentText("Fin de la partie");
+            Alert alert = new PopupStatsClassicMode(model.getStats());
 
             EventHandler<DialogEvent> event =
                     e1 -> onClickReplayButton(null);
