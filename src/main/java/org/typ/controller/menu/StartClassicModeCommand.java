@@ -2,10 +2,9 @@ package org.typ.controller.menu;
 
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
+import javafx.scene.Parent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 import org.typ.controller.ControllerClassicMode;
 import org.typ.model.ClassicCorrector;
 import org.typ.model.ClassicTextGenerator;
@@ -40,25 +39,33 @@ public class StartClassicModeCommand implements Command {
 
         FXMLLoader loaderView = new FXMLLoader(getClass().getResource("/org/typ/fxmlViewClassic.fxml"));
         FXMLLoader loaderController = new FXMLLoader(getClass().getResource("/org/typ/fxmlControllerClassic.fxml"));
+        FXMLLoader loaderEntete = new FXMLLoader(getClass().getResource("/org/typ/entete.fxml"));
 
         loaderView.setController(view);
         loaderController.setController(controller);
 
+
         VBox layout = null;
+        Parent entete = null;
         try {
-            layout = new VBox(20, (AnchorPane)loaderView.load(), (AnchorPane)loaderController.load());
+            layout = new VBox(20, loaderView.load(), loaderController.load());
+            entete = loaderEntete.load();
         } catch (IOException e) {
             e.printStackTrace();
         }
         layout.setBackground(new Background(new BackgroundFill(Color.rgb(7, 39, 69), CornerRadii.EMPTY, Insets.EMPTY)));
 
-        controller.setActionExitButton(new ExitGameCommand(scene, layout));
+        BorderPane pane = new BorderPane();
+        pane.setTop(entete);
+        pane.setCenter(layout);
+
+        controller.setActionExitButton(new ExitGameCommand(scene, pane));
         controller.start(view);
 
         model.stop();
         model.initialize();
 
-        scene.getChildren().add(layout);
-        layout.toFront();
+        scene.getChildren().add(pane);
+        pane.toFront();
     }
 }
