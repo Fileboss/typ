@@ -44,7 +44,7 @@ public abstract class AbstractCorrector{
     /** S'occupe de notifier la vue  **/
     private PropertyChangeSupport support;
 
-    private Struct data;
+    protected Struct data;
 
     /** État courant des statistics **/
     private State state;
