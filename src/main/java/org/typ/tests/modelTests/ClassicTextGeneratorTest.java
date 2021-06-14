@@ -17,8 +17,6 @@ public class ClassicTextGeneratorTest {
         classicTextGenerator1 = new ClassicTextGenerator("src/main/resources/mots_courants_fr.csv", 1500, 200);
     }
 
-
-
     @Test
     public void testReturn200Words() {
         try {

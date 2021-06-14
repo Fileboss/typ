@@ -32,9 +32,6 @@ public class MenuButton extends Button {
 
         this.setOnMouseEntered(this::mouseEnteredListener);
         this.setOnMouseExited(this::mouseExitedListener);
-
-
-
     }
 
     private void mouseEnteredListener(MouseEvent e ) {

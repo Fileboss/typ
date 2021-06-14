@@ -52,23 +52,6 @@ public class ClassicCorrectorTest {
 
     @Test
     /**
-     * Test Case : Le nombre de mot renvoyé doit correpondre on nombre de mot du texte de départ
-     */
-    public void getNbWordsTest() {
-        // CONDITIONS DU TEST
-        int nbExpectedWords = text.size();
-
-        // CHECK EXCEPTION
-
-        // EXECUTION DU TEST
-        int nbResultWord = corrector.getNbWords();
-
-        // CHECK DU RESULTAT
-        assertEquals(nbExpectedWords, nbResultWord);
-    }
-
-    @Test
-    /**
      * Test Case : La position doit correpsondre, en l'occurence 0 quand on initialise le corrector
      */
     public void getPositionCurrentWordTest() {

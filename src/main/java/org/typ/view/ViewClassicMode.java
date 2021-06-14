@@ -33,30 +33,6 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
     /** Le text complet qui vient du model **/
     private List<String> fullText;
 
-    /**
-     * Contructeur de la classe VueClassicMode. Cette classe affiche le titre, le chrono, le texte à recopier, le
-     * compteur de mots corrects et faux
-     */
-    /*public ViewClassicMode() {
-        super();
-        labelTyp = new Label("Typ");
-        labelTyp.setTextFill(Color.GOLDENROD);
-        labelChrono = new Label("03:42");
-        var boxTypChrono = new VBox(12, labelTyp, labelChrono);
-
-        textFlow = new TextFlow();
-        correctLabel = new Label("Correct : ");
-        correctValue = new Label("0");
-        falseLabel = new Label("False : ");
-        falseValue = new Label("0");
-        hBoxCorrectFalse = new HBox(50, correctLabel, correctValue, falseLabel, falseValue);
-
-        this.setTop(boxTypChrono);
-        this.setCenter(textFlow);
-        this.setBottom(hBoxCorrectFalse);
-    }*/
-
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         Struct struct = (Struct) evt.getNewValue();
@@ -107,7 +83,7 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
     }
 
     /**
-     * Change la couleur du mot pour indiquer qu'il a été correctement écris.
+     * Change la couleur du mot pour indiquer qu'il a été correctement écrit.
      * @param index la position du mot
      */
     public void colorCorrectWord(int index){
@@ -117,6 +93,10 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
         viewTextFlow.getChildren().add(index, new TextFlow(tt));
     }
 
+    /**
+     * Change la couleur du mot pour indiquer qu'il a été incorrectement écrit.
+     * @param index la position du mot
+     */
     public void colorIncorrectWord(int index){
         viewTextFlow.getChildren().remove(index);
         TextFalse tf = new TextFalse(this.fullText.get(index)+" ");
@@ -124,6 +104,10 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
         viewTextFlow.getChildren().add(index, new TextFlow(tf));
     }
 
+    /**
+     * Met à jour le texte de la vue.
+     * @param text le nouveau texte à afficher
+     */
     public void updateText(List<String> text){
         this.fullText = text;
         viewTextFlow.getChildren().clear();
@@ -145,6 +129,10 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
         correctsWordCount.setText(""+count);
     }
 
+    /**
+     * Met a jour l'affichage du label timer
+     * @param time le nouveau temps à afficher
+     */
     public void displayChronometer(int time){
         String formattedTime = new SimpleDateFormat("mm:ss").format(time*1000);
         chronometer.setText(formattedTime);
