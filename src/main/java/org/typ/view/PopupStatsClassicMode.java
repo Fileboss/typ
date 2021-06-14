@@ -22,11 +22,11 @@ public class PopupStatsClassicMode extends Alert {
         super(Alert.AlertType.INFORMATION);
         int time = ((TimedStatistics)stats).getTime();
         String formattedTime = new SimpleDateFormat("mm:ss").format(time * 1000);
-        this.timeLabel = new String("Temps : " + formattedTime.toString());
-        this.nbCorrectWordsLabel = new String("Correct words : " + stats.getNbCorrectWords());
-        this.nbIncorrectWordsLabel = new String("Incorrect words : " + stats.getNbIncorrectWords());
-        this.nbCorrectInputsLabel = new String("Correct inputs : " + stats.getNbCorrectInputs());
-        this.nbIncorrectInputsLabel = new String("Incorrect inputs : " + stats.getNbIncorrectInputs());
+        this.timeLabel = "Temps : " + formattedTime;
+        this.nbCorrectWordsLabel = "Correct words : " + stats.getNbCorrectWords();
+        this.nbIncorrectWordsLabel = "Incorrect words : " + stats.getNbIncorrectWords();
+        this.nbCorrectInputsLabel = "Correct inputs : " + stats.getNbCorrectInputs();
+        this.nbIncorrectInputsLabel = "Incorrect inputs : " + stats.getNbIncorrectInputs();
 
         StringBuilder builder = new StringBuilder();
         builder.append(timeLabel + "\n");

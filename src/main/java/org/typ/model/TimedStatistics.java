@@ -10,7 +10,7 @@ public interface TimedStatistics {
 
     /**
      * Retourne la propriété enveloppant la valeur de time.
-     * @return la valeur de time, le temps passé depuis le début de l'évaluation
+     * @return la propriété en lecture seul enveloppant time
      */
     ReadOnlyIntegerProperty timeProperty();
 

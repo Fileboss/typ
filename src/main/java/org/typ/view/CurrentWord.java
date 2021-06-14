@@ -14,7 +14,6 @@ public class CurrentWord extends TextFlow {
         super();
         this.fullText = correctPart.getText() + remainingPart.getText();
 
-        String colorStr = "#051e35";
         correctPart.setFont(Font.font ("Verdana", FontWeight.NORMAL, 20));
         remainingPart.setFont(Font.font ("Verdana", FontWeight.NORMAL, 20));
         TextFlow wholeWord = new TextFlow();

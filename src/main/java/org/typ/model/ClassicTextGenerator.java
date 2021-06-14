@@ -20,13 +20,13 @@ public class ClassicTextGenerator implements TextGenerator {
 
     private String filePath;
 
-    private Integer numberOfWords;
+    private final Integer numberOfWords;
 
-    private Integer numberToSplit;
+    private final Integer numberToSplit;
 
     private final CSVParser parser;
 
-    private List<String[]> fileAsList;
+    private final List<String[]> fileAsList;
 
     public ClassicTextGenerator(String filePath, Integer numberOfWords, Integer numberToSplit) {
         this.filePath = filePath;

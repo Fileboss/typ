@@ -27,22 +27,22 @@ public abstract class AbstractCorrector{
     protected int positionLastCorrectCharacter;
 
     /** Liste des positions des mots correctements saisies. */
-    protected List<Integer> correctWordsPosition;
+    protected final List<Integer> correctWordsPosition;
 
     /** Liste des positions des mots incorrectements saisies. */
-    protected List<Integer>  incorrectWordsPosition;
+    protected final List<Integer>  incorrectWordsPosition;
 
     /** Le texte complet qui permet d'évaluer si les mots donnés sont correctes ou non. */
-    protected ObservableList<String> text;
+    protected final ObservableList<String> text;
 
     /** C'est le générateur de texte. **/
-    protected TextGenerator textGenerator;
+    protected final TextGenerator textGenerator;
 
     /** Les statistiques concernant l'évaluation d'une partie. */
-    protected Statistics stats;
+    protected final Statistics stats;
 
     /** S'occupe de notifier la vue  **/
-    private PropertyChangeSupport support;
+    private final PropertyChangeSupport support;
 
     protected Struct data;
 
@@ -84,18 +84,6 @@ public abstract class AbstractCorrector{
         return FXCollections.unmodifiableObservableList(text);
     }
 
-    /** Retourne le nombre de mots dans le text complet.
-     *
-     * @return le nombre de mot du textWrapper
-     */
-    public int getNbWords(){
-        return getText().size();
-    }
-
-    public TextGenerator getTextGenerator() {
-        return textGenerator;
-    }
-
     /** Retourne la position du mot en cours d'évaluation.
      *
      * @return la position du mot courant
@@ -115,7 +103,7 @@ public abstract class AbstractCorrector{
      * @return correctWordPosition
      */
     public List<Integer> getCorrectWordsPosition() {
-        return correctWordsPosition;
+        return new ArrayList<>(correctWordsPosition);
     }
 
     /** Retourne la liste des positions des mots incorrectes
@@ -123,7 +111,7 @@ public abstract class AbstractCorrector{
      * @return incorrectWordsPosition
      */
     public List<Integer> getIncorrectWordsPosition() {
-        return incorrectWordsPosition;
+        return new ArrayList<>(incorrectWordsPosition);
     }
 
     /** Evalue le mot word avec le mot correpondant à la position positionCurrentWord du texte
