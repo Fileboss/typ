@@ -31,7 +31,7 @@ public class ClassicCorrector extends AbstractCorrector{
     }
 
     @Override
-    public void characterEvaluationProcess(String partialWord) {
+    protected void characterEvaluationProcess(String partialWord) {
         // Cas où rien est écrit
         if(partialWord.length() == 0){
             this.positionFirstTypo = -1;

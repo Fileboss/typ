@@ -140,7 +140,7 @@ public abstract class AbstractCorrector{
      *
      * @param partialWord le mot à comparer
      */
-    public void evaluateCharacters(String partialWord){
+    public final void evaluateCharacters(String partialWord){
         if(state == State.RESET){
             start();
         }
@@ -153,7 +153,7 @@ public abstract class AbstractCorrector{
      *
      * @param partialWord le mot à comparer
      */
-    public abstract void characterEvaluationProcess(String partialWord);
+    protected abstract void characterEvaluationProcess(String partialWord);
 
     /** Passe au mot suivant en incrémentant posCurrentWord de 1.
      *
@@ -199,7 +199,7 @@ public abstract class AbstractCorrector{
     /** Démarre l'évaluation du texte.
      * Ne Peut être appelé qu'après l'appel à initialize()
      */
-    protected void start() {
+    private void start() {
         if (state != State.RESET){
             throw  new UnsupportedStateException(State.RESET.toString(), state.toString());
         }

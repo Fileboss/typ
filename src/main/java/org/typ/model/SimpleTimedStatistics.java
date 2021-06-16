@@ -32,6 +32,7 @@ public class SimpleTimedStatistics extends SimpleStatistics implements TimedStat
         timer.set(0);
     }
 
+    @Override
     public void stop(){
         super.stop();
         timerHandler.stop();

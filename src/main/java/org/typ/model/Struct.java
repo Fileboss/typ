@@ -19,20 +19,20 @@ public class Struct {
      * Contruit une Struct
      * @param position : position du mot courant
      */
-    public Struct(int position, int positionFirstTypo, int positionLastCorrectCharacter, List<Integer> correctWordPosition, List<Integer> incorrectWordPosition) {
+    public Struct(int position, int positionFirstTypo, int positionLastCorrectCharacter, List<Integer> correctWordsPosition, List<Integer> incorrectWordsPosition) {
         this.position = position;
         this.positionFirstTypo = positionFirstTypo;
         this.positionLastCorrectCharacter = positionLastCorrectCharacter;
-        this.correctWordsPosition = new ArrayList<>(correctWordPosition);
-        this.incorrectWordsPosition = new ArrayList<>(incorrectWordPosition);
+        this.correctWordsPosition = new ArrayList<>(correctWordsPosition);
+        this.incorrectWordsPosition = new ArrayList<>(incorrectWordsPosition);
     }
 
-    public Struct(Struct copie){
-        this(copie.position,
-                copie.positionFirstTypo,
-                copie.positionLastCorrectCharacter,
-                copie.correctWordsPosition,
-                copie.incorrectWordsPosition);
+    public Struct(Struct copy){
+        this(copy.position,
+                copy.positionFirstTypo,
+                copy.positionLastCorrectCharacter,
+                copy.correctWordsPosition,
+                copy.incorrectWordsPosition);
     }
 
     public int getPosition() {
