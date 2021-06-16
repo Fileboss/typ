@@ -26,7 +26,7 @@ public class StartClassicModeCommand implements Command {
     public void execute() {
         ViewClassicMode view = new ViewClassicMode();
 
-        ClassicTextGenerator ctg = new ClassicTextGenerator("src/main/resources/org/typ/dictionaries/mots_courants_fr.csv", 1500, 15);
+        ClassicTextGenerator ctg = new ClassicTextGenerator("src/main/resources/org/typ/dictionaries/mots_courants_fr.csv", 1500, 50);
 
         ClassicCorrector model = null;
         try {

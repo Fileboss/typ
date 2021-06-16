@@ -4,7 +4,7 @@ module org.typ {
     requires opencsv;
     requires junit;
     requires java.desktop;
-    requires snakeyaml;
+    requires org.yaml.snakeyaml;
     exports org.typ;
     exports org.typ.tests.modelTests;
 
