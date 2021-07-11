@@ -52,6 +52,10 @@ public class SimpleCurrentWord implements CurrentWord {
             else{
                 // On met à jour l'indice du premier caractère faux
                 for (int i = 0; i < partialWord.length(); i++){
+                    if (i > word.length()-1){
+                        positionFirstTypo = i;
+                        break;
+                    }
                     if(partialWord.charAt(i) != this.word.charAt(i)){
                         positionFirstTypo = i;
                     }

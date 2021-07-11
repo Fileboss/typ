@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 
 public class ClassicCorrector extends AbstractCorrector{
 
-
     /**
      * Initialise un correcteur avec pour première position 0,
      * les listes de mots correctes et incorrectes vides.
@@ -32,42 +31,21 @@ public class ClassicCorrector extends AbstractCorrector{
 
     @Override
     protected void characterEvaluationProcess(String partialWord) {
-        // Cas où rien est écrit
-        if(partialWord.length() == 0){
-            this.positionFirstTypo = -1;
-            this.positionLastCorrectCharacter = -1;
-        }
-        // Cas où le mot écrit est (pour le moment) correct
-        // On met à jour l'indice du dernier caractère correct
-        else if (getText().get(positionCurrentWord).startsWith(partialWord)){
-            // Incrémente uniquement lorsque l'on ajoute des caractères
-            if (partialWord.length() - 1 > positionLastCorrectCharacter){
+        // On tape u nouveau caractère
+        if (partialWord.length() - 1 > currentWord.getPositionLastEvaluatedCharacter()){
+            // Le caractère est bon
+            if (currentWord.evaluateWord(partialWord)){
                 stats.incrementNbCorrectInputs();
             }
-            this.positionLastCorrectCharacter = partialWord.length() - 1;
-            this.positionFirstTypo = -1;
-        } else {
-            // Cas où il y a une erreur
-
-            // On met à jour l'indice du premier caractère faux
-            for (int i = 0; i < partialWord.length(); i++){
-                if (i < this.getText().get(this.positionCurrentWord).length() && partialWord.charAt(i) != this.getText().get(this.positionCurrentWord).charAt(i)) {
-                    System.out.println("done 1");
-                    if (i != positionFirstTypo){
-                        stats.incrementNbIncorrectInputs();
-                    }
-                    this.positionFirstTypo = i;
-                    break;
-                }
-                if(i >= this.getText().get(this.positionCurrentWord).length()){
-                    System.out.println("done 2");
-                    if (i != positionFirstTypo){
-                        stats.incrementNbIncorrectInputs();
-                    }
-                    this.positionFirstTypo = i;
-                    break;
-                }
+            // Le caractère est mauvais
+            else{
+                stats.incrementNbIncorrectInputs();
             }
+        }
+        // On fait un retour arrière
+        else{
+            // On évalue le mot mais on fait rien avec
+            currentWord.evaluateWord(partialWord);
         }
     }
 

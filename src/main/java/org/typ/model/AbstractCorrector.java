@@ -20,11 +20,7 @@ public abstract class AbstractCorrector{
     /** La position du mot en cours d'évaluation. */
     protected int positionCurrentWord;
 
-    /** La position de la première erreur */
-    protected int positionFirstTypo;
-
-    /** La position du dernier caractère correct */
-    protected int positionLastCorrectCharacter;
+    protected CurrentWord currentWord;
 
     /** Liste des positions des mots correctements saisies. */
     protected final List<Integer> correctWordsPosition;
@@ -162,6 +158,7 @@ public abstract class AbstractCorrector{
         positionCurrentWord++;
         Struct data = generateData();
         if (positionCurrentWord < text.size()){
+            currentWord = new SimpleCurrentWord(text.get(positionCurrentWord));
             notifyView(data);
         }
     }
@@ -183,8 +180,6 @@ public abstract class AbstractCorrector{
         positionCurrentWord = 0;
         correctWordsPosition.clear();
         incorrectWordsPosition.clear();
-        positionFirstTypo = -1;
-        positionLastCorrectCharacter = -1;
         stats.reset();
 
         try {
@@ -192,6 +187,7 @@ public abstract class AbstractCorrector{
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        currentWord = new SimpleCurrentWord(text.get(0));
         Struct data = generateData();
         notifyView(data);
     }
@@ -229,6 +225,6 @@ public abstract class AbstractCorrector{
      */
     protected Struct generateData(){
         return new Struct(positionCurrentWord,
-                this.positionFirstTypo, this.positionLastCorrectCharacter, this.correctWordsPosition, this.incorrectWordsPosition);
+                currentWord.getPositionFirstTypo(), currentWord.getPositionLastCorrectCharacter(), this.correctWordsPosition, this.incorrectWordsPosition);
     }
 }
