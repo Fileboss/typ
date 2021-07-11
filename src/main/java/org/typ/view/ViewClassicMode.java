@@ -50,7 +50,7 @@ public class ViewClassicMode extends BorderPane implements PropertyChangeListene
             // Cas où il y a une partie correcte et une autre partie (fausse ou non)
             // Dans ce cas, on utilise une substring pour découper le mot jusqu'au dernier caractère correct
             // La deuxième partie du mot sera ecrite soit en rouge (si il y a une erreur), soit dans la police de base
-            // On utilise la classe CurrentWord pour concatener les deux Text
+            // On utilise la classe SimpleCurrentWord pour concatener les deux Text
             correctString = wholeWord.substring(0, struct.getPositionLastCorrectCharacter() + 1);
             remainingString = wholeWord.substring(struct.getPositionLastCorrectCharacter() + 1, wholeWord.length());
         }else{
