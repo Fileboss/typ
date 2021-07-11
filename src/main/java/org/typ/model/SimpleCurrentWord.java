@@ -1,8 +1,5 @@
 package org.typ.model;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-
 public class SimpleCurrentWord implements CurrentWord {
 
     /** Chaîne de caractères du mot **/
@@ -11,14 +8,11 @@ public class SimpleCurrentWord implements CurrentWord {
     /** La position de la première erreur */
     private int positionFirstTypo;
 
-    /** La position de la dernière erreur **/
-    private int positionLastTypo;
+    /** La position du dernier caractère évalué **/
+    private int positionLastEvaluatedCharacter;
 
     /** La position du dernier caractère correct */
     private int positionLastCorrectCharacter;
-
-    /** S'occupe de notifier la vue  **/
-    private final PropertyChangeSupport support;
 
     /**
      * Construit un mot courant avec une chaîne vide
@@ -27,39 +21,44 @@ public class SimpleCurrentWord implements CurrentWord {
      * @param word la chaîne de caractère du mot courant
      */
     public SimpleCurrentWord(String word){
-        this.support = new PropertyChangeSupport(this);
-        setWord(word);
-    }
-
-    @Override
-    public final void addPropertyChangeListener(PropertyChangeListener pcl) {
-        support.addPropertyChangeListener(pcl);
-    }
-
-    @Override
-    public final void removePropertyChangeListener(PropertyChangeListener pcl) {
-        support.removePropertyChangeListener(pcl);
-    }
-
-    @Override
-    public void evaluateWord(String word) {
-        for (int i = 0; i < word.length(); i++){
-            // Le caractère est correcte
-            if (word.charAt(i) == this.word.charAt(i)){
-                positionLastCorrectCharacter = i;
-            }
-            else{
-                
-            }
-        }
-    }
-
-    @Override
-    public void setWord(String word){
         this.word = word;
         positionFirstTypo = -1;
-        positionLastTypo = -1;
+        positionLastEvaluatedCharacter = -1;
         positionLastCorrectCharacter = -1;
+    }
+
+    @Override
+    public boolean evaluateWord(String partialWord) {
+        positionLastEvaluatedCharacter = partialWord.length() - 1;
+        // Retour arrière ou rien écrit
+        if(partialWord.length() - 1 < positionLastEvaluatedCharacter){
+            if (positionLastEvaluatedCharacter < positionFirstTypo){
+                positionFirstTypo = -1;
+            }
+            if (positionLastEvaluatedCharacter < positionLastCorrectCharacter){
+                positionLastEvaluatedCharacter--;
+            }
+            return true;
+        }
+        // C'est un nouveau caractère
+        else{
+            // Cas où le mot écrit est (pour le moment) correct
+            if (this.word.startsWith(partialWord)){
+                positionLastCorrectCharacter = partialWord.length() - 1;
+                positionFirstTypo = -1;
+                return true;
+            }
+            // Cas où il y a une erreur
+            else{
+                // On met à jour l'indice du premier caractère faux
+                for (int i = 0; i < partialWord.length(); i++){
+                    if(partialWord.charAt(i) != this.word.charAt(i)){
+                        positionFirstTypo = i;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     @Override
@@ -78,7 +77,7 @@ public class SimpleCurrentWord implements CurrentWord {
     }
 
     @Override
-    public int getPositionLastTypo() {
-        return positionLastTypo;
+    public int getPositionLastEvaluatedCharacter() {
+        return positionLastEvaluatedCharacter;
     }
 }

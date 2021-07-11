@@ -1,24 +1,14 @@
 package org.typ.model;
 
-import java.beans.PropertyChangeListener;
-
 public interface CurrentWord {
-    public void addPropertyChangeListener(PropertyChangeListener pcl);
-
-    public void removePropertyChangeListener(PropertyChangeListener pcl);
 
     /**
      * Compare le mot Word avec le mot courant et met à jour la position du
      * dernier bon caractère, de la première et dernière erreur.
-     * @param word le mot à comparer
+     * @param partialWord le mot à comparer
+     * @return True si partial word est identique au début du mot courant sinon False
      */
-    public void evaluateWord(String word);
-
-    /**
-     * Change de mot à évaluer, set à 0 les autres attributs.
-     * @param word le nouveau mot courant
-     */
-    public void setWord(String word);
+    public boolean evaluateWord(String partialWord);
 
     /**
      * Retourne le mot courant.
@@ -39,8 +29,8 @@ public interface CurrentWord {
     public int getPositionLastCorrectCharacter();
 
     /**
-     * Retourne la position de la dernière erreur.
-     * @return positionLastTypo
+     * Retourne la position du dernier caractère évalué.
+     * @return positionLastCharacter
      */
-    public int getPositionLastTypo();
+    public int getPositionLastEvaluatedCharacter();
 }

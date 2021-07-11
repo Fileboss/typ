@@ -1,7 +1,5 @@
 package org.typ.model;
 
-import java.beans.PropertyChangeListener;
-
 public class CurrentWordProxy implements CurrentWord{
 
     /** l'objet sur lequel s'applique le proxy **/
@@ -12,22 +10,7 @@ public class CurrentWordProxy implements CurrentWord{
     }
 
     @Override
-    public void addPropertyChangeListener(PropertyChangeListener pcl) {
-
-    }
-
-    @Override
-    public void removePropertyChangeListener(PropertyChangeListener pcl) {
-
-    }
-
-    @Override
-    public void evaluateWord(String word) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void setWord(String word) {
+    public boolean evaluateWord(String word) {
         throw new UnsupportedOperationException();
     }
 
@@ -47,7 +30,7 @@ public class CurrentWordProxy implements CurrentWord{
     }
 
     @Override
-    public int getPositionLastTypo() {
-        return currentWord.getPositionLastTypo();
+    public int getPositionLastEvaluatedCharacter() {
+        return currentWord.getPositionLastEvaluatedCharacter();
     }
 }
