@@ -1,54 +1,48 @@
-# sv
+# typ
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Logiciel d'entraînement à la frappe au clavier : simple, lisible (grande police, couleurs marquées) et multilingue.
 
-## Creating a project
+Réécriture en Svelte de la version JavaFX d'origine, conservée dans [`legacy/`](legacy/).
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Fonctionnalités
 
-```sh
-# create a new project
-npx sv create my-app
-```
+- **Mode classique** : taper une série de mots courants (10 à 50) le plus vite possible.
+- **Mode chrono** : un maximum de mots en 15, 30, 60 ou 120 secondes.
+- Coloration en direct, lettre par lettre ; compteurs de mots justes/faux et chronomètre.
+- Résultats en fin de partie : temps, mots par minute, précision, mots et frappes justes/fausses.
+- **Historique** des parties (stocké dans le navigateur) avec graphique de progression.
+- **Réglages** : langue de l'interface et des mots (français, anglais, allemand, espagnol), thème clair/sombre, taille du texte.
+- Raccourcis : <kbd>Espace</kbd> valide un mot, <kbd>Échap</kbd> recommence la partie.
 
-To recreate this project with the same configuration:
+## Stack
 
-```sh
-# recreate this project
-npx sv@1.1.1 create --template minimal --types ts --add prettier eslint vitest="usages:unit,component" playwright="demo:no" sveltekit-adapter="adapter:static" paraglide="languageTags:fr,en,de,es+demo:no" --install npm .
-```
+SvelteKit 3 (Svelte 5, runes) · TypeScript · Vite · adapter-static (SPA) · Paraglide (i18n) · Dexie (IndexedDB) · uPlot · Vitest · Playwright
 
-## Adding features
-
-Add features to your project with `sv add`:
+## Développement
 
 ```sh
-npx sv add
+npm install
+npm run dev          # serveur de développement
+npm run build        # site statique dans build/
+npm run check        # vérification des types
+npm run lint         # Prettier + ESLint
+npm run test:unit    # tests unitaires (Vitest)
+npm run test:e2e     # tests d'intégration (Playwright)
 ```
 
-For example, to add Tailwind CSS:
+## Architecture
 
-```sh
-npx sv add tailwindcss
+```
+src/lib/core/        moteur pur, sans dépendance à l'UI (testé unitairement)
+  engine.ts          état de partie immuable : setInput, submitWord, tick, computeStats
+  modes.ts           un mode = une configuration (nombre de mots, limite de temps)
+  text-source.ts     sources de mots (dictionnaires chargés à la demande)
+src/lib/game.svelte.ts      partie réactive (runes) autour du moteur
+src/lib/settings.svelte.ts  réglages persistés, fournis par contexte
+src/lib/history.ts          historique des parties (IndexedDB)
+src/lib/components/         écran de jeu, affichage des mots, résultats, graphique
+src/routes/                 menu, choix du mode, /play/[mode], statistiques, réglages
+messages/                   traductions de l'interface
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
+Pour ajouter un mode de jeu, il suffit d'une entrée dans `modes.ts` et de son nom dans `src/lib/i18n.ts`. Pour une nouvelle source de texte, il suffit d'implémenter `TextSource`.
